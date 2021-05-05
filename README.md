@@ -33,7 +33,7 @@ Below you can find an overview of library performance in a streaming application
 - GPU: NVIDIA GeForce GTX 1050 Ti
 - RAM: 8 GB
 
-![FPS visualization PC](fpsVisualization-pc.PNG "FPS visualization (PC)")
+![FPS visualization PC](fpsVisualization-pc.png "FPS visualization (PC)")
 
 Full benchmarks data can be found [here](https://github.com/Arction/performance-comparison-multilinechart/blob/main/bench/benchmarks_pc.csv).
 
@@ -46,7 +46,7 @@ Full benchmarks data can be found [here](https://github.com/Arction/performance-
 - GPU: Intel UHD Graphics 620
 - RAM: 8 GB
 
-![FPS visualization laptop](fpsVisualization-laptop.PNG "FPS visualization (Laptop)")
+![FPS visualization laptop](fpsVisualization-laptop.png "FPS visualization (Laptop)")
 
 Full benchmarks data can be found [here](https://github.com/Arction/performance-comparison-multilinechart/blob/main/bench/benchmarks_laptop.csv).
 
@@ -72,8 +72,8 @@ The following competitors have been tested and proven to utilize downsampling:
 
 - Competitor C
 
-![Competitor C spike data](spikeData-C.PNG "Competitor C spike data (incorrect visualization)")
+![Competitor C spike data](spikeData-C.png "Competitor C spike data (incorrect visualization)")
 
 Same data visualized *correctly* with LightningChart® JS:
 
-![LightningChart® JS spike data](spikeData-lcjs.PNG "LightningChart® JS spike data")
+![LightningChart® JS spike data](spikeData-lcjs.png "LightningChart® JS spike data")
