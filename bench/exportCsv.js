@@ -2,6 +2,7 @@ const fs = require('fs');
 
 const src = 'pc';
 // const src = 'laptop';
+// const src = 'high-end-pc'
 
 const data = JSON.parse(fs.readFileSync(`benchmarks_${src}.json`));
 

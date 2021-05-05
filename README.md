@@ -50,6 +50,19 @@ Full benchmarks data can be found [here](https://github.com/Arction/performance-
 
 Full benchmarks data can be found [here](https://github.com/Arction/performance-comparison-multilinechart/blob/main/bench/benchmarks_laptop.csv).
 
+### High end PC
+
+- Date: 05.05.2021
+- OS: Windows 10
+- Browser: Google Chrome v90.0.4430.93
+- CPU: Ryzen 9 5900X
+- GPU: RTX 3080
+- RAM: 16 GB
+
+![FPS visualization high end PC](fpsVisualization-high-end-pc.png "FPS visualization (High end PC)")
+
+Full benchmarks data can be found [here](https://github.com/Arction/performance-comparison-multilinechart/blob/main/bench/benchmarks_high-end-pc.csv).
+
 ## Results analysis
 
 All of the included chart libraries proved to be capable of visualizing the realtime multichannel ECG chart.

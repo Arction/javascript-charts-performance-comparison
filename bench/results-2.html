@@ -60,6 +60,7 @@
               formatNum(category.totalVisibleDataPoints)
             );
         };
+
         const categories = [
           {
             name: '1 ch, 1 kHz, 1 s',
@@ -129,6 +130,36 @@
           },
         ];
 
+        if (src === 'high-end-pc') {
+          categories.push({
+            name: '10 ch, 500 kHz, 2 s',
+            getBenchmarks: (benchmarks) =>
+              benchmarks.filter(
+                (item) =>
+                  item.config.channelsCount === 10 &&
+                  item.config.channelDataPointsPerSecond === 500000 &&
+                  item.config.timeDomainInterval === 1000000
+                                                
+              ),
+            format,
+            totalDataPointsPerSecond: 10 * 500000,
+            totalVisibleDataPoints: 10 * 500000 * 2,
+          },
+          {
+            name: '10 ch, 1 MHz, 1 s',
+            getBenchmarks: (benchmarks) =>
+              benchmarks.filter(
+                (item) =>
+                  item.config.channelsCount === 10 &&
+                  item.config.channelDataPointsPerSecond === 1000000 &&
+                  item.config.timeDomainInterval === 1000000
+              ),
+            format,
+            totalDataPointsPerSecond: 10 * 1000000,
+            totalVisibleDataPoints: 10 * 1000000 * 1,
+          })
+        }
+
         const opts = {
           title: `Performance benchmarks visualization (${src})`,
           titleAxisY: 'FPS (average)',
@@ -193,6 +224,7 @@
             chart.getDefaultAxisY().setMouseInteractions(false)
           );
         const yAxis = chart.getDefaultAxisY();
+
 
         if (props.title) {
           chart.setTitle(props.title);
