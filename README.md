@@ -72,7 +72,7 @@ When FPS drops below ~30...40, the stuttering becomes visible to user and the we
 Most chart libraries were able to handle 1 ECG channel with a total of 1000 data points streamed in every second, and a 1 second time domain view.
 After this threshold, most libraries performance plummets, except for LightningChart® JS, Competitor A and Competitor E.
 
-Soon after, at 10 ECG channels with a total of 100 000 data points streamed in every second, and a total of 10 million data points visible on screen, LightningChart® JS was the only chart library that could still function with excellent FPS, and going even further to **20 ECG channels with a total of 2 million data points streamed in every second, and a total of 20 million data points visible on screen** (on PC).
+Soon after, at 10 ECG channels with a total of 100 000 data points streamed in every second, and a total of 10 million data points visible on screen, LightningChart® JS was the only chart library that could still function with excellent FPS, and going even further to **total of 10 million data points streamed in every second** (on high end PC).
 
 LightningChart® JS was able smoothly visualize, with over 40 FPS, data rates that are **90 x more than average of the competitors** in this test. 
 
