@@ -15,7 +15,7 @@ Test, Library, Initial render speed (ms), FPS avg, Frame time avg (ms), Timeout 
 1ch 10000 dp/s,LightningChart® JS,23,164.7,6,5,22
 1ch 10000 dp/s,Competitor A,65,163.9,6,6,106
 1ch 10000 dp/s,Competitor B,42,88.6,11,21,52
-1ch 10000 dp/s,Competitor C,,,,,
+1ch 10000 dp/s,Competitor C,61,98.3,10,12,77
 1ch 10000 dp/s,Competitor D,89,20.3,51,78,25
 1ch 10000 dp/s,Competitor E,42,86.3,11,15,11
 1ch 10000 dp/s,Competitor F,49,40.8,24,25,37

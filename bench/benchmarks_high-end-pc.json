@@ -670,6 +670,42 @@
             },
             {
                 "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620223274117,
+                "loadupSpeedMs": 60.599999997066334,
+                "fps": {
+                    "min": 34.36189952530874,
+                    "max": 104.13801135720597,
+                    "avg": 98.32151081125359,
+                    "median": 101.53380929873167
+                },
+                "heapSize": {
+                    "min": 29560087,
+                    "max": 133700927,
+                    "avg": 76807912.11864407,
+                    "median": 74494020
+                },
+                "timeout": {
+                    "min": 8.085000001301523,
+                    "max": 50.09499999869149,
+                    "avg": 11.88151683168351,
+                    "median": 9.509999999863794
+                },
+                "frameTime": {
+                    "min": 7.730000001174631,
+                    "max": 36.60999999920023,
+                    "avg": 9.575663248958179,
+                    "median": 9.249999999155989
+                }
+            },
+            {
+                "config": {
                     "channelsCount": 10,
                     "channelDataPointsPerSecond": 100000,
                     "timeDomainInterval": 1000000,
