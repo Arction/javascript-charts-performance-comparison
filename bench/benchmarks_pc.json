@@ -1,0 +1,1592 @@
+[
+    {
+        "library": {
+            "name": "LightningChart® JS",
+            "version": "3.0.0"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620047725692,
+                "loadupSpeedMs": 46.735000039916486,
+                "fps": {
+                    "min": 59.98299612504423,
+                    "max": 64.58905216568354,
+                    "avg": 60.14036366852305,
+                    "median": 60.056700037951614
+                },
+                "heapSize": {
+                    "min": 12049482,
+                    "max": 24132670,
+                    "avg": 18586253.155172415,
+                    "median": 18852007
+                },
+                "timeout": {
+                    "min": 1.1199999717064202,
+                    "max": 25.24499996798113,
+                    "avg": 5.000811801966935,
+                    "median": 4.98999998671934
+                },
+                "frameTime": {
+                    "min": 1.2700000079348683,
+                    "max": 31.469999987166375,
+                    "avg": 16.658392559685513,
+                    "median": 16.654999984893948
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620047785900,
+                "loadupSpeedMs": 42.600000044330955,
+                "fps": {
+                    "min": 60.03421507200272,
+                    "max": 70.37792946270626,
+                    "avg": 60.26727548210428,
+                    "median": 60.10352091429748
+                },
+                "heapSize": {
+                    "min": 11099800,
+                    "max": 23313888,
+                    "avg": 16854341.655172415,
+                    "median": 17455278
+                },
+                "timeout": {
+                    "min": 1.1500000255182385,
+                    "max": 24.970000027678907,
+                    "avg": 5.043343419070105,
+                    "median": 4.985000006854534
+                },
+                "frameTime": {
+                    "min": 0.9300000383518636,
+                    "max": 36.69500001706183,
+                    "avg": 16.65179522752118,
+                    "median": 16.650000005029142
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620047867698,
+                "loadupSpeedMs": 74.43999999668449,
+                "fps": {
+                    "min": 60.036459781013725,
+                    "max": 68.9346155220767,
+                    "avg": 60.22820301050289,
+                    "median": 60.09147552408581
+                },
+                "heapSize": {
+                    "min": 15379922,
+                    "max": 802782227,
+                    "avg": 180940828,
+                    "median": 25824798
+                },
+                "timeout": {
+                    "min": 1.9949999987147748,
+                    "max": 37.92500001145527,
+                    "avg": 5.153820851934662,
+                    "median": 4.985000006854534
+                },
+                "frameTime": {
+                    "min": 3.7299999967217445,
+                    "max": 34.660000004805624,
+                    "avg": 16.653243618179786,
+                    "median": 16.654999984893948
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 100000,
+                    "timeDomainInterval": 1000000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620047828874,
+                "loadupSpeedMs": 2519.7899999911897,
+                "fps": {
+                    "min": 49.46403230609047,
+                    "max": 66.44076805229398,
+                    "avg": 55.06085866270606,
+                    "median": 53.193545309114796
+                },
+                "heapSize": {
+                    "min": 447184975,
+                    "max": 1447597979,
+                    "avg": 906730655.6666666,
+                    "median": 872889924
+                },
+                "timeout": {
+                    "min": 1.500000013038516,
+                    "max": 1739.8249999969266,
+                    "avg": 6.201858974362911,
+                    "median": 4.994999966584146
+                },
+                "frameTime": {
+                    "min": 1.7900000093504786,
+                    "max": 1750.400000018999,
+                    "avg": 18.6114547146694,
+                    "median": 16.64750001509674
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 20,
+                    "channelDataPointsPerSecond": 100000,
+                    "timeDomainInterval": 1000000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620047916331,
+                "loadupSpeedMs": 4811.585000017658,
+                "fps": {
+                    "min": 14.661044353969071,
+                    "max": 59.82800284686615,
+                    "avg": 49.00989282389585,
+                    "median": 45.994284188077
+                },
+                "heapSize": {
+                    "min": 1133534189,
+                    "max": 1996863405,
+                    "avg": 1408566215.4761906,
+                    "median": 1346125889
+                },
+                "timeout": {
+                    "min": 4.004999995231628,
+                    "max": 8538.525000039954,
+                    "avg": 20.10153846157949,
+                    "median": 4.999999946448952
+                },
+                "frameTime": {
+                    "min": 4.2100000428035855,
+                    "max": 6868.67999995593,
+                    "avg": 68.20811816191615,
+                    "median": 16.620000009424984
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor A"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620194329137,
+                "loadupSpeedMs": 70.4600000026403,
+                "fps": {
+                    "min": 60.01625227884975,
+                    "max": 67.53562504419774,
+                    "avg": 60.148905262236404,
+                    "median": 60.05364840195969
+                },
+                "heapSize": {
+                    "min": 73530470,
+                    "max": 121467046,
+                    "avg": 94335477.05172414,
+                    "median": 93090410
+                },
+                "timeout": {
+                    "min": 1.3499999913619831,
+                    "max": 18.215000003692694,
+                    "avg": 6.985218910106266,
+                    "median": 4.9549999966984615
+                },
+                "frameTime": {
+                    "min": 8.109999995213002,
+                    "max": 25.02000000094995,
+                    "avg": 16.66357262103062,
+                    "median": 16.644999996060506
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620194375812,
+                "loadupSpeedMs": 81.00500000000466,
+                "fps": {
+                    "min": 59.946199347295185,
+                    "max": 80.43758043588115,
+                    "avg": 60.25610816981978,
+                    "median": 60.08718635167162
+                },
+                "heapSize": {
+                    "min": 70169765,
+                    "max": 135509698,
+                    "avg": 103622172.27118644,
+                    "median": 102105122
+                },
+                "timeout": {
+                    "min": 1.3500000059138983,
+                    "max": 32.66500000609085,
+                    "avg": 8.864884751774706,
+                    "median": 10.420000005979091
+                },
+                "frameTime": {
+                    "min": 9.265000000596046,
+                    "max": 38.22000000218395,
+                    "avg": 16.686052338530406,
+                    "median": 16.640000001643784
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620194463845,
+                "loadupSpeedMs": 70.19500000751577,
+                "fps": {
+                    "min": 28.959871791882442,
+                    "max": 66.02403275067684,
+                    "avg": 49.77872880908511,
+                    "median": 52.62339013579113
+                },
+                "heapSize": {
+                    "min": 71618417,
+                    "max": 149135746,
+                    "avg": 118771065.56140351,
+                    "median": 119214158
+                },
+                "timeout": {
+                    "min": 1.8549999949755147,
+                    "max": 172.81499999808148,
+                    "avg": 40.15259036143735,
+                    "median": 27.34000000054948
+                },
+                "frameTime": {
+                    "min": 13.474999999743886,
+                    "max": 109.2449999996461,
+                    "avg": 34.61804498270887,
+                    "median": 28.195000006235205
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 100000,
+                    "timeDomainInterval": 1000000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620194516017,
+                "loadupSpeedMs": 1424.2150000063702,
+                "fps": {
+                    "min": 1.2934841061521856,
+                    "max": 2.492267739341357,
+                    "avg": 1.8785316183672893,
+                    "median": 1.8228464724366005
+                },
+                "heapSize": {
+                    "min": 448122348,
+                    "max": 1597453544,
+                    "avg": 764655109.0882353,
+                    "median": 884979766
+                },
+                "timeout": {
+                    "min": 784.364999999525,
+                    "max": 2446.1999999912223,
+                    "avg": 1464.9797368420925,
+                    "median": 1525.099999998929
+                },
+                "frameTime": {
+                    "min": 410.4749999969499,
+                    "max": 1799.700000003213,
+                    "avg": 814.6805555556462,
+                    "median": 796.2025000015274
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 20,
+                    "channelDataPointsPerSecond": 100000,
+                    "timeDomainInterval": 1000000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620194572501,
+                "loadupSpeedMs": 2499.5100000087405,
+                "fps": {
+                    "min": 0.5651617351595896,
+                    "max": 1.046630530002931,
+                    "avg": 0.7869907826154673,
+                    "median": 0.7606897880351831
+                },
+                "heapSize": {
+                    "min": 771574052,
+                    "max": 2255654217,
+                    "avg": 1246318033.4444444,
+                    "median": 1233460364.5
+                },
+                "timeout": {
+                    "min": 1805.9099999954924,
+                    "max": 4840.454999997746,
+                    "avg": 3209.0812499991443,
+                    "median": 3183.2649999996647
+                },
+                "frameTime": {
+                    "min": 1073.0699999985518,
+                    "max": 3474.4250000076136,
+                    "avg": 2010.366071428247,
+                    "median": 2176.0300000023562
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor B"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048567832,
+                "loadupSpeedMs": 23.385000007692724,
+                "fps": {
+                    "min": 60.021022787586524,
+                    "max": 65.18741381508262,
+                    "avg": 60.18193023786424,
+                    "median": 60.072449280861285
+                },
+                "heapSize": {
+                    "min": 10673421,
+                    "max": 22692987,
+                    "avg": 16272061.48275862,
+                    "median": 16382357
+                },
+                "timeout": {
+                    "min": 3.9999999571591616,
+                    "max": 35.62999999849126,
+                    "avg": 6.281184844042667,
+                    "median": 5.004999984521419
+                },
+                "frameTime": {
+                    "min": 4.87000000430271,
+                    "max": 26.94000001065433,
+                    "avg": 16.658190898986152,
+                    "median": 16.63999998709187
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048608650,
+                "loadupSpeedMs": 77.35500001581386,
+                "fps": {
+                    "min": 31.630054877373723,
+                    "max": 58.46503854241392,
+                    "avg": 55.80272319879432,
+                    "median": 57.12513148367747
+                },
+                "heapSize": {
+                    "min": 19873555,
+                    "max": 62166554,
+                    "avg": 41396530.5862069,
+                    "median": 41776034.5
+                },
+                "timeout": {
+                    "min": 3.9049999904818833,
+                    "max": 117.36999999266118,
+                    "avg": 20.559382716028356,
+                    "median": 17.042499996023253
+                },
+                "frameTime": {
+                    "min": 11.67499995790422,
+                    "max": 72.69000000087544,
+                    "avg": 17.104629418466764,
+                    "median": 16.702499997336417
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048646920,
+                "loadupSpeedMs": 308.38000000221655,
+                "fps": {
+                    "min": 7.798882420200966,
+                    "max": 8.655812680162478,
+                    "avg": 8.541889274541939,
+                    "median": 8.602997932368865
+                },
+                "heapSize": {
+                    "min": 60169497,
+                    "max": 236390969,
+                    "avg": 130777498.13461539,
+                    "median": 117578888
+                },
+                "timeout": {
+                    "min": 5.7200000155717134,
+                    "max": 295.58000003453344,
+                    "avg": 212.93846428577257,
+                    "median": 219.31999997468665
+                },
+                "frameTime": {
+                    "min": 100.12000001734123,
+                    "max": 161.35499998927116,
+                    "avg": 115.55426923083499,
+                    "median": 110.35499998251908
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor C"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "notes": [
+            {
+                "id": "down-sampling"
+            }
+        ],
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048396374,
+                "loadupSpeedMs": 60.3899999987334,
+                "fps": {
+                    "min": 39.52725404038997,
+                    "max": 59.73718639853178,
+                    "avg": 58.97015916847818,
+                    "median": 59.535993812534926
+                },
+                "heapSize": {
+                    "min": 20270365,
+                    "max": 49979276,
+                    "avg": 35122269.22413793,
+                    "median": 36386579.5
+                },
+                "timeout": {
+                    "min": 1.9650000031106174,
+                    "max": 40.23000004235655,
+                    "avg": 10.452445102817421,
+                    "median": 11.97000005049631
+                },
+                "frameTime": {
+                    "min": 10.654999990947545,
+                    "max": 36.68000001925975,
+                    "avg": 16.742101004475835,
+                    "median": 16.590000013820827
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048436870,
+                "loadupSpeedMs": 109.30499999085441,
+                "fps": {
+                    "min": 22.936831967342332,
+                    "max": 58.00692723390452,
+                    "avg": 54.57814060525211,
+                    "median": 56.79915895563546
+                },
+                "heapSize": {
+                    "min": 25963352,
+                    "max": 69838217,
+                    "avg": 45313199.637931034,
+                    "median": 45933273
+                },
+                "timeout": {
+                    "min": 1.9650000031106174,
+                    "max": 65.56000001728535,
+                    "avg": 17.26442141621655,
+                    "median": 16.620000009424984
+                },
+                "frameTime": {
+                    "min": 13.749999983701855,
+                    "max": 57.91999999200925,
+                    "avg": 17.24276149423991,
+                    "median": 16.62500004749745
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048476480,
+                "loadupSpeedMs": 273.38499994948506,
+                "fps": {
+                    "min": 11.80247379868616,
+                    "max": 17.30398289436171,
+                    "avg": 16.337975894304954,
+                    "median": 16.668060993658145
+                },
+                "heapSize": {
+                    "min": 27579442,
+                    "max": 81073776,
+                    "avg": 41838671.03571428,
+                    "median": 41146882.5
+                },
+                "timeout": {
+                    "min": 1.9249999895691872,
+                    "max": 149.87500000279397,
+                    "avg": 60.24007028109959,
+                    "median": 55.29250000836328
+                },
+                "frameTime": {
+                    "min": 51.11499998020008,
+                    "max": 150.40500002214685,
+                    "avg": 57.79019230764019,
+                    "median": 54.84749999595806
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 100000,
+                    "timeDomainInterval": 1000000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048519831,
+                "loadupSpeedMs": 3339.8099999758415,
+                "fps": {
+                    "min": 3.348984253078674,
+                    "max": 4.473260340767647,
+                    "avg": 4.303017838763811,
+                    "median": 4.401282243812456
+                },
+                "heapSize": {
+                    "min": 629683302,
+                    "max": 1461232266,
+                    "avg": 1031377957.5652174,
+                    "median": 1006228787.5
+                },
+                "timeout": {
+                    "min": 1.7300000181421638,
+                    "max": 1206.1300000059418,
+                    "avg": 274.94091743127007,
+                    "median": 217.50500000780448
+                },
+                "frameTime": {
+                    "min": 205.0300000119023,
+                    "max": 830.0649999873713,
+                    "avg": 223.550703703788,
+                    "median": 214.7150000091642
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor D"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048899004,
+                "loadupSpeedMs": 75.72000002255663,
+                "fps": {
+                    "min": 22.85322516197486,
+                    "max": 32.374056547586044,
+                    "avg": 29.690859842303844,
+                    "median": 28.61017595910711
+                },
+                "heapSize": {
+                    "min": 6086463,
+                    "max": 16711914,
+                    "avg": 11619129.454545455,
+                    "median": 11688342
+                },
+                "timeout": {
+                    "min": 24.809999973513186,
+                    "max": 733.9750000392087,
+                    "avg": 42.042103786818906,
+                    "median": 33.779999997932464
+                },
+                "frameTime": {
+                    "min": 25.17999999690801,
+                    "max": 123.060000010766,
+                    "avg": 35.016598599751525,
+                    "median": 32.53000002587214
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048952171,
+                "loadupSpeedMs": 138.00000003539026,
+                "fps": {
+                    "min": 17.764427540939337,
+                    "max": 22.17677480265973,
+                    "avg": 21.345257782712423,
+                    "median": 21.4572072172727
+                },
+                "heapSize": {
+                    "min": 10019550,
+                    "max": 49847281,
+                    "avg": 23788987.736842107,
+                    "median": 21226402
+                },
+                "timeout": {
+                    "min": 1.2149999965913594,
+                    "max": 173.7050000228919,
+                    "avg": 93.64093749991298,
+                    "median": 92.20000001369044
+                },
+                "frameTime": {
+                    "min": 35.644999996293336,
+                    "max": 126.67999998666346,
+                    "avg": 48.331642512066345,
+                    "median": 47.20500000985339
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048989226,
+                "loadupSpeedMs": 482.4650000082329,
+                "fps": {
+                    "min": 4.23269855531375,
+                    "max": 6.249648457189378,
+                    "avg": 5.261552301996087,
+                    "median": 5.26288692229663
+                },
+                "heapSize": {
+                    "min": 32415276,
+                    "max": 202245578,
+                    "avg": 110537193.91836734,
+                    "median": 114257795
+                },
+                "timeout": {
+                    "min": 187.0950000011362,
+                    "max": 916.8199999839999,
+                    "avg": 524.7865789467795,
+                    "median": 506.24999997671694
+                },
+                "frameTime": {
+                    "min": 141.71500003430992,
+                    "max": 425.0950000132434,
+                    "avg": 236.25609374994383,
+                    "median": 224.46500000660308
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor E"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620047982614,
+                "loadupSpeedMs": 51.084999984595925,
+                "fps": {
+                    "min": 59.20371009755036,
+                    "max": 60.05029211460703,
+                    "avg": 60.00256578278055,
+                    "median": 60.00301559988016
+                },
+                "heapSize": {
+                    "min": 3685898,
+                    "max": 5817662,
+                    "avg": 4405352,
+                    "median": 4370662
+                },
+                "timeout": {
+                    "min": 2.0050000166520476,
+                    "max": 19.114999973680824,
+                    "avg": 6.454582795706047,
+                    "median": 5.004999984521419
+                },
+                "frameTime": {
+                    "min": 13.540000014472753,
+                    "max": 20.569999993313104,
+                    "avg": 16.666368684066416,
+                    "median": 16.659999964758754
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048023042,
+                "loadupSpeedMs": 33.63499999977648,
+                "fps": {
+                    "min": 54.064282425321686,
+                    "max": 59.965974812315714,
+                    "avg": 59.80995957084487,
+                    "median": 59.92848542947473
+                },
+                "heapSize": {
+                    "min": 3934677,
+                    "max": 6878503,
+                    "avg": 4884849.847457627,
+                    "median": 4873561
+                },
+                "timeout": {
+                    "min": 4.019999993033707,
+                    "max": 51.76000000210479,
+                    "avg": 10.248276392209684,
+                    "median": 11.765000002924353
+                },
+                "frameTime": {
+                    "min": 11.060000048018992,
+                    "max": 35.97500000614673,
+                    "avg": 16.67663424126074,
+                    "median": 16.660000022966415
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048061970,
+                "loadupSpeedMs": 112.99499997403473,
+                "fps": {
+                    "min": 27.711577896075415,
+                    "max": 32.500218654619815,
+                    "avg": 31.878421127513974,
+                    "median": 32.12602258527602
+                },
+                "heapSize": {
+                    "min": 6257837,
+                    "max": 10905676,
+                    "avg": 7834524.6034482755,
+                    "median": 7571099
+                },
+                "timeout": {
+                    "min": 27.159999997820705,
+                    "max": 91.47500002291054,
+                    "avg": 49.431080858087896,
+                    "median": 58.17999999271706
+                },
+                "frameTime": {
+                    "min": 26.374999957624823,
+                    "max": 63.26500000432134,
+                    "avg": 30.771246153849344,
+                    "median": 30.295000004116446
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor F"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048131996,
+                "loadupSpeedMs": 35.42999998899177,
+                "fps": {
+                    "min": 46.00239212707481,
+                    "max": 50.93565762024178,
+                    "avg": 48.825365886501274,
+                    "median": 48.890577131726225
+                },
+                "heapSize": {
+                    "min": 5897009,
+                    "max": 22212636,
+                    "avg": 11748113.155172413,
+                    "median": 11689068
+                },
+                "timeout": {
+                    "min": 2.2750000352971256,
+                    "max": 56.86999997124076,
+                    "avg": 20.816792649118135,
+                    "median": 20.16749998438172
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048179663,
+                "loadupSpeedMs": 60.01499999547377,
+                "fps": {
+                    "min": 36.46707023276336,
+                    "max": 49.78561195812723,
+                    "avg": 48.18911124275719,
+                    "median": 48.7277585167086
+                },
+                "heapSize": {
+                    "min": 10201347,
+                    "max": 34782030,
+                    "avg": 23167944.51724138,
+                    "median": 22153531
+                },
+                "timeout": {
+                    "min": 2.6450000004842877,
+                    "max": 59.21999999554828,
+                    "avg": 20.498992486332373,
+                    "median": 19.009999989066273
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620050224124,
+                "loadupSpeedMs": 158.85000000707805,
+                "fps": {
+                    "min": 13.578838737566217,
+                    "max": 18.560941927458977,
+                    "avg": 17.923953786228672,
+                    "median": 18.070057200494396
+                },
+                "heapSize": {
+                    "min": 20646530,
+                    "max": 140137962,
+                    "avg": 72842365.14285715,
+                    "median": 62098731
+                },
+                "timeout": {
+                    "min": 5.819999962113798,
+                    "max": 253.15499998396263,
+                    "avg": 57.207266666616,
+                    "median": 48.79499995149672
+                },
+                "frameTime": {
+                    "min": 43.5799999977462,
+                    "max": 162.42000000784174,
+                    "avg": 53.90877917413541,
+                    "median": 48.56500000460073
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor G"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048273090,
+                "loadupSpeedMs": 19.229999976232648,
+                "fps": {
+                    "min": 59.01997743102064,
+                    "max": 63.578853663984624,
+                    "avg": 59.75608454883237,
+                    "median": 59.70683144913673
+                },
+                "heapSize": {
+                    "min": 4520086,
+                    "max": 11336940,
+                    "avg": 7741480.75862069,
+                    "median": 7667238
+                },
+                "timeout": {
+                    "min": 1.1950000189244747,
+                    "max": 124.13000001106411,
+                    "avg": 7.013114773263535,
+                    "median": 5.000000004656613
+                },
+                "frameTime": {
+                    "min": 7.694999978411943,
+                    "max": 138.11999995959923,
+                    "avg": 16.7270457079279,
+                    "median": 16.6000000317581
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048314885,
+                "loadupSpeedMs": 55.04499998642132,
+                "fps": {
+                    "min": 47.60431295255996,
+                    "max": 57.20059169568384,
+                    "avg": 56.3595367168598,
+                    "median": 56.8165229796142
+                },
+                "heapSize": {
+                    "min": 11557410,
+                    "max": 32675170,
+                    "avg": 21637818.423728812,
+                    "median": 20944556
+                },
+                "timeout": {
+                    "min": 15.92000003438443,
+                    "max": 44.32499996619299,
+                    "avg": 17.80461424333665,
+                    "median": 17.140000010840595
+                },
+                "frameTime": {
+                    "min": 15.894999960437417,
+                    "max": 43.17499999888241,
+                    "avg": 17.486305361315672,
+                    "median": 17.13500000187196
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048356165,
+                "loadupSpeedMs": 205.94999997410923,
+                "fps": {
+                    "min": 9.01240434554847,
+                    "max": 9.340608499768248,
+                    "avg": 9.292364823467885,
+                    "median": 9.309653954670853
+                },
+                "heapSize": {
+                    "min": 26266345,
+                    "max": 117155773,
+                    "avg": 67364398.66071428,
+                    "median": 63460987
+                },
+                "timeout": {
+                    "min": 70.1450000051409,
+                    "max": 229.0200000279583,
+                    "avg": 124.96020833326232,
+                    "median": 106.09499996644445
+                },
+                "frameTime": {
+                    "min": 94.77000002516434,
+                    "max": 154.48500000638887,
+                    "avg": 107.22708928577569,
+                    "median": 104.8624999821186
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor H"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048687287,
+                "loadupSpeedMs": 44.694999989587814,
+                "fps": {
+                    "min": 35.72152736853521,
+                    "max": 45.82019669320208,
+                    "avg": 42.10202655961343,
+                    "median": 42.98850729136088
+                },
+                "heapSize": {
+                    "min": 20319819,
+                    "max": 74772143,
+                    "avg": 43164967.89655172,
+                    "median": 41186355
+                },
+                "timeout": {
+                    "min": 2.154999994672835,
+                    "max": 86.14000002853572,
+                    "avg": 28.79385206532798,
+                    "median": 26.494999998249114
+                },
+                "frameTime": {
+                    "min": 16.88000001013279,
+                    "max": 65.39000000339001,
+                    "avg": 27.99432835819238,
+                    "median": 26.239999977406114
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048726187,
+                "loadupSpeedMs": 76.89500000560656,
+                "fps": {
+                    "min": 6.919624751068351,
+                    "max": 17.304211498678274,
+                    "avg": 12.146284279274683,
+                    "median": 12.047115896360804
+                },
+                "heapSize": {
+                    "min": 26271404,
+                    "max": 159588754,
+                    "avg": 74194838.36538461,
+                    "median": 68937739
+                },
+                "timeout": {
+                    "min": 55.02500000875443,
+                    "max": 623.360000026878,
+                    "avg": 194.19912337673247,
+                    "median": 148.12999998684973
+                },
+                "frameTime": {
+                    "min": 45.80999998142943,
+                    "max": 336.22499997727573,
+                    "avg": 144.51660287096365,
+                    "median": 122.70499998703599
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048764835,
+                "loadupSpeedMs": 261.25499996123835,
+                "fps": {
+                    "min": 1.0939676798846667,
+                    "max": 3.5211887533303967,
+                    "avg": 2.222130602620132,
+                    "median": 2.1680518383242164
+                },
+                "heapSize": {
+                    "min": 42058345,
+                    "max": 711118560,
+                    "avg": 252011264.6,
+                    "median": 202869323
+                },
+                "timeout": {
+                    "min": 180.7750000152737,
+                    "max": 4744.545000023209,
+                    "avg": 1440.7194736842557,
+                    "median": 827.5349999894388
+                },
+                "frameTime": {
+                    "min": 180.3150000050664,
+                    "max": 2795.8549999748357,
+                    "avg": 914.1043939391349,
+                    "median": 639.1899999580346
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor I"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620048808905,
+                "loadupSpeedMs": 103.57500001555309,
+                "fps": {
+                    "min": 47.338139978349744,
+                    "max": 59.942350053324795,
+                    "avg": 59.67558169956826,
+                    "median": 59.87786892418886
+                },
+                "heapSize": {
+                    "min": 8710866,
+                    "max": 19448738,
+                    "avg": 12954681.827586208,
+                    "median": 12682280
+                },
+                "timeout": {
+                    "min": 1.1300000478513539,
+                    "max": 86.89499995671213,
+                    "avg": 5.809927395928565,
+                    "median": 4.985000006854534
+                },
+                "frameTime": {
+                    "min": 1.3599999947473407,
+                    "max": 64.200000022538,
+                    "avg": 16.68270983877672,
+                    "median": 16.684999980498105
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620049795894,
+                "loadupSpeedMs": 209.63999995728955,
+                "fps": {
+                    "min": 3.686622353489066,
+                    "max": 20.430421998189143,
+                    "avg": 15.33908973017396,
+                    "median": 16.628639100885508
+                },
+                "heapSize": {
+                    "min": 23359801,
+                    "max": 90525706,
+                    "avg": 56169670.708333336,
+                    "median": 55603229.5
+                },
+                "timeout": {
+                    "min": 1.3799999724142253,
+                    "max": 1351.8400000175461,
+                    "avg": 26.761810883124053,
+                    "median": 5.004999984521419
+                },
+                "frameTime": {
+                    "min": 0.1449999981559813,
+                    "max": 1364.960000035353,
+                    "avg": 48.946680260961195,
+                    "median": 16.645000025164336
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620049852822,
+                "loadupSpeedMs": 979.9850000417791,
+                "fps": {
+                    "min": 9007199254740991,
+                    "max": -9007199254740991,
+                    "avg": null,
+                    "median": 0
+                },
+                "heapSize": {
+                    "min": 72756574,
+                    "max": 156168430,
+                    "avg": 108242978,
+                    "median": 95803930
+                },
+                "timeout": {
+                    "min": 1.179999962914735,
+                    "max": 11097.125000029337,
+                    "avg": 796.7699999998634,
+                    "median": 4.974999988917261
+                },
+                "frameTime": {
+                    "min": 1.2799999676644802,
+                    "max": 34680.74500001967,
+                    "avg": 5822.939999998198,
+                    "median": 12.8825000138022
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor J"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620049032445,
+                "loadupSpeedMs": 108.76500001177192,
+                "fps": {
+                    "min": 14.066752149619598,
+                    "max": 24.66160751406442,
+                    "avg": 19.84483980635777,
+                    "median": 19.417618829634897
+                },
+                "heapSize": {
+                    "min": 4491523,
+                    "max": 11916894,
+                    "avg": 7658910.392857143,
+                    "median": 6711920
+                },
+                "timeout": {
+                    "min": 51.20000004535541,
+                    "max": 187.755000020843,
+                    "avg": 118.20055335956135,
+                    "median": 118.16999997245148
+                },
+                "frameTime": {
+                    "min": 23.834999999962747,
+                    "max": 105.94499995931983,
+                    "avg": 59.31061264813101,
+                    "median": 68.30500002251938
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620049070605,
+                "loadupSpeedMs": 225.89000000152737,
+                "fps": {
+                    "min": 9.872040606232941,
+                    "max": 12.006832979171907,
+                    "avg": 10.164727233933021,
+                    "median": 10.10429071485977
+                },
+                "heapSize": {
+                    "min": 6743823,
+                    "max": 13192855,
+                    "avg": 9813201.185185185,
+                    "median": 9218546
+                },
+                "timeout": {
+                    "min": 105.92000000178814,
+                    "max": 250.2600000007078,
+                    "avg": 195.81882352940738,
+                    "median": 207.25500001572073
+                },
+                "frameTime": {
+                    "min": 50.45500001870096,
+                    "max": 157.0250000222586,
+                    "avg": 98.12741830079129,
+                    "median": 105.17250001430511
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620049111505,
+                "loadupSpeedMs": 662.9550000070594,
+                "fps": {
+                    "min": 2.7549575461248406,
+                    "max": 2.867557999277325,
+                    "avg": 2.8439662685364575,
+                    "median": 2.8552491095523544
+                },
+                "heapSize": {
+                    "min": 18597405,
+                    "max": 46870806,
+                    "avg": 34955644.37209302,
+                    "median": 36937506
+                },
+                "timeout": {
+                    "min": 324.39500000327826,
+                    "max": 762.6300000119954,
+                    "avg": 682.3894318182614,
+                    "median": 696.9700000190642
+                },
+                "frameTime": {
+                    "min": 301.32500000763685,
+                    "max": 435.1499999756925,
+                    "avg": 348.8405747125032,
+                    "median": 352.54500003065914
+                }
+            }
+        ]
+    },
+    {
+        "library": {
+            "name": "Competitor K"
+        },
+        "test": {
+            "name": "Multichannel ECG Chart"
+        },
+        "benchmarks": [
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 1000,
+                    "timeDomainInterval": 1000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620049152849,
+                "loadupSpeedMs": 366.8700000271201,
+                "fps": {
+                    "min": 29.844510099685646,
+                    "max": 59.29216857394602,
+                    "avg": 57.89994250207673,
+                    "median": 58.81955063722429
+                },
+                "heapSize": {
+                    "min": 15250887,
+                    "max": 27927654,
+                    "avg": 20643622.01694915,
+                    "median": 20798451
+                },
+                "timeout": {
+                    "min": 1.4099999680183828,
+                    "max": 63.86499997461215,
+                    "avg": 14.387750599535552,
+                    "median": 14.934999984689057
+                },
+                "frameTime": {
+                    "min": 11.425000033341348,
+                    "max": 72.07500003278255,
+                    "avg": 16.878293025887732,
+                    "median": 16.515000024810433
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 1,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620049192606,
+                "loadupSpeedMs": 733.1250000279397,
+                "fps": {
+                    "min": 2.800355645136554,
+                    "max": 3.1960624510605453,
+                    "avg": 3.131039149961898,
+                    "median": 3.1811044627269394
+                },
+                "heapSize": {
+                    "min": 29286485,
+                    "max": 78496462,
+                    "avg": 51913572.4680851,
+                    "median": 49021518
+                },
+                "timeout": {
+                    "min": 1.2750000460073352,
+                    "max": 896.8500000191852,
+                    "avg": 391.33934210526365,
+                    "median": 315.5900000128895
+                },
+                "frameTime": {
+                    "min": 41.560000041499734,
+                    "max": 488.9149999944493,
+                    "avg": 312.88515624995244,
+                    "median": 307.66249998123385
+                }
+            },
+            {
+                "config": {
+                    "channelsCount": 10,
+                    "channelDataPointsPerSecond": 10000,
+                    "timeDomainInterval": 10000,
+                    "testDurationSeconds": 30,
+                    "strokeThickness": 2,
+                    "settleTimeMs": 3000
+                },
+                "timestamp": 1620049244308,
+                "loadupSpeedMs": 2849.3750000488944,
+                "fps": {
+                    "min": 0.8529970477798862,
+                    "max": 1.7762620341754236,
+                    "avg": 1.4650546082393119,
+                    "median": 1.5311909579352685
+                },
+                "heapSize": {
+                    "min": 33837261,
+                    "max": 202899768,
+                    "avg": 73401876.65625,
+                    "median": 72224161
+                },
+                "timeout": {
+                    "min": 1.0849999962374568,
+                    "max": 6210.790000041015,
+                    "avg": 737.5254999991739,
+                    "median": 553.2899999816436
+                },
+                "frameTime": {
+                    "min": 94.7200000518933,
+                    "max": 6049.540000036359,
+                    "avg": 563.4074074073901,
+                    "median": 353.742500039516
+                }
+            }
+        ]
+    }
+]

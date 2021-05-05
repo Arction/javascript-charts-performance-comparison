@@ -1,0 +1,27 @@
+
+body {
+    margin: 0px 0px 0px 0px;
+}
+
+#wait {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 6px 6px 6px 6px;
+    color: white;
+    z-index: 100;
+}
+
+#reference {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 6px 6px 6px 6px;
+    color: white;
+    z-index: 100;
+}
+
+#chart {
+    width: 100vw;
+    height: 100vh;
+}

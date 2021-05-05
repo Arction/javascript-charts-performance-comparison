@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Benchmark results visualization (single test case)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        margin: 0px 0px 0px 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="lcjs.iife.js"></script>
+    <script>
+      const {
+        lightningChart,
+        AxisTickStrategies,
+        SolidFill,
+        ColorHSV,
+        SolidLine,
+        emptyFill,
+        emptyLine,
+        AutoCursorModes,
+        UIOrigins,
+        LinearGradientFill,
+        HighlightModes,
+      } = lcjs;
+
+      const visualizeBenchmarkResults = (fullBenchmarks) => {
+        console.log(fullBenchmarks);
+
+        const benchmarks = fullBenchmarks
+          .filter((libResult) => libResult.benchmarks)
+          .map((libResult) => ({
+            ...libResult,
+            ...libResult.benchmarks.find(
+              (benchmark) =>
+                benchmark.config.channelsCount === 10 &&
+                benchmark.config.channelDataPointsPerSecond === 10000 &&
+                benchmark.config.timeDomainInterval === 10000
+            ),
+          }));
+
+        console.log(benchmarks);
+
+        const getBenchmarkStats = (selectCategory, opts) => {
+          const { isBiggerBetter } = opts;
+          const min = benchmarks.reduce((prev, cur) => {
+            const value = selectCategory(cur);
+            return value !== undefined ? Math.min(prev, value) : prev;
+          }, Number.MAX_SAFE_INTEGER);
+          const max = benchmarks.reduce((prev, cur) => {
+            const value = selectCategory(cur);
+            return value !== undefined ? Math.max(prev, value) : prev;
+          }, -Number.MAX_SAFE_INTEGER);
+          const best = benchmarks.find(
+            (item) => selectCategory(item) === (isBiggerBetter ? max : min)
+          );
+          return { min, max, best };
+        };
+
+        const initialRenderStats = getBenchmarkStats(
+          (item) => item.loadupSpeedMs,
+          { isBiggerBetter: false }
+        );
+        const fpsStats = getBenchmarkStats((item) => item.fps?.avg, {
+          isBiggerBetter: true,
+        });
+        const timeoutStats = getBenchmarkStats((item) => item.timeout?.avg, {
+          isBiggerBetter: false,
+        });
+        const heapSizeStats = getBenchmarkStats((item) => item.heapSize?.avg, {
+          isBiggerBetter: false,
+        });
+        const frameTimeStats = getBenchmarkStats(
+          (item) => item.frameTime?.avg,
+          {
+            isBiggerBetter: false,
+          }
+        );
+
+        const opts = {
+          title: 'Performance benchmarks visualization (single test)',
+          categories: [
+            {
+              name: 'Initial render speed',
+              format: (builder, category, value, group) => {
+                return builder
+                  .addRow(group.name)
+                  .addRow(
+                    'Initial render speed:',
+                    '',
+                    group.loadupSpeedMs.toFixed(0) + ' ms'
+                  )
+                  .addRow(
+                    group.name === initialRenderStats.best.library.name
+                      ? 'This library had the best initial render speed'
+                      : `${(
+                          group.loadupSpeedMs /
+                          initialRenderStats.best.loadupSpeedMs
+                        ).toFixed(1)}x slower than ${
+                          initialRenderStats.best.library.name
+                        }`
+                  );
+              },
+            },
+            {
+              name: 'Refresh Speed',
+              format: (builder, category, value, group) => {
+                return builder
+                  .addRow(group.name)
+                  .addRow('FPS (avg):', '', group.fps.avg.toFixed(1))
+                  .addRow(
+                    group.name === fpsStats.best.library.name
+                      ? 'This library had the best refresh speed'
+                      : `${(fpsStats.best.fps.avg / group.fps.avg).toFixed(
+                          1
+                        )}x slower refresh rate than ${
+                          fpsStats.best.library.name
+                        }`
+                  );
+              },
+            },
+            {
+              name: 'Frame Times',
+              format: (builder, category, value, group) => {
+                return builder
+                  .addRow(group.name)
+                  .addRow(
+                    'Frame time (avg):',
+                    '',
+                    group.frameTime.avg.toFixed(1)
+                  )
+                  .addRow(
+                    group.name === frameTimeStats.best.library.name
+                      ? 'This library had the best average frame time'
+                      : `${(
+                          group.frameTime.avg /
+                          frameTimeStats.best.frameTime.avg
+                        ).toFixed(1)}x slower average frame time than ${
+                          frameTimeStats.best.library.name
+                        }`
+                  );
+              },
+            },
+            {
+              name: 'Event blocking',
+              format: (builder, category, value, group) => {
+                return builder
+                  .addRow(group.name)
+                  .addRow(
+                    'setTimeout delay (avg):',
+                    '',
+                    group.timeout.avg.toFixed(1) + ' ms'
+                  )
+                  .addRow(
+                    group.name === timeoutStats.best.library.name
+                      ? 'This library blocked the event queue least'
+                      : `Blocks ${(
+                          group.timeout.avg / timeoutStats.best.timeout.avg
+                        ).toFixed(1)}x longer than ${
+                          timeoutStats.best.library.name
+                        }`
+                  );
+              },
+            },
+            {
+              name: 'Memory efficiency',
+              format: (builder, category, value, group) => {
+                return builder
+                  .addRow(group.name)
+                  .addRow(
+                    'Memory usage (avg):',
+                    '',
+                    Math.round(group.heapSize.avg / Math.pow(1000, 2)) + ' MB'
+                  )
+                  .addRow(
+                    group.name === heapSizeStats.best.library.name
+                      ? 'This library used least memory'
+                      : `Used ${
+                          Math.round(
+                            (group.heapSize.avg -
+                              heapSizeStats.best.heapSize.avg) /
+                              Math.pow(1000, 2)
+                          ) + ' MB'
+                        } more than ${heapSizeStats.best.library.name}`
+                  );
+              },
+            },
+          ],
+          groups: benchmarks.map((libResult) => ({
+            ...libResult,
+            name: libResult.library.name,
+            values: [
+              libResult.loadupSpeedMs !== undefined
+                ? 1 / libResult.loadupSpeedMs
+                : 0,
+              libResult.fps !== undefined ? libResult.fps.avg : 0,
+              libResult.frameTime !== undefined
+                ? 1 / libResult.frameTime.avg
+                : 0,
+              libResult.timeout !== undefined ? 1 / libResult.timeout.avg : 0,
+              libResult.heapSize !== undefined ? 1 / libResult.heapSize.avg : 0,
+            ],
+          })),
+        };
+        console.log(opts);
+        groupedBarChart(opts);
+      };
+
+      const groupedBarChart = (props) => {
+        const categoriesCount = props.categories.length;
+        const groupsCount = props.groups.length;
+
+        const chart = lightningChart()
+          .ChartXY()
+          .setPadding({
+            left: 80,
+            right: 80,
+            bottom: 40,
+          })
+          // .setMouseInteractions(false)
+          .setAutoCursorMode(AutoCursorModes.onHover)
+          .setAutoCursor((cursor) =>
+            cursor
+              .disposePointMarker()
+              .disposeTickMarkerX()
+              .disposeTickMarkerY()
+              .setGridStrokeXStyle(emptyLine)
+              .setGridStrokeYStyle(emptyLine)
+          );
+        const xAxis = chart
+          .getDefaultAxisX()
+          .setTickStrategy(AxisTickStrategies.Empty)
+          .setMouseInteractions(false);
+        const yAxes = new Array(categoriesCount).fill(0).map((_, iCategory) =>
+          chart
+            .addAxisY({
+              // type: 'logarithmic',
+            })
+            .setMouseInteractions(false)
+            .setTickStrategy(AxisTickStrategies.Empty)
+        );
+        chart.getDefaultAxisY().dispose();
+        const yAxis = chart.getDefaultAxisY();
+
+        if (props.title) {
+          chart.setTitle(props.title);
+        } else {
+          chart.setTitle('').setTitleFillStyle(emptyFill);
+        }
+        if (props.titleAxisX) xAxis.setTitle(props.titleAxisX);
+        if (props.titleAxisY) yAxis.setTitle(props.titleAxisY);
+
+        const groupsGapX = 1.0;
+        const groupItemsWidthX = 1.0;
+        const groupItemsGapX = 0.1;
+        const marginsLeftRightX = 0.5;
+        const xStart = marginsLeftRightX;
+
+        // Each category has own series (same color and y Axis)
+        const categorySeries = new Array(categoriesCount)
+          .fill(0)
+          .map((_, iCategory) => {
+            const category = props.categories[iCategory];
+            return chart
+              .addRectangleSeries({
+                yAxis: yAxes[iCategory],
+              })
+              .setName(category.name)
+              .setHighlightMode(HighlightModes.onHover)
+              .setCursorResultTableFormatter((builder, series, rectangle) => {
+                const group = groupsWithXRange.find(
+                  (info) =>
+                    rectangle.getDimensionsTwoPoints().x1 >= info.xStart &&
+                    rectangle.getDimensionsTwoPoints().x2 <= info.xEnd
+                ).group;
+                return category.format(
+                  builder,
+                  category,
+                  group.values[iCategory],
+                  group
+                );
+              });
+          });
+
+        const groupsWithXRange = [];
+        const xEnd = props.groups.reduce((prevXEnd, group, iGroup) => {
+          const groupXStart = prevXEnd + (iGroup > 0 ? groupsGapX : 0);
+          const xEndGroup = props.categories.reduce(
+            (prevXEndGroup, category, iCategory) => {
+              const itemXStart =
+                prevXEndGroup +
+                (iCategory > 0 && iCategory < categoriesCount
+                  ? groupItemsGapX
+                  : 0);
+              const itemXEnd = itemXStart + groupItemsWidthX;
+              const itemValue = group.values[iCategory];
+              const colorEnd = ColorHSV((360 * iCategory) / categoriesCount);
+              const colorStart = colorEnd.setA(100);
+              const series = categorySeries[iCategory];
+              const rectangle = series
+                .add({
+                  x1: itemXStart,
+                  x2: itemXEnd,
+                  y1: 0,
+                  y2: Math.max(0, itemValue),
+                })
+                .setFillStyle(
+                  new LinearGradientFill({
+                    angle: 0,
+                    stops: [
+                      { offset: 0, color: colorStart },
+                      { offset: 1, color: colorEnd },
+                    ],
+                  })
+                );
+              return itemXEnd;
+            },
+            groupXStart
+          );
+          groupsWithXRange.push({
+            group,
+            xStart: groupXStart,
+            xEnd: xEndGroup,
+          });
+
+          const groupLabel = xAxis
+            .addCustomTick()
+            .setValue((groupXStart + xEndGroup) / 2)
+            .setTextFormatter(() => group.name)
+            .setGridStrokeStyle(emptyLine)
+            .setMarker((tickMarker) =>
+              tickMarker.setBackground((background) =>
+                background.setFillStyle(emptyFill).setStrokeStyle(emptyLine)
+              )
+            );
+
+          return xEndGroup;
+        }, xStart);
+
+        xAxis.setInterval(0, xEnd + marginsLeftRightX, false, true);
+        yAxes.forEach((axis, iCategory) => {
+          const yMin = categorySeries[iCategory].getBoundaries().min.y;
+          const yMax = categorySeries[iCategory].getBoundaries().max.y;
+          axis.setInterval(0, yMax / 100, false, true);
+          axis.setInterval(0, yMax, 1000 + Math.random() * 1000, true);
+        });
+
+        const legend = chart.addLegendBox().add(chart);
+        legend.setEntries((entry, component) => {
+          const iCategory = categorySeries.indexOf(component);
+          entry.setButtonOnFillStyle(
+            new SolidFill({
+              color: ColorHSV((360 * iCategory) / categoriesCount),
+            })
+          );
+        });
+      };
+
+      fetch('benchmarks_pc.json')
+        .then((r) => r.json())
+        .then((benchmarks) => {
+          visualizeBenchmarkResults(benchmarks);
+        });
+    </script>
+  </body>
+</html>

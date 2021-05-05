@@ -1,0 +1,24 @@
+0000000000000000000000000000000000000000 489dca6351a023510a245a84eabffd03badbbe8b Niilo Keinänen <niilo.keinanen@arction.com> 1620194233 +0300	clone: from https://github.com/Arction/performance-comparison-multilinechart.git
+489dca6351a023510a245a84eabffd03badbbe8b 686727a966b3f6ea4ba9ca290397ebcf742afb1d Niilo Keinänen <niilo.keinanen@arction.com> 1620194902 +0300	commit: Tweaks
+686727a966b3f6ea4ba9ca290397ebcf742afb1d 62c387b40d78f3a62afe76b6bfbe29cc13edf823 Niilo Keinänen <niilo.keinanen@arction.com> 1620195341 +0300	commit: Export pc benchmarks
+62c387b40d78f3a62afe76b6bfbe29cc13edf823 4291c75813ddd5b96a32ceda0243a90489134120 Niilo Keinänen <niilo.keinanen@arction.com> 1620196367 +0300	commit: Test libraries with spike data
+4291c75813ddd5b96a32ceda0243a90489134120 356787841d889625a52e1324411bde9c629ece2b Niilo Keinänen <niilo.keinanen@arction.com> 1620196843 +0300	commit: Move benchmark stuff to bench folder
+356787841d889625a52e1324411bde9c629ece2b 6091332bd3a6b83025b1954381c3a6277463cd31 Niilo Keinänen <niilo.keinanen@arction.com> 1620197992 +0300	commit: Write readme
+6091332bd3a6b83025b1954381c3a6277463cd31 859957ae7c62b5a74e09a84de943cdf858fa4735 Niilo Keinänen <niilo.keinanen@arction.com> 1620200919 +0300	commit: Tweaks
+859957ae7c62b5a74e09a84de943cdf858fa4735 0a2ec77d3a5b595b247a8f3ab163d932fc477ec9 Niilo Keinänen <niilo.keinanen@arction.com> 1620202172 +0300	commit: Add measurements for initial heap size
+0a2ec77d3a5b595b247a8f3ab163d932fc477ec9 12db0cc2090bdb9e18631e7289eadd9c738ae2db Niilo Keinänen <niilo.keinanen@arction.com> 1620202909 +0300	commit: Reset config
+12db0cc2090bdb9e18631e7289eadd9c738ae2db b7118a0784b2830519bbf2c8519f1abfbdb5c5e3 Niilo Keinänen <niilo.keinanen@arction.com> 1620203677 +0300	commit: Remove temp file
+b7118a0784b2830519bbf2c8519f1abfbdb5c5e3 e5fe0874e733aa4dbf99e5862e59978d83037ac6 Niilo Keinänen <niilo.keinanen@arction.com> 1620217717 +0300	commit: Hide competitor names
+e5fe0874e733aa4dbf99e5862e59978d83037ac6 2e8f8a198ad6c976df4db7e3c4d3fba6e4bab592 Niilo Keinänen <niilo.keinanen@arction.com> 1620217769 +0300	commit: Hide competitor name
+2e8f8a198ad6c976df4db7e3c4d3fba6e4bab592 2392553faafa4519930b2e577b3e29eb4fcb095d Niilo Keinänen <niilo.keinanen@arction.com> 1620217879 +0300	commit: Update pics
+2392553faafa4519930b2e577b3e29eb4fcb095d d41ab82cdb5096cd16da2b51a16e5e89ca7de77e Niilo Keinänen <niilo.keinanen@arction.com> 1620218015 +0300	commit: Update csv benchmarks
+d41ab82cdb5096cd16da2b51a16e5e89ca7de77e 8684dee7ace2a2d3106dab55f05932efd85e0ca6 Niilo Keinänen <niilo.keinanen@arction.com> 1620218139 +0300	commit: Update csv benchmarks
+8684dee7ace2a2d3106dab55f05932efd85e0ca6 103a733a0b17e02fbbe73c9a72557c4e3ca33620 Niilo Keinänen <niilo.keinanen@arction.com> 1620218256 +0300	commit: Add links to full data
+103a733a0b17e02fbbe73c9a72557c4e3ca33620 f8c89d6feda8d434ee5ce58b8e848af54781f6b3 Niilo Keinänen <niilo.keinanen@arction.com> 1620219225 +0300	commit: Update readme
+f8c89d6feda8d434ee5ce58b8e848af54781f6b3 b51eb70f92451e74177d662fe7749ce22090fa2c Niilo Keinänen <niilo.keinanen@arction.com> 1620219430 +0300	commit: Remove proof of concepts
+b51eb70f92451e74177d662fe7749ce22090fa2c f6b2d2faa3345014bcdc7cf757157303c364d185 Niilo Keinänen <niilo.keinanen@arction.com> 1620220542 +0300	commit: Readme tweaks
+f6b2d2faa3345014bcdc7cf757157303c364d185 c68060f94aa20726216d9b9958580d948e63e927 Niilo Keinänen <niilo.keinanen@arction.com> 1620220795 +0300	commit: Improve spike data example
+c68060f94aa20726216d9b9958580d948e63e927 c68060f94aa20726216d9b9958580d948e63e927 Niilo Keinänen <niilo.keinanen@arction.com> 1620220805 +0300	reset: moving to HEAD
+c68060f94aa20726216d9b9958580d948e63e927 746ed2e0b51700aaa61f0e813caa86b79a44c44b Niilo Keinänen <niilo.keinanen@arction.com> 1620220952 +0300	commit: Tweaks
+746ed2e0b51700aaa61f0e813caa86b79a44c44b cc1d0225c6438f525b0596d2dc6c3ca154884187 Niilo Keinänen <niilo.keinanen@arction.com> 1620221027 +0300	commit: Fix typo
+cc1d0225c6438f525b0596d2dc6c3ca154884187 dbdbb45702ac0b2c8a2b843d43a58a60a302ebf4 Niilo Keinänen <niilo.keinanen@arction.com> 1620221064 +0300	commit: Remove blog link (in dev)
