@@ -3,17 +3,17 @@ Public comparison of LightningChart® JS performance against other JavaScript ch
 ![Multichannel ECG Chart](multichannel-ecg-chart.png "5 channel ECG Chart visualized with LightningChart® JS")
 
 The following chart libraries were tested:
-- [LightningChart® JS](https://www.arction.com/lightningchart-ultimate-sdk)
-- [Highcharts](https://www.highcharts.com/)
-- [SciChart](https://www.scichart.com/javascript-chart-features/)
-- [Anychart](https://www.anychart.com/)
-- [amCharts](https://www.amcharts.com/)
-- [ECharts](http://echarts.apache.org/en/index.html)
-- [DvxCharts](https://www.dvxcharts.com/)
-- [Dygraphs](https://dygraphs.com/)
-- [Canvas.js](https://canvasjs.com/)
-- [μPlot](https://github.com/leeoniya/uPlot)
-- [Plotly.js](https://plotly.com/javascript/)
+- [LightningChart® JS v3.0.0](https://www.arction.com/lightningchart-ultimate-sdk)
+- [Highcharts 9.1.0](https://www.highcharts.com/)
+- [SciChart 1.4.1578](https://www.scichart.com/javascript-chart-features/)
+- [Anychart 8.9.0](https://www.anychart.com/)
+- [amCharts 4](https://www.amcharts.com/)
+- [ECharts 5](http://echarts.apache.org/en/index.html)
+- [DvxCharts 5.0.0.0](https://www.dvxcharts.com/)
+- [Dygraphs 2.1.0](https://dygraphs.com/)
+- [Canvas.js 3.2.16](https://canvasjs.com/)
+- [μPlot 1.6.8](https://github.com/leeoniya/uPlot)
+- [Plotly.js 1.58.4](https://plotly.com/javascript/)
 
 Competitor results are kept unidentified (for example, "Competitor A").
 
