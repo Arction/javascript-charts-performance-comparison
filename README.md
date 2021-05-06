@@ -57,7 +57,7 @@ Full benchmarks data can be found [here](https://github.com/Arction/performance-
 - Browser: Google Chrome v90.0.4430.93
 - CPU: Ryzen 9 5900X
 - GPU: RTX 3080
-- RAM: 16 GB
+- RAM: 32 GB
 
 ![FPS visualization high end PC](fpsVisualization-high-end-pc.png "FPS visualization (High end PC)")
 
