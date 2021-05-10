@@ -97,7 +97,7 @@ Same data visualized *correctly* with LightningChart® JS:
 
 ### Other errors
 
-With extremely dense data (100 μs resolution), competitor G produces incorrect visualization (curve looks like it is thicker than it should, or like there is a lot of *noise*). In this case, the Y value can't be accurately identified.
+With extremely dense data (100 μs resolution), competitor G produces incorrect visualization (curve looks like it is thicker than it should, or like there is a lot of *noise*). In this case, the Y value can't be accurately identified. Additionally, the visualized Y min/max range is out of the input data bounds (max Y is obviously drawn higher than 5.0).
 
 ![Competitor G noise visualization](issue0-G.png "Competitor G \"noise\" error")
 
