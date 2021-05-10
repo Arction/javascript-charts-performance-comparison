@@ -103,7 +103,7 @@ With extremely dense data (100 μs resolution), competitor G produces incorrect 
 
 Same data visualized *correctly* with LightningChart® JS:
 
-![LightningChart® JS spike data](issue0-LCJS.png "LightningChart® JS spike data")
+![LightningChart® JS](issue0-LCJS.png "LightningChart® JS")
 
 
 ## Replicating performance benchmarks
