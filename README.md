@@ -124,6 +124,14 @@ The test parameters are configured by modifying `bench/config.iife.js`. After mo
 
 All the benchmark applications run for specified amount of time (30 seconds by default), and then print out the benchmark results into the *console*.
 
+### Required dependencies
+
+Some chart libraries do not have public URLs where the latest version can be fetched. For these libraries, you have to manually download their library build, and place it in the `bench` folder in order for the application to work.
+
+- LightningChart® JS | Included in project `lcjs.iife.js`
+- μPlot | Requires `uPlot.iife.min.js`, `uPlot.min.css`
+- DvxCharts | Requires `dvxCharts.chart.min.js`, `dvxCharts.chart.min.css`, `dvxCharts.styles.css`
+
 ### Chart libraries that require a license
 
 *SciChart* can't be run with the above method, as there is no IIFE build available, and it also requires licensing management software installed on the local computer. *SciChart* benchmark application can be found in `bench/scichart/`.

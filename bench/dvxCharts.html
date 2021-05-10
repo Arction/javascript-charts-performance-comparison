@@ -30,6 +30,11 @@
       // NOTE: Stroke width from configuration not used (requires css).
       let testStopped = false;
 
+      if (! ('dvxCharts' in window)) {
+        // Library has to be manually downloaded and put into `bench` folder.
+        alert(`Library not found, refer to README Required dependencies on required files for this library.`)
+      }
+
       const prepareData = (packedData) => {
         // Map ECG y data into n channels on same X, and Y Axis (offset channels Y coordinate).
         // Source Y data is in range [0, 1].
