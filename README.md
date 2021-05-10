@@ -76,7 +76,11 @@ Soon after, at 10 ECG channels with a total of 100 000 data points streamed in e
 
 LightningChart® JS was able smoothly visualize, with over 40 FPS, data rates that are **90 x more than average of the competitors** in this test. 
 
-## Downsampling
+## Errors in data visualization
+
+Chart library performance is important, but producing correct visualizations is even more important. This section contains some cases where **incorrect** or *unexpected* results were identified.
+
+### Downsampling
 
 Some chart libraries are known to utilize internal downsampling of input data.
 While this yields increased performance, it produces incorrect visualization which is unacceptable in any realistic application.
@@ -90,6 +94,16 @@ The following competitors have been tested and proven to utilize downsampling:
 Same data visualized *correctly* with LightningChart® JS:
 
 ![LightningChart® JS spike data](spikeData-lcjs.png "LightningChart® JS spike data")
+
+### Other errors
+
+With extremely dense data (100 μs resolution), competitor G produces incorrect visualization (curve looks like it is thicker than it should, or like there is a lot of *noise*). In this case, the Y value can't be accurately identified.
+
+![Competitor G noise visualization](issue0-G.pNG "Competitor G \"noise\" error")
+
+Same data visualized *correctly* with LightningChart® JS:
+
+![LightningChart® JS spike data](issue0-LCJS.png "LightningChart® JS spike data")
 
 
 ## Replicating performance benchmarks
