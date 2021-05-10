@@ -118,7 +118,7 @@ npm i --global http-server
 http-server
 ```
 
-Benchmark index page can be then found in `localhost:8080/bench` by typing the URL directly into a browser (like Google Chrome).
+Afterwards, benchmark index page can be found in `localhost:8080/bench` by typing the URL directly into a browser (like Google Chrome).
 
 The test parameters are configured by modifying `bench/config.iife.js`. After modifications, a *cache refresh* is usually required (reload page with Shift+Ctrl+R).
 
