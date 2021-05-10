@@ -58,13 +58,13 @@
             text: '',
           },
           boost: {
-            seriesThreshold: 1,
+            
           },
           series: new Array(BENCHMARK_CONFIG.channelsCount)
             .fill(0)
             .map((_, iChannel) => ({
               data: [],
-              lineWidth: 1,
+              lineWidth: BENCHMARK_CONFIG.strokeThickness,
               boostThreshold: 1,
             })),
         });
