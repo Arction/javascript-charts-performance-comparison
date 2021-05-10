@@ -90,3 +90,26 @@ The following competitors have been tested and proven to utilize downsampling:
 Same data visualized *correctly* with LightningChart® JS:
 
 ![LightningChart® JS spike data](spikeData-lcjs.png "LightningChart® JS spike data")
+
+
+## Replicating performance benchmarks
+
+The benchmark applications and all related resources can be found in `bench/` folder.
+
+**Hosting development server**
+
+```
+npm i --global http-server
+
+http-server
+```
+
+Benchmark index page can be then found in `localhost:8080/bench` by typing the URL directly into a browser (like Google Chrome).
+
+The test parameters are configured by modifying `bench/config.iife.js`. After modifications, a *cache refresh* is usually required (reload page with Shift+Ctrl+R).
+
+All the benchmark applications run for specified amount of time (30 seconds by default), and then print out the benchmark results into the *console*.
+
+### Chart libraries that require a license
+
+*SciChart* can't be run with the above method, as there is no IIFE build available, and it also requires licensing management software installed on the local computer. *SciChart* benchmark application can be found in `bench/scichart/`.
