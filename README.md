@@ -3,7 +3,7 @@ Public comparison of LightningChart® JS performance against other JavaScript ch
 ![Multichannel ECG Chart](multichannel-ecg-chart.png "5 channel ECG Chart visualized with LightningChart® JS")
 
 The following chart libraries were tested:
-- [LightningChart® JS v3.0.0](https://www.arction.com/lightningchart-ultimate-sdk)
+- [LightningChart® JS v3.0.0](https://www.arction.com/lightningchart-js/)
 - [Highcharts 9.1.0](https://www.highcharts.com/)
 - [SciChart 1.4.1578](https://www.scichart.com/javascript-chart-features/)
 - [Anychart 8.9.0](https://www.anychart.com/)
