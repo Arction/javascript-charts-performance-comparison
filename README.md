@@ -14,6 +14,7 @@ The following chart libraries were tested:
 - [Canvas.js 3.2.16](https://canvasjs.com/)
 - [μPlot 1.6.8](https://github.com/leeoniya/uPlot)
 - [Plotly.js 1.58.4](https://plotly.com/javascript/)
+- [ZingChart 2.9.3](https://www.zingchart.com/)
 
 Competitor results are kept unidentified (for example, "Competitor A").
 
