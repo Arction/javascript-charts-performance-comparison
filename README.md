@@ -36,7 +36,7 @@ Below you can find an overview of library performance in a streaming application
 
 ![FPS visualization PC](fpsVisualization-pc.png "FPS visualization (PC)")
 
-Full benchmarks data can be found [here](https://github.com/Arction/performance-comparison-multilinechart/blob/main/bench/benchmarks_pc.csv).
+Full benchmarks data can be found [here](https://github.com/Arction/javascript-charts-performance-comparison/blob/main/bench/benchmarks_pc.csv).
 
 ### Laptop
 
@@ -49,7 +49,7 @@ Full benchmarks data can be found [here](https://github.com/Arction/performance-
 
 ![FPS visualization laptop](fpsVisualization-laptop.png "FPS visualization (Laptop)")
 
-Full benchmarks data can be found [here](https://github.com/Arction/performance-comparison-multilinechart/blob/main/bench/benchmarks_laptop.csv).
+Full benchmarks data can be found [here](https://github.com/Arction/javascript-charts-performance-comparison/blob/main/bench/benchmarks_laptop.csv).
 
 ### High end PC
 
@@ -62,7 +62,7 @@ Full benchmarks data can be found [here](https://github.com/Arction/performance-
 
 ![FPS visualization high end PC](fpsVisualization-high-end-pc.png "FPS visualization (High end PC)")
 
-Full benchmarks data can be found [here](https://github.com/Arction/performance-comparison-multilinechart/blob/main/bench/benchmarks_high-end-pc.csv).
+Full benchmarks data can be found [here](https://github.com/Arction/javascript-charts-performance-comparison/blob/main/bench/benchmarks_high-end-pc.csv).
 
 ## Results analysis
 
