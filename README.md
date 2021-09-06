@@ -69,16 +69,20 @@ Full benchmarks data can be found [here](https://github.com/Arction/javascript-c
 
 ## Results analysis
 
-All of the included chart libraries proved to be capable of visualizing the realtime multichannel ECG chart.
-Increasing the amount of channels and data streaming rate eventually leads to FPS dropping and more and more time spent in updating the chart.
-When FPS drops below ~30...40, the stuttering becomes visible to user and the web page becomes uninteractive.
+While all of the included chart libraries could visualize the multichannel ECG chart, it quickly became apparent that majority of the tested charts are not designed for frequent updates.
 
-Most chart libraries were able to handle 1 ECG channel with a total of 1000 data points streamed in every second, and a 1 second time domain view.
-After this threshold, most libraries performance plummets, except for LightningChart® JS, Competitor A and Competitor E.
+Already with only one channel and 1000 incoming data points per second, most charts utilize 100% of the CPU which means that the rest of the webpage stops working well. CPU usage can only be observed with browser developer tools, but the same effect can be observed from the benchmark results by looking at `FPS` dropping to 30 and below (laptop measurements).
 
-Soon after, at 10 ECG channels with a total of 100 000 data points streamed in every second, and a total of 10 million data points visible on screen, LightningChart® JS was the only chart library that could still function with excellent FPS, and going even further to **total of 10 million data points streamed in every second** (on high end PC).
+Increasing data amount to 10 channels and 10000 incoming data points per second, 9 out of 12 charts cease working as their FPS drops to ~10 and below. At this point, _LightningChart JS_ refreshes twice as fast and with ~3x less processing than the other still functioning charts (laptop measurements).
 
-LightningChart® JS was able smoothly visualize, with over 40 FPS, data rates that are **90 x more than average of the competitors** in this test. 
+Increasing data amounts even further, every chart except for _LightningChart JS_ drops off, either crashing or refreshing at less than 5 FPS.
+The final measurement for _LightningChart JS_ is with 10 channels and million data points per second coming to a whopping total of **10 million incoming data points per second** and still refreshing with over 60 FPS (high-end pc measurements). At this point, the amount of data is approaching the limitations of modern browsers but it seems clear that _LightningChart JS_ is not going to be the bottleneck.
+
+**Conclusion:**
+
+- _LightningChart JS_ performed **175x** more efficiently than the fastest hardware accelerated competitor (amount of data, refresh rate).
+- _LightningChart JS_ performed **542x** more efficiently than the average competitor.
+- Majority of web charts claiming "high performance" are still not suitable for real-time line chart visualization as they require too much CPU processing, leaving the rest of the webpage performing bad.
 
 ## Errors in data visualization
 
