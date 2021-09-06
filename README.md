@@ -16,7 +16,8 @@ The following chart libraries were tested:
 - [Plotly.js 1.58.4](https://plotly.com/javascript/)
 - [ZingChart 2.9.3](https://www.zingchart.com/)
 
-Competitor results are kept unidentified (for example, "Competitor A").
+The following chart libraries were suggested but not included:
+- [DevExtreme](https://js.devexpress.com/) Based on SVG, this is not suitable for real-time data visualization.
 
 ## Benchmarks
 
@@ -24,6 +25,8 @@ Below you can find an overview of library performance in a streaming application
 - Higher bar corresponds to smoother performance.
 - Orange bar color means stuttering is visible to human eye.
 - Red bar color means stuttering is constant and feels laggy, or even unusable.
+
+Competitor results are kept unidentified (for example, "Competitor A").
 
 ### PC
 
