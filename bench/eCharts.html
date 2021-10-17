@@ -20,29 +20,23 @@
     <script src="config.iife.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
     <div id="chart"></div>
-
     <script>
-      let testStopped = false;
+      let app = undefined
 
-      const prepareData = (packedData) => {
-        // Map ECG y data into n channels on same X, and Y Axis (offset channels Y coordinate).
-        // Source Y data is in range [0, 1].
-        const channelsYValues = new Array(BENCHMARK_CONFIG.channelsCount)
-          .fill(0)
-          .map((_, iChannel) =>
-            packedData.map(
-              (srcY, iDataPoint) =>
-                srcY + (BENCHMARK_CONFIG.channelsCount - (iChannel + 1)) * 1
-            )
-          );
-        return channelsYValues;
-      };
+      const shiftingData = new Array(BENCHMARK_CONFIG.channelsCount)
+        .fill(0)
+        .map((_, iChannel) =>
+          new Array(BENCHMARK_CONFIG.timeDomainInterval)
+            .fill(0)
+            .map((_, iDataPoint) => [
+              iDataPoint,
+              0,
+            ])
+        );
 
-      const createChart = (sourceData) => {
+      const createChart = async () => {
         const container = document.getElementById('chart');
-
         const chart = echarts.init(container);
-
         const options = {
           animation: false,
           title: {},
@@ -67,245 +61,66 @@
         };
         chart.setOption(options);
 
-        const shiftingData = new Array(BENCHMARK_CONFIG.channelsCount)
-          .fill(0)
-          .map((_, iChannel) =>
-            new Array(BENCHMARK_CONFIG.timeDomainInterval)
-              .fill(0)
-              .map((_, iDataPoint) => [
-                iDataPoint,
-                sourceData[iChannel][iDataPoint],
-              ])
-          );
-        let iDataPoint = 0;
-        const addNDataPoints = (n) => {
-          // Update visible data each frame to simulate data being streamed in.
-          // (NOTE: means that user can't zoom to view older data along time domain).
+        app = {
+          chart,
+        }
+      }
 
-          // Shift all channels data arrays by amount of new data points.
-          shiftingData.forEach((values) => {
-            for (let i = 0; i < n; i += 1) {
-              values.shift(1);
-            }
-          });
-          for (let iNewDataPoint = 0; iNewDataPoint < n; iNewDataPoint += 1) {
-            // Add new value to each channel data array.
-            const iSourceDataPoint = iDataPoint % sourceData[0].length;
-            for (
-              let iChannel = 0;
-              iChannel < BENCHMARK_CONFIG.channelsCount;
-              iChannel += 1
-            ) {
-              const values = shiftingData[iChannel];
-              const x = iDataPoint;
-              const y = sourceData[iChannel][iSourceDataPoint];
-              values.push([x, y]);
-            }
-            iDataPoint += 1;
+      const setData = async (data) => {
+        iDataPoint = 0
+        appendData(data)
+      }
+
+      let iDataPoint = 0
+      const appendData = async (data) => {
+        const n = data[0].length
+
+        // Update visible data each frame to simulate data being streamed in.
+        // (NOTE: means that user can't zoom to view older data along time domain).
+
+        // Shift all channels data arrays by amount of new data points.
+        shiftingData.forEach((values) => {
+          for (let i = 0; i < n; i += 1) {
+            values.shift(1);
           }
-
-          chart.setOption({
-            series: new Array(BENCHMARK_CONFIG.channelsCount)
-              .fill(0)
-              .map((_, iChannel) => ({
-                data: shiftingData[iChannel],
-              })),
-            xAxis: {
-              min: iDataPoint - BENCHMARK_CONFIG.timeDomainInterval,
-              max: iDataPoint,
-            },
-          });
-        };
-
-        return {
-          renderInitialData: () => {
-            return new Promise((resolve) => {
-              chart.on('finished', () => {
-                resolve();
-              });
-              addNDataPoints(BENCHMARK_CONFIG.timeDomainInterval);
-            });
-          },
-          streamData: () => {
-            let tPrev = performance.now();
-            let newDataModulus = 0;
-            const streamData = () => {
-              const tNow = performance.now();
-              const tDelta = tNow - tPrev;
-              let newDataPointsCount =
-                BENCHMARK_CONFIG.channelDataPointsPerSecond * (tDelta / 1000) +
-                newDataModulus;
-              newDataModulus = newDataPointsCount % 1;
-              newDataPointsCount = Math.floor(newDataPointsCount);
-              if (newDataPointsCount > 0) {
-                addNDataPoints(newDataPointsCount);
-              }
-              tPrev = tNow;
-              if (!testStopped) {
-                requestAnimationFrame(streamData);
-              }
-            };
-            streamData();
-          },
-        };
-      };
-
-      const wait = document.getElementById('wait');
-      wait.textContent = 'Fetching data.json ...';
-      fetch(BENCHMARK_CONFIG.dataSource)
-        .then((result) => result.json())
-        .then(async (packedData) => {
-          const data = prepareData(packedData);
-          wait.textContent = 'Letting chart settle';
-          const { renderInitialData, streamData } = createChart(data);
-          await new Promise((resolve) =>
-            setTimeout(resolve, BENCHMARK_CONFIG.settleTimeMs)
-          );
-
-          // Measure initial render speed speed.
-          wait.textContent = 'Rendering ...';
-          await new Promise((resolve) =>
-            requestAnimationFrame(() => requestAnimationFrame(resolve))
-          );
-
-          console.time('loadup');
-          const heapSizeStart = performance.memory.usedJSHeapSize;
-          let tStart = performance.now();
-          let loadupSpeedMs = 0;
-
-          await renderInitialData();
-          wait.textContent = 'Ready! Streaming data ...';
-          console.timeEnd('loadup');
-          const heapSizeInitialRender = performance.memory.usedJSHeapSize;
-          loadupSpeedMs = performance.now() - tStart;
-
-          // Measure FPS and HEAP SIZE while streaming.
-          streamData();
-          tStart = performance.now();
-          const fpsMeasurements = [];
-          const heapSizeMeasurements = [];
-          const timeoutMeasurements = [];
-          (() => {
-            let frames = 0;
-            const recordFrame = () => {
-              frames++;
-              const tNow = performance.now();
-              const fps = 1000 / ((tNow - tStart) / frames);
-              if (frames >= 5) {
-                fpsMeasurements.push(fps);
-              }
-              if (!testStopped) {
-                requestAnimationFrame(recordFrame);
-              }
-            };
-            requestAnimationFrame(recordFrame);
-          })();
-          (() => {
-            let tPrev = tStart;
-            const checkHeapSize = () => {
-              const tNow = performance.now();
-              if (tNow - tPrev > 500) {
-                const heapSize = performance.memory.usedJSHeapSize;
-                heapSizeMeasurements.push(heapSize);
-                tPrev = tNow;
-              }
-              if (!testStopped) {
-                requestAnimationFrame(checkHeapSize);
-              }
-            };
-            checkHeapSize();
-          })();
-
-          (() => {
-            let tPrev = tStart;
-            const check = () => {
-              const tNow = performance.now();
-              timeoutMeasurements.push(tNow - tPrev);
-              tPrev = tNow;
-              if (!testStopped) {
-                setTimeout(check);
-              }
-            };
-            setTimeout(check);
-          })();
-          const frameTimeMeasurements = [];
-          (() => {
-            let frames = 0;
-            let tPrev = tStart;
-            const check = () => {
-              frames++;
-              const tNow = performance.now();
-              const frameTime = tNow - tPrev;
-              if (frames >= 5) {
-                frameTimeMeasurements.push(frameTime);
-              }
-              tPrev = tNow;
-              if (!testStopped) {
-                requestAnimationFrame(check);
-              }
-            };
-            requestAnimationFrame(check);
-          })();
-
-          const checkOver = () => {
-            const tNow = performance.now();
-            if (tNow - tStart >= BENCHMARK_CONFIG.testDurationSeconds * 1000) {
-              // Finish benchmark.
-              testStopped = true;
-              wait.textContent = 'Benchmark finished. See console for results';
-
-              // Calculate min, max, avg, median from FPS and HEAP SIZE measurements.
-              const getNumberArrayStats = (array) => {
-                // https://stackoverflow.com/questions/45309447/calculating-median-javascript
-                function median(values) {
-                  if (values.length === 0) return 0;
-                  values.sort((a, b) => a - b);
-                  const half = Math.floor(values.length / 2);
-                  if (values.length % 2) return values[half];
-                  return (values[half - 1] + values[half]) / 2.0;
-                }
-                return {
-                  min: array.reduce(
-                    (prev, cur) => Math.min(prev, cur),
-                    Number.MAX_SAFE_INTEGER
-                  ),
-                  max: array.reduce(
-                    (prev, cur) => Math.max(prev, cur),
-                    -Number.MAX_SAFE_INTEGER
-                  ),
-                  avg:
-                    array.reduce((prev, cur) => prev + cur, 0) / array.length,
-                  median: median(array),
-                };
-              };
-
-              const fpsStats = getNumberArrayStats(fpsMeasurements);
-              const heapSizeStats = getNumberArrayStats(heapSizeMeasurements);
-              const timeoutStats = getNumberArrayStats(timeoutMeasurements);
-              const frameTimeStats = getNumberArrayStats(frameTimeMeasurements);
-              const benchmark = {
-                config: BENCHMARK_CONFIG,
-                timestamp: Date.now(),
-                loadupSpeedMs: loadupSpeedMs,
-                fps: fpsStats,
-                heapSize: {
-                  ...heapSizeStats,
-                  before: heapSizeStart,
-                  afterInitialRender: heapSizeInitialRender,
-                },
-                timeout: timeoutStats,
-                frameTime: frameTimeStats,
-              };
-              console.log(
-                'BENCHMARK RESULTS\n',
-                '-----------------\n',
-                JSON.stringify(benchmark)
-              );
-            } else requestAnimationFrame(checkOver);
-          };
-          requestAnimationFrame(checkOver);
         });
+        for (let iNewDataPoint = 0; iNewDataPoint < n; iNewDataPoint += 1) {
+          // Add new value to each channel data array.
+          for (
+            let iChannel = 0;
+            iChannel < BENCHMARK_CONFIG.channelsCount;
+            iChannel += 1
+          ) {
+            const values = shiftingData[iChannel];
+            const x = iDataPoint;
+            const y = data[iChannel][iNewDataPoint];
+            values.push([x, y]);
+          }
+          iDataPoint += 1;
+        }
+
+        app.chart.setOption({
+          series: new Array(BENCHMARK_CONFIG.channelsCount)
+            .fill(0)
+            .map((_, iChannel) => ({
+              data: shiftingData[iChannel],
+            })),
+          xAxis: {
+            min: iDataPoint - BENCHMARK_CONFIG.timeDomainInterval,
+            max: iDataPoint,
+          },
+        });
+      }
+
+      window.Test = {
+        format: 'y-array',
+        createChart,
+        setData,
+        appendData
+      }
+
     </script>
+    <script src="benchmark.js"></script>
 
     <p id="reference">
       Code based on

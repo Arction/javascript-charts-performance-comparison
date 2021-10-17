@@ -21,25 +21,10 @@
     <script src="https://code.highcharts.com/modules/boost.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <div id="chart"></div>
-
     <script>
-      let testStopped = false;
+      let app = undefined
 
-      const prepareData = (packedData) => {
-        // Map ECG y data into n channels on same X, and Y Axis (offset channels Y coordinate).
-        // Source Y data is in range [0, 1].
-        const channelsYValues = new Array(BENCHMARK_CONFIG.channelsCount)
-          .fill(0)
-          .map((_, iChannel) =>
-            packedData.map(
-              (srcY, iDataPoint) =>
-                srcY + (BENCHMARK_CONFIG.channelsCount - (iChannel + 1)) * 1
-            )
-          );
-        return channelsYValues;
-      };
-
-      const createChart = (sourceData) => {
+      const createChart = async () => {
         Highcharts.setOptions({
           plotOptions: {
             line: {
@@ -53,6 +38,7 @@
             },
           },
         });
+        
         const chart = Highcharts.chart('chart', {
           title: {
             text: '',
@@ -69,221 +55,47 @@
             })),
         });
 
-        let iDataPoint = 0;
-        const data = new Array(BENCHMARK_CONFIG.channelsCount)
-          .fill(0)
-          .map((_) => []);
-        const addNDataPoints = (n) => {
-          // Add new value to each channel data array.
-          for (let iNewDataPoint = 0; iNewDataPoint < n; iNewDataPoint += 1) {
-            const iSourceDataPoint = iDataPoint % sourceData[0].length;
-            for (
-              let iChannel = 0;
-              iChannel < BENCHMARK_CONFIG.channelsCount;
-              iChannel += 1
-            ) {
-              const y = sourceData[iChannel][iSourceDataPoint];
-              chart.series[iChannel].addPoint(y, false);
-            }
-            iDataPoint += 1;
+        app = {
+          chart
+        }
+      }
+
+      const setData = async (data) => {
+        app.chart.series.forEach((series, i) => {
+          series.setData(data[i])
+        })
+      }
+
+      let iDataPoint = 0
+      const appendData = async (data) => {
+        const shift = iDataPoint > BENCHMARK_CONFIG.timeDomainInterval
+
+        iDataPoint += data[0].length
+        app.chart.series.forEach((series, i) => {
+          for (let iDp = 0; iDp < data[i].length; iDp ++) {
+            series.addPoint(data[i][iDp], false, shift)
           }
-          chart.series.forEach((series) => {
-            series.xAxis.update(
-              {
-                min: iDataPoint - BENCHMARK_CONFIG.timeDomainInterval,
-                max: iDataPoint,
-              },
-              false,
-              false
-            );
-          });
-          chart.redraw();
-        };
-
-        return {
-          renderInitialData: () => {
-            return new Promise((resolve) => {
-              addNDataPoints(BENCHMARK_CONFIG.timeDomainInterval);
-              requestAnimationFrame(resolve);
-            });
-          },
-          streamData: () => {
-            let tPrev = performance.now();
-            let newDataModulus = 0;
-            const streamData = () => {
-              const tNow = performance.now();
-              const tDelta = tNow - tPrev;
-              let newDataPointsCount =
-                BENCHMARK_CONFIG.channelDataPointsPerSecond * (tDelta / 1000) +
-                newDataModulus;
-              newDataModulus = newDataPointsCount % 1;
-              newDataPointsCount = Math.floor(newDataPointsCount);
-              addNDataPoints(newDataPointsCount);
-              tPrev = tNow;
-              if (!testStopped) {
-                requestAnimationFrame(streamData);
-              }
-            };
-            streamData();
-          },
-        };
-      };
-
-      const wait = document.getElementById('wait');
-      wait.textContent = 'Fetching data.json ...';
-      fetch(BENCHMARK_CONFIG.dataSource)
-        .then((result) => result.json())
-        .then(async (packedData) => {
-          const data = prepareData(packedData);
-          wait.textContent = 'Letting chart settle';
-          const { renderInitialData, streamData } = createChart(data);
-          await new Promise((resolve) =>
-            setTimeout(resolve, BENCHMARK_CONFIG.settleTimeMs)
+          series.xAxis.update(
+            {
+              min: iDataPoint - BENCHMARK_CONFIG.timeDomainInterval,
+              max: iDataPoint,
+            },
+            false,
+            false
           );
+        })
+        app.chart.redraw();
+      }
 
-          // Measure initial render speed speed.
-          wait.textContent = 'Rendering ...';
-          await new Promise((resolve) =>
-            requestAnimationFrame(() => requestAnimationFrame(resolve))
-          );
+      window.Test = {
+        format: 'y-array',
+        createChart,
+        setData,
+        appendData
+      }
 
-          console.time('loadup');
-          const heapSizeStart = performance.memory.usedJSHeapSize;
-          let tStart = performance.now();
-          let loadupSpeedMs = 0;
-
-          await renderInitialData();
-          wait.textContent = 'Ready! Streaming data ...';
-          console.timeEnd('loadup');
-          const heapSizeInitialRender = performance.memory.usedJSHeapSize;
-          loadupSpeedMs = performance.now() - tStart;
-
-          // Measure FPS and HEAP SIZE while streaming.
-          streamData();
-          tStart = performance.now();
-          const fpsMeasurements = [];
-          const heapSizeMeasurements = [];
-          const timeoutMeasurements = [];
-          (() => {
-            let frames = 0;
-            const recordFrame = () => {
-              frames++;
-              const tNow = performance.now();
-              const fps = 1000 / ((tNow - tStart) / frames);
-              if (frames >= 5) {
-                fpsMeasurements.push(fps);
-              }
-              if (!testStopped) {
-                requestAnimationFrame(recordFrame);
-              }
-            };
-            requestAnimationFrame(recordFrame);
-          })();
-          (() => {
-            let tPrev = tStart;
-            const checkHeapSize = () => {
-              const tNow = performance.now();
-              if (tNow - tPrev > 500) {
-                const heapSize = performance.memory.usedJSHeapSize;
-                heapSizeMeasurements.push(heapSize);
-                tPrev = tNow;
-              }
-              if (!testStopped) {
-                requestAnimationFrame(checkHeapSize);
-              }
-            };
-            checkHeapSize();
-          })();
-          (() => {
-            let tPrev = tStart;
-            const check = () => {
-              const tNow = performance.now();
-              timeoutMeasurements.push(tNow - tPrev);
-              tPrev = tNow;
-              if (!testStopped) {
-                setTimeout(check);
-              }
-            };
-            setTimeout(check);
-          })();
-          const frameTimeMeasurements = [];
-          (() => {
-            let frames = 0;
-            let tPrev = tStart;
-            const check = () => {
-              frames++;
-              const tNow = performance.now();
-              const frameTime = tNow - tPrev;
-              if (frames >= 5) {
-                frameTimeMeasurements.push(frameTime);
-              }
-              tPrev = tNow;
-              if (!testStopped) {
-                requestAnimationFrame(check);
-              }
-            };
-            requestAnimationFrame(check);
-          })();
-
-          const checkOver = () => {
-            const tNow = performance.now();
-            if (tNow - tStart >= BENCHMARK_CONFIG.testDurationSeconds * 1000) {
-              // Finish benchmark.
-              testStopped = true;
-              wait.textContent = 'Benchmark finished. See console for results';
-
-              // Calculate min, max, avg, median from FPS and HEAP SIZE measurements.
-              const getNumberArrayStats = (array) => {
-                // https://stackoverflow.com/questions/45309447/calculating-median-javascript
-                function median(values) {
-                  if (values.length === 0) return 0;
-                  values.sort((a, b) => a - b);
-                  const half = Math.floor(values.length / 2);
-                  if (values.length % 2) return values[half];
-                  return (values[half - 1] + values[half]) / 2.0;
-                }
-                return {
-                  min: array.reduce(
-                    (prev, cur) => Math.min(prev, cur),
-                    Number.MAX_SAFE_INTEGER
-                  ),
-                  max: array.reduce(
-                    (prev, cur) => Math.max(prev, cur),
-                    -Number.MAX_SAFE_INTEGER
-                  ),
-                  avg:
-                    array.reduce((prev, cur) => prev + cur, 0) / array.length,
-                  median: median(array),
-                };
-              };
-
-              const fpsStats = getNumberArrayStats(fpsMeasurements);
-              const heapSizeStats = getNumberArrayStats(heapSizeMeasurements);
-              const timeoutStats = getNumberArrayStats(timeoutMeasurements);
-              const frameTimeStats = getNumberArrayStats(frameTimeMeasurements);
-              const benchmark = {
-                config: BENCHMARK_CONFIG,
-                timestamp: Date.now(),
-                loadupSpeedMs: loadupSpeedMs,
-                fps: fpsStats,
-                heapSize: {
-                  ...heapSizeStats,
-                  before: heapSizeStart,
-                  afterInitialRender: heapSizeInitialRender,
-                },
-                timeout: timeoutStats,
-                frameTime: frameTimeStats,
-              };
-              console.log(
-                'BENCHMARK RESULTS\n',
-                '-----------------\n',
-                JSON.stringify(benchmark)
-              );
-            } else requestAnimationFrame(checkOver);
-          };
-          requestAnimationFrame(checkOver);
-        });
     </script>
+    <script src="benchmark.js"></script>
 
     <p id="reference">
       Code based on
