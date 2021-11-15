@@ -2,9 +2,9 @@ const BENCHMARK_CONFIG = {
   // "lcjs" | "scichart"
   library: "lcjs",
   // "static" | "append" | "refresh"
-  mode: "append",
+  mode: "static",
   // In "static" or "refresh" mode, amount of data points per channel.
-  channelDataPointsCount: 10000,
+  channelDataPointsCount: 100000,
   channelsCount: 5,
   ticksEnabled: false,
   dataSource: 'data.json',

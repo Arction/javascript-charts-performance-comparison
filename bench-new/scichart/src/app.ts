@@ -124,7 +124,10 @@ declare let BENCHMARK_CONFIG: {
   };
 
   const refreshData = (data) => {
-
+    channels.forEach((ch, iChannel) => {
+      ch.dataSeries.clear()
+      ch.dataSeries.appendRange(data[iChannel][0], data[iChannel][1])
+    })
   }
 
   return {

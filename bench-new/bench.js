@@ -145,6 +145,16 @@
 
     if (BENCHMARK_CONFIG.mode === "refresh") {
       const dataSet1 = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_, iCh) => 
+        BENCHMARK_IMPLEMENTATION.dataFormat === 'individual-xy-lists' ?
+        [
+          new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => i),
+          new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => {
+            const ySrc = testData1YValues[i % testData1YValues.length]
+            const y = iCh + ySrc
+            return y
+          })
+        ]
+        :
         new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => {
           const ySrc = testData1YValues[i % testData1YValues.length]
           const y = iCh + ySrc
@@ -158,6 +168,16 @@
         })
       )
       const dataSet2 = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_, iCh) => 
+      BENCHMARK_IMPLEMENTATION.dataFormat === 'individual-xy-lists' ?
+        [
+          new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => i),
+          new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => {
+            const ySrc = testData1YValues[i % testData1YValues.length]
+            const y = iCh + ySrc + Math.random() * 0.05
+            return y
+          })
+        ]
+        :
         new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => {
           const ySrc = testData1YValues[i % testData1YValues.length]
           const y = iCh + ySrc + Math.random() * 0.05
