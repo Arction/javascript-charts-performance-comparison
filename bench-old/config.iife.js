@@ -40,5 +40,5 @@ var E = {
 
 var BENCHMARK_CONFIG = (function (t) {
   'use strict';
-  return {...A, refreshData: false, scrollData: false}
+  return {...D, refreshData: false, scrollData: true}
 })();

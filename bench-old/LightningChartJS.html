@@ -10,8 +10,8 @@
     <h2 id="wait">Loading lib....</h2>
 
     <script src="config.iife.js"></script>
-    <!-- <script src="lcjs.iife.js"></script> -->
-    <script src="https://unpkg.com/@arction/lcjs@3.2.0/dist/lcjs.iife.js"></script>
+    <script src="master.iife.js"></script>
+    <!-- <script src="https://unpkg.com/@arction/lcjs@3.2.0/dist/lcjs.iife.js"></script> -->
     <script>
       // LightningChart JS benchmark test implementation.
 
@@ -62,6 +62,7 @@
             })
             .setName(`Channel #${iChannel + 1}`)
             .setMaxPointCount(BENCHMARK_CONFIG.timeDomainInterval)
+            .setStrokeStyle(stroke => stroke.setThickness(1))
           return lineSeries
         });
 

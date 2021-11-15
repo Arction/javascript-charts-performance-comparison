@@ -1,0 +1,17 @@
+{
+  "name": "bench",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bench.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "live-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}
