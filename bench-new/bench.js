@@ -78,6 +78,7 @@
 
   requestAnimationFrame(async () => {
     console.log("loadChart");
+    console.log("\t" + (initialDataPointsCount * BENCHMARK_CONFIG.channelsCount) + ' data points')
     const tStart = window.performance.now();
     await BENCHMARK_IMPLEMENTATION.loadChart(initialData);
     const tLoadup = window.performance.now() - tStart;

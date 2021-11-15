@@ -42,6 +42,7 @@ declare let BENCHMARK_CONFIG: {
         wasmContext = sciChart.wasmContext
 
         xAxis = new NumericAxis(wasmContext);
+        xAxis.axisTitle = 'time domain'
         const yAxis = new NumericAxis(wasmContext);
         yAxis.autoRange = EAutoRange.Always;
         sciChartSurface.xAxes.add(xAxis);
