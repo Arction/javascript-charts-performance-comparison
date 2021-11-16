@@ -1,0 +1,59 @@
+[
+    {
+        "_TEMPLATE": true,
+        "refreshRate": 0,
+        "channelDataPointsCount": 0,
+        "channelsCount": 0,
+        "fail": false,
+        "cpu": 0,
+        "fps": 0
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 1000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpu": 23.2,
+        "fps": 60.0
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 10000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpu": 49.6,
+        "fps": 54.6
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 100000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpu": 100,
+        "fps": 12.3
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 200000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpu": 100,
+        "fps": 4.7
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 400000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpu": 100,
+        "fps": 2.2
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 800000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpu": 100,
+        "fps": 1.1
+    }
+]

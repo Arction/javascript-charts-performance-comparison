@@ -16,7 +16,7 @@ declare let BENCHMARK_CONFIG: {
   channelDataPointsCount: number,
   channelsCount: number,
   ticksEnabled: boolean,
-  appendTimeDomainInterval: number,
+  appendTimeDomainIntervalSeconds: number,
   appendNewSamplesPerSecond: number,
   refreshRate: number,
   strokeThickness: number
@@ -115,21 +115,22 @@ declare let BENCHMARK_CONFIG: {
         );
 
         if (BENCHMARK_CONFIG.mode === 'append') {
-          const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainInterval
-          const deleteDataPointsCount = existingDataPoints - keepDataPointsCount
+          const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
+          const deleteDataPointsCount = (existingDataPoints + newDataPointsCount) - keepDataPointsCount
           if (deleteDataPointsCount > 0) {
             ch.dataSeries.removeRange(0, deleteDataPointsCount)
             existingDataPoints -= deleteDataPointsCount
           }
         }
       });
+
       dataPoints += newDataPointsCount
       existingDataPoints += newDataPointsCount
       sciChartSurface.zoomExtentsY()
 
       if (BENCHMARK_CONFIG.mode === 'append') {
         xAxis.visibleRange = new NumberRange(
-          dataPoints - BENCHMARK_CONFIG.appendTimeDomainInterval,
+          dataPoints - BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond,
           dataPoints
         )
       }

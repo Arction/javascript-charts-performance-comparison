@@ -36,7 +36,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
             }
           })
           .setName(`Channel #${iChannel + 1}`)
-          .setMaxPointCount(BENCHMARK_CONFIG.timeDomainInterval)
+          .setDataCleaning({minDataPointCount: 1})
           .setStrokeStyle(stroke => stroke.setThickness(BENCHMARK_CONFIG.strokeThickness))
           .add(initialData[iChannel])
         return lineSeries
@@ -47,7 +47,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       }
 
       if (BENCHMARK_CONFIG.mode === "append") {
-        chart.getDefaultAxisX().setScrollStrategy(AxisScrollStrategies.progressive).setInterval(-BENCHMARK_CONFIG.appendTimeDomainInterval, 0)
+        chart.getDefaultAxisX().setScrollStrategy(AxisScrollStrategies.progressive).setInterval(-BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond, 0)
       } else {
         chart.getDefaultAxisX().setInterval(0, BENCHMARK_CONFIG.channelDataPointsCount, false, true)
       }

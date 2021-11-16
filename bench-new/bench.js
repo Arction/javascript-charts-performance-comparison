@@ -127,7 +127,7 @@
     if (BENCHMARK_CONFIG.mode === "append") {
       console.log(`appending history data ${BENCHMARK_CONFIG.appendHistorySeconds}s ...`)
       while (dataPoints < BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond) {
-        const addDataPointsCount = Math.min(BENCHMARK_CONFIG.maxChunkDataPoints, dataPoints - BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond)
+        const addDataPointsCount = Math.min(BENCHMARK_CONFIG.maxChunkDataPoints, BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond - dataPoints)
         BENCHMARK_IMPLEMENTATION.appendData(packNDataPoints(addDataPointsCount, testData1YValues));
         await new Promise(resolve => setTimeout(resolve, 1000))
         dataPoints += addDataPointsCount
