@@ -4,11 +4,13 @@ const BENCHMARK_CONFIG = {
   // "static" | "append" | "refresh"
   mode: "static",
   // In "static" or "refresh" mode, amount of data points per channel.
-  channelDataPointsCount: 1000000,
-  channelsCount: 40,
+  channelDataPointsCount: 10000,
+  channelsCount: 10,
   ticksEnabled: false,
   dataSource: 'data.json',
   strokeThickness: 1,
+  // Max amount of data points to append in a single frame (total of all channels).
+  maxChunkDataPoints: 1000000,
   // In "append" mode, interval of x axis.
   appendTimeDomainInterval: 50000,
   // In "append" mode, amount of samples pushed every second.

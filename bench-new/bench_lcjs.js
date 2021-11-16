@@ -48,6 +48,8 @@ const BENCHMARK_IMPLEMENTATION = (() => {
 
       if (BENCHMARK_CONFIG.mode === "append") {
         chart.getDefaultAxisX().setScrollStrategy(AxisScrollStrategies.progressive).setInterval(-BENCHMARK_CONFIG.appendTimeDomainInterval, 0)
+      } else {
+        chart.getDefaultAxisX().setInterval(0, BENCHMARK_CONFIG.channelDataPointsCount, false, true)
       }
 
       requestAnimationFrame(resolve);
@@ -55,11 +57,17 @@ const BENCHMARK_IMPLEMENTATION = (() => {
   };
 
   const appendData = (data) => {
-    seriesList.forEach((series, iChannel) => series.add(data[iChannel]))
+    return new Promise((resolve, reject) => {
+      seriesList.forEach((series, iChannel) => series.add(data[iChannel]))
+      requestAnimationFrame(resolve)
+    })
   };
 
   const refreshData = (data) => {
-    seriesList.forEach((series, iChannel) => series.clear().add(data[iChannel]))
+    return new Promise((resolve, reject) => {
+      seriesList.forEach((series, iChannel) => series.clear().add(data[iChannel]))
+      requestAnimationFrame(resolve)
+    })
   }
 
   return {

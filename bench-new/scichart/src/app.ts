@@ -43,6 +43,9 @@ declare let BENCHMARK_CONFIG: {
 
         xAxis = new NumericAxis(wasmContext);
         xAxis.axisTitle = 'time domain'
+        if (BENCHMARK_CONFIG.mode !== 'append') {
+          xAxis.visibleRange = new NumberRange(0, BENCHMARK_CONFIG.channelDataPointsCount)
+        }
         const yAxis = new NumericAxis(wasmContext);
         yAxis.autoRange = EAutoRange.Always;
         sciChartSurface.xAxes.add(xAxis);
@@ -92,42 +95,65 @@ declare let BENCHMARK_CONFIG: {
         });
         dataPoints = existingDataPoints = initialData[0][0].length
 
-        sciChartSurface.rendered.subscribe(() => {
-          resolve()
-        })
+        const onRendered = () => {
+          resolve(undefined)
+          sciChartSurface.rendered.unsubscribe(onRendered)
+        }
+        sciChartSurface.rendered.subscribe(onRendered)
     });
   };
 
   let dataPoints = 0
   let existingDataPoints = 0
   const appendData = (data) => {
-    const newDataPointsCount = data[0][0].length
-    channels.forEach((ch, iChannel) => {
-      ch.dataSeries.appendRange(
-        data[iChannel][0],
-        data[iChannel][1]
-      );
+    return new Promise((resolve, reject) => {
+      const newDataPointsCount = data[0][0].length
+      channels.forEach((ch, iChannel) => {
+        ch.dataSeries.appendRange(
+          data[iChannel][0],
+          data[iChannel][1]
+        );
 
-      const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainInterval
-      const deleteDataPointsCount = existingDataPoints - keepDataPointsCount
-      if (deleteDataPointsCount > 0) {
-        ch.dataSeries.removeRange(0, deleteDataPointsCount)
-        existingDataPoints -= deleteDataPointsCount
+        if (BENCHMARK_CONFIG.mode === 'append') {
+          const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainInterval
+          const deleteDataPointsCount = existingDataPoints - keepDataPointsCount
+          if (deleteDataPointsCount > 0) {
+            ch.dataSeries.removeRange(0, deleteDataPointsCount)
+            existingDataPoints -= deleteDataPointsCount
+          }
+        }
+      });
+      dataPoints += newDataPointsCount
+      existingDataPoints += newDataPointsCount
+      sciChartSurface.zoomExtentsY()
+
+      if (BENCHMARK_CONFIG.mode === 'append') {
+        xAxis.visibleRange = new NumberRange(
+          dataPoints - BENCHMARK_CONFIG.appendTimeDomainInterval,
+          dataPoints
+        )
       }
-    });
-    dataPoints += newDataPointsCount
-    existingDataPoints += newDataPointsCount
-    sciChartSurface.zoomExtentsY()
-    xAxis.visibleRange = new NumberRange(
-      dataPoints - BENCHMARK_CONFIG.appendTimeDomainInterval,
-      dataPoints
-    );
+
+      const onRendered = () => {
+        resolve(undefined)
+        sciChartSurface.rendered.unsubscribe(onRendered)
+      }
+      sciChartSurface.rendered.subscribe(onRendered)
+    })
   };
 
   const refreshData = (data) => {
-    channels.forEach((ch, iChannel) => {
-      ch.dataSeries.clear()
-      ch.dataSeries.appendRange(data[iChannel][0], data[iChannel][1])
+    return new Promise((resolve, reject) => {
+      channels.forEach((ch, iChannel) => {
+        ch.dataSeries.clear()
+        ch.dataSeries.appendRange(data[iChannel][0], data[iChannel][1])
+      })
+      
+      const onRendered = () => {
+        resolve(undefined)
+        sciChartSurface.rendered.unsubscribe(onRendered)
+      }
+      sciChartSurface.rendered.subscribe(onRendered)
     })
   }
 

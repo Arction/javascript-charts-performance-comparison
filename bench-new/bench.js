@@ -72,17 +72,31 @@
 
     return packedDataPoints
   };
-  
-  const initialDataPointsCount = BENCHMARK_CONFIG.mode === 'append' ? 0 : BENCHMARK_CONFIG.channelDataPointsCount
-  const initialData = packNDataPoints(initialDataPointsCount, testData1YValues)
 
   requestAnimationFrame(async () => {
     console.log("loadChart");
-    console.log("\t" + (initialDataPointsCount * BENCHMARK_CONFIG.channelsCount) + ' data points')
-    const tStart = window.performance.now();
-    await BENCHMARK_IMPLEMENTATION.loadChart(initialData);
-    const tLoadup = window.performance.now() - tStart;
-    console.log(`\t${tLoadup.toFixed(1)}ms`);
+    let dLoadup = 0
+    let iteration = 0
+    let dataPoints = 0
+    const initialDataPointsCount = BENCHMARK_CONFIG.mode === 'append' ? 0 : BENCHMARK_CONFIG.channelDataPointsCount
+    console.log("\ttotal data points: " + (initialDataPointsCount * BENCHMARK_CONFIG.channelsCount))
+    do {
+      const addDataPointsCount = Math.min(BENCHMARK_CONFIG.maxChunkDataPoints / BENCHMARK_CONFIG.channelsCount, initialDataPointsCount - dataPoints)
+      const data = packNDataPoints(addDataPointsCount)
+      const tStart = window.performance.now()
+      if (iteration === 0) {
+        await BENCHMARK_IMPLEMENTATION.loadChart(data);
+      } else {
+        await BENCHMARK_IMPLEMENTATION.appendData(data)
+      }
+      const dIteration = window.performance.now() - tStart
+      dLoadup += dIteration
+      dataPoints += addDataPointsCount
+      console.log(`\tchunk ${iteration + 1} ${addDataPointsCount} data points (per channel) ${(dIteration).toFixed(1)}ms`)
+      iteration += 1
+    } while (dataPoints < initialDataPointsCount)
+
+    console.log(`\t${dLoadup.toFixed(1)}ms`);
 
     const initiateFPSMonitoring = () => {
       // Setup FPS monitoring.
@@ -111,11 +125,9 @@
     }
 
     if (BENCHMARK_CONFIG.mode === "append") {
-
       console.log(`appending history data ${BENCHMARK_CONFIG.appendHistorySeconds}s ...`)
-      let dataPoints = initialDataPointsCount
       while (dataPoints < BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond) {
-        const addDataPointsCount = Math.min(1000 * 1000, BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond)
+        const addDataPointsCount = Math.min(BENCHMARK_CONFIG.maxChunkDataPoints, dataPoints - BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond)
         BENCHMARK_IMPLEMENTATION.appendData(packNDataPoints(addDataPointsCount, testData1YValues));
         await new Promise(resolve => setTimeout(resolve, 1000))
         dataPoints += addDataPointsCount
