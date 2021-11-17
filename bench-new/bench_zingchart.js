@@ -92,11 +92,11 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
       const deleteDataPointsCount = Math.max((existingDataPoints) - keepDataPointsCount, 0)
       for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
-        for (let i = 0; i < deleteDataPointsCount; i += 1) {
-          data[iCh].shift()
-        }
         for (let i = 0; i < newDataPointsCount; i += 1) {
           data[iCh].push(newData[iCh][i])
+        }
+        for (let i = 0; i < deleteDataPointsCount; i += 1) {
+          data[iCh].shift()
         }
       }
       existingDataPoints -= deleteDataPointsCount

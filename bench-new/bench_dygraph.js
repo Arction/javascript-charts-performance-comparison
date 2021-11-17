@@ -3,8 +3,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
   const beforeStart = () => {
     return new Promise(async (resolve, reject) => {
       const stylesheets = [
-        "lib/dvxCharts.chart.min.css",
-        "lib/dvxCharts.chart.min.css"
+        "//cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.css",
       ]
       for (const stylesheet of stylesheets) {
         const domStylesheet = document.createElement('link')
@@ -17,7 +16,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         })
       }
       const scripts = [
-        "lib/dvxCharts.chart.min.js",
+        "//cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js",
       ]
       for (const script of scripts) {
         const libScript = document.createElement('script')
@@ -27,10 +26,6 @@ const BENCHMARK_IMPLEMENTATION = (() => {
           libScript.onload = resolve
         })
       }
-      if (! ('dvxCharts' in window)) {
-        // Library has to be manually downloaded and put into `lib` folder.
-        alert(`Library not found, refer to README Required dependencies on required files for this library.`)
-      }
       resolve()
     });
   };
@@ -38,35 +33,25 @@ const BENCHMARK_IMPLEMENTATION = (() => {
   let totalDataPoints = 0
   let existingDataPoints = 0
   let data
-  let chart
-  let state
+  let g
   
   const loadChart = (initialData) => {
     return new Promise((resolve, reject) => {
-      totalDataPoints = initialData[0].length
+      totalDataPoints = initialData.length
       existingDataPoints = totalDataPoints
       data = initialData
       
-      state = {
-        axes: [
-          {
-            type: 'linear',
-            location: 'bottom',
-            zoomEnabled: true,
-          },
+      g = new Dygraph(document.getElementById('chart'), data, {
+        drawPoints: false,
+        showRoller: false,
+        strokeWidth: BENCHMARK_CONFIG.strokeThickness,
+        labels: [
+          'Time domain',
+          ...new Array(BENCHMARK_CONFIG.channelsCount)
+            .fill(0)
+            .map((_, iChannel) => `Channel #${iChannel + 1}`),
         ],
-        series: new Array(BENCHMARK_CONFIG.channelsCount)
-          .fill(0)
-          .map((_, iChannel) => ({
-            title: `Channel #${iChannel + 1}`,
-            type: 'line',
-            data: data[iChannel],
-            markers: null,
-            class: 'mySeries',
-          })),
-      };
-      chart = new dvxCharts.Chart(state);
-      chart.write('chart');
+      });
 
       if (!BENCHMARK_CONFIG.ticksEnabled) {
         // TODO IMMEDIATE: How to hide ticks ?
@@ -78,23 +63,22 @@ const BENCHMARK_IMPLEMENTATION = (() => {
 
   const appendData = (newData) => {
     return new Promise((resolve, reject) => {
-      newDataPointsCount = newData[0].length
+      const newDataPointsCount = newData.length
       totalDataPoints += newDataPointsCount
       existingDataPoints += newDataPointsCount
 
       const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
       const deleteDataPointsCount = Math.max((existingDataPoints) - keepDataPointsCount, 0)
 
-      for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
-        for (let i = 0; i < newDataPointsCount; i += 1) {
-          data[iCh].push(newData[iCh][i])
-        }
-        for (let i = 0; i < deleteDataPointsCount; i += 1) {
-          data[iCh].shift()
-        }
+      for (let i = 0; i < newDataPointsCount; i += 1) {
+        data.push(newData[i])
       }
+      for (let i = 0; i < deleteDataPointsCount; i += 1) {
+        data.shift()
+      }
+    
       existingDataPoints -= deleteDataPointsCount
-      chart.setState(state);
+      g.updateOptions({ file: data })
 
       requestAnimationFrame(resolve)
     })
@@ -102,17 +86,15 @@ const BENCHMARK_IMPLEMENTATION = (() => {
 
   const refreshData = (data) => {
     return new Promise((resolve, reject) => {
-      state.series.forEach((series, iCh) => {
-        series.data = data[iCh]
-      })
-      chart.setState(state)
+      
+      g.updateOptions({ file: data })
 
       requestAnimationFrame(resolve)
     })
   }
 
   return {
-    dataFormat: 'xy-tuple-array',
+    dataFormat: 'xyyy-array',
     beforeStart,
     loadChart,
     appendData,
