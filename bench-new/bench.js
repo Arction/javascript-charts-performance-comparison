@@ -196,6 +196,16 @@ const getDataInFormat = (
     return srcYValuesChannels.map(
       chYValues => chYValues.map((y, i) => ([xStart + i, y]))
     )
+  } else if (dataFormat === 'individual-xyyy-arrays') {
+    const formattedData = [
+      new Array(srcYValuesChannels[0].length).fill(0).map((_, i) => xStart + i)
+    ]
+    for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
+      formattedData.push(
+        srcYValuesChannels[iCh]
+      )
+    }
+    return formattedData
   } else {
     throw new Error('unidentified format ' + dataFormat)
   }
