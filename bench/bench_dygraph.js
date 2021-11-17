@@ -73,11 +73,13 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       for (let i = 0; i < newDataPointsCount; i += 1) {
         data.push(newData[i])
       }
-      for (let i = 0; i < deleteDataPointsCount; i += 1) {
-        data.shift()
+      if (BENCHMARK_CONFIG.mode === 'append') {
+        for (let i = 0; i < deleteDataPointsCount; i += 1) {
+          data.shift()
+        }
+        existingDataPoints -= deleteDataPointsCount
       }
     
-      existingDataPoints -= deleteDataPointsCount
       g.updateOptions({ file: data })
 
       requestAnimationFrame(resolve)

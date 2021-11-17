@@ -49,8 +49,10 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         for (let i = 0; i < newDataPointsCount; i += 1) {
           data[iCh].push(newData[iCh][i])
         }
-        for (let i = 0; i < deleteDataPointsCount; i += 1) {
-          data[iCh].shift()
+        if (BENCHMARK_CONFIG.mode === 'append') {
+          for (let i = 0; i < deleteDataPointsCount; i += 1) {
+            data[iCh].shift()
+          }
         }
       }
       existingDataPoints -= deleteDataPointsCount

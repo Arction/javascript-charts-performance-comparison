@@ -1,0 +1,38 @@
+[
+    {
+        "_TEMPLATE": true,
+        "channelDataPointsCount": 0,
+        "channelsCount": 0,
+        "fail": false,
+        "loadupDelayMsChrome": 0,
+        "loadupDelayMsFirefox": 0
+    },
+    {
+        "channelDataPointsCount": 100,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": 381,
+        "loadupDelayMsFirefox": 495
+    },
+    {
+        "channelDataPointsCount": 1000,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": 578,
+        "loadupDelayMsFirefox": 682
+    },
+    {
+        "channelDataPointsCount": 10000,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": 2157,
+        "loadupDelayMsFirefox": 3985
+    },
+    {
+        "channelDataPointsCount": 100000,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": 34816,
+        "loadupDelayMsFirefox": 50500
+    }
+]
