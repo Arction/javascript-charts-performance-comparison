@@ -192,6 +192,10 @@ const getDataInFormat = (
       formattedData.push(sample)
     })
     return formattedData
+  } else if (dataFormat === 'xy-tuple-array') {
+    return srcYValuesChannels.map(
+      chYValues => chYValues.map((y, i) => ([xStart + i, y]))
+    )
   } else {
     throw new Error('unidentified format ' + dataFormat)
   }

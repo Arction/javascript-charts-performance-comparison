@@ -1,12 +1,12 @@
 const BENCHMARK_CONFIG = {
-  // TODO: dvxchart, echart, uplot, zingchart, highchart
-  // "lcjs" | "scichart" | "plotly" | "amchart" | "anychart"
-  library: "highchart",
+  // TODO: dvxchart, echart, uplot
+  // "lcjs" | "scichart" | "plotly" | "amchart" | "anychart" | "highchart" | "zingchart"
+  library: "zingchart",
   // "static" | "append" | "refresh"
   mode: "static",
   // In "static" or "refresh" mode, amount of data points per channel.
   channelDataPointsCount: 10000,
-  channelsCount: 10,
+  channelsCount: 1,
   ticksEnabled: false,
   dataSource: 'data.json',
   strokeThickness: 1,
@@ -19,5 +19,5 @@ const BENCHMARK_CONFIG = {
   // In "append" mode, the data that matches this many seconds is first appended into the chart to simulate as if the application had run for a long time.
   appendHistorySeconds: 15, 
   // In "refresh" mode, amount of refreshes every second.
-  refreshRate: 10,
+  refreshRate: 1,
 };
