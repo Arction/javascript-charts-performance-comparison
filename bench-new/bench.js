@@ -31,46 +31,18 @@
 
   let iDataPoint = 0;
   const packNDataPoints = (n) => {
-    const packedDataPoints = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_) => []);
-    if (BENCHMARK_IMPLEMENTATION.dataFormat === 'xy-object-array') {
-      for (let iNewDataPoint = 0; iNewDataPoint < n; iNewDataPoint += 1) {
-        const iDataPointSource = iDataPoint % testData1YValues.length;
-        const ySrc = testData1YValues[iDataPointSource];
-        for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
-          const y = ySrc + iCh
-          packedDataPoints[iCh][iNewDataPoint] = { x: iDataPoint, y };
-        }
-        iDataPoint += 1;
+    const yValuesChannels = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map(_ => [])
+    const len = testData1YValues.length
+    for (let i = 0; i < n; i += 1) {
+      const ySrc = testData1YValues[(iDataPoint + i) % len]
+      for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
+        const y = ySrc + iCh
+        yValuesChannels[iCh].push(y)
       }
-    } else if (BENCHMARK_IMPLEMENTATION.dataFormat === 'y-array') {
-      for (let iNewDataPoint = 0; iNewDataPoint < n; iNewDataPoint += 1) {
-        const iDataPointSource = iDataPoint % testData1YValues.length;
-        const ySrc = testData1YValues[iDataPointSource];
-        for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
-          const y = iCh + ySrc
-          packedDataPoints[iCh][iNewDataPoint] = y;
-        }
-        iDataPoint += 1;
-      }
-    } else if (BENCHMARK_IMPLEMENTATION.dataFormat === 'individual-xy-lists') {
-      packedDataPoints.forEach((channel, i) => {
-        channel.push([], [])
-      })
-      for (let iNewDataPoint = 0; iNewDataPoint < n; iNewDataPoint += 1) {
-        const iDataPointSource = iDataPoint % testData1YValues.length;
-        const ySrc = testData1YValues[iDataPointSource];
-        for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
-          const y = iCh + ySrc
-          packedDataPoints[iCh][0].push(iDataPoint)
-          packedDataPoints[iCh][1].push(y)
-        }
-        iDataPoint += 1;
-      }
-    } else {
-      throw new Error('unidentified format ' + BENCHMARK_IMPLEMENTATION.dataFormat)
     }
-
-    return packedDataPoints
+    const packedData = getDataInFormat(yValuesChannels, iDataPoint, BENCHMARK_IMPLEMENTATION.dataFormat)
+    iDataPoint += n
+    return packedData
   };
 
   requestAnimationFrame(async () => {
@@ -157,52 +129,18 @@
     }
 
     if (BENCHMARK_CONFIG.mode === "refresh") {
-      const dataSet1 = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_, iCh) => 
-        BENCHMARK_IMPLEMENTATION.dataFormat === 'individual-xy-lists' ?
-        [
-          new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => i),
-          new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => {
-            const ySrc = testData1YValues[i % testData1YValues.length]
-            const y = iCh + ySrc
-            return y
-          })
-        ]
-        :
-        new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => {
-          const ySrc = testData1YValues[i % testData1YValues.length]
-          const y = iCh + ySrc
-          if (BENCHMARK_IMPLEMENTATION.dataFormat === 'xy-object-array') {
-            return { x: i, y }
-          } else if (BENCHMARK_IMPLEMENTATION.dataFormat === 'y-array') {
-            return y
-          } else {
-            throw new Error('unidentified data format ' + BENCHMARK_IMPLEMENTATION.dataFormat)
-          }
-        })
+      const dataSet1YValues = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_, iCh) => 
+        new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) =>
+          testData1YValues[i % testData1YValues.length] + iCh
+        )
       )
-      const dataSet2 = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_, iCh) => 
-      BENCHMARK_IMPLEMENTATION.dataFormat === 'individual-xy-lists' ?
-        [
-          new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => i),
-          new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => {
-            const ySrc = testData1YValues[i % testData1YValues.length]
-            const y = iCh + ySrc + Math.random() * 0.05
-            return y
-          })
-        ]
-        :
-        new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => {
-          const ySrc = testData1YValues[i % testData1YValues.length]
-          const y = iCh + ySrc + Math.random() * 0.05
-          if (BENCHMARK_IMPLEMENTATION.dataFormat === 'xy-object-array') {
-            return { x: i, y }
-          } else if (BENCHMARK_IMPLEMENTATION.dataFormat === 'y-array') {
-            return y
-          } else {
-            throw new Error('unidentified data format ' + BENCHMARK_IMPLEMENTATION.dataFormat)
-          }
-        })
+      const dataSet1 = getDataInFormat(dataSet1YValues, 0, BENCHMARK_IMPLEMENTATION.dataFormat)
+      const dataSet2YValues = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_, iCh) => 
+        new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) =>
+          testData1YValues[i % testData1YValues.length] + iCh + Math.random() * 0.05
+        )
       )
+      const dataSet2 = getDataInFormat(dataSet2YValues, 0, BENCHMARK_IMPLEMENTATION.dataFormat)
         
       initiateFPSMonitoring()
       let tPrev = window.performance.now()
@@ -222,3 +160,39 @@
     }
   });
 })();
+
+const getDataInFormat = (
+  srcYValuesChannels,
+  xStart,
+  dataFormat
+) => {
+  if (dataFormat === 'xy-object-array') {
+    return srcYValuesChannels.map(
+      chYValues => chYValues.map((y, i) => ({ x: xStart + i, y }))
+    )
+  } else if (dataFormat === 'y-array') {
+    return srcYValuesChannels
+  } else if (dataFormat === 'individual-xy-lists') {
+    const formattedData = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_) => []);
+    formattedData.forEach((channel, iCh) => {
+      channel.push([], [])
+      srcYValuesChannels[iCh].forEach((y, i) => {
+        channel[0].push(xStart + i)
+        channel[1].push(y)
+      })
+    })
+    return formattedData
+  } else if (dataFormat === 'xyyy-array') {
+    const formattedData = []
+    srcYValuesChannels[0].forEach((_, i) => {
+      const sample = [xStart + i]
+      for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
+        sample.push(srcYValuesChannels[iCh][i])
+      }
+      formattedData.push(sample)
+    })
+    return formattedData
+  } else {
+    throw new Error('unidentified format ' + dataFormat)
+  }
+}
