@@ -67,16 +67,11 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
         const deleteDataPointsCount = (existingDataPoints) - keepDataPointsCount
         if (deleteDataPointsCount > 0) {
-          for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
-            if (deleteDataPointsCount === 1) {
-              // Shift is faster than splice
-            } else {
-            }
-          }
+          table.remove(totalDataPoints - (deleteDataPointsCount + keepDataPointsCount), totalDataPoints - keepDataPointsCount)
           existingDataPoints -= deleteDataPointsCount
         }
 
-        // TODO IMMEDIATE: How to set X axis view ???
+        // NOTE: How to set X axis view ?
         // chart.xScale().minimum = totalDataPoints - BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
         
       }
