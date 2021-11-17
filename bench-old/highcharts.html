@@ -72,6 +72,7 @@
 
         iDataPoint += data[0].length
         app.chart.series.forEach((series, i) => {
+          // https://www.highcharts.com/forum/viewtopic.php?t=34324
           for (let iDp = 0; iDp < data[i].length; iDp ++) {
             series.addPoint(data[i][iDp], false, shift)
           }
