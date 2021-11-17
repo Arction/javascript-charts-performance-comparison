@@ -1,11 +1,11 @@
 const BENCHMARK_CONFIG = {
-  // "lcjs" | "scichart"
-  library: "lcjs",
+  // "lcjs" | "scichart" | "plotly" | "amchart"
+  library: "amchart",
   // "static" | "append" | "refresh"
-  mode: "append",
+  mode: "static",
   // In "static" or "refresh" mode, amount of data points per channel.
-  channelDataPointsCount: 100,
-  channelsCount: 10,
+  channelDataPointsCount: 10000,
+  channelsCount: 1,
   ticksEnabled: false,
   dataSource: 'data.json',
   strokeThickness: 1,
@@ -16,7 +16,7 @@ const BENCHMARK_CONFIG = {
   // In "append" mode, amount of samples pushed every second.
   appendNewSamplesPerSecond: 1000,
   // In "append" mode, the data that matches this many seconds is first appended into the chart to simulate as if the application had run for a long time.
-  appendHistorySeconds: 600, 
+  appendHistorySeconds: 60, 
   // In "refresh" mode, amount of refreshes every second.
   refreshRate: 10,
 };

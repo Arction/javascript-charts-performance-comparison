@@ -131,7 +131,7 @@
         BENCHMARK_IMPLEMENTATION.appendData(packNDataPoints(addDataPointsCount, testData1YValues));
         await new Promise(resolve => setTimeout(resolve, 1000))
         dataPoints += addDataPointsCount
-        console.log(`\t${dataPoints} data points`)
+        console.log(`\t${dataPoints} / ${BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond} data points`)
       }
 
       initiateFPSMonitoring()
@@ -173,7 +173,7 @@
           const y = iCh + ySrc
           if (BENCHMARK_IMPLEMENTATION.dataFormat === 'xy-object-array') {
             return { x: i, y }
-          } else if (BENCHMARK_IMPLEMENTATION.dataFormat === 'y-object-array') {
+          } else if (BENCHMARK_IMPLEMENTATION.dataFormat === 'y-array') {
             return y
           } else {
             throw new Error('unidentified data format ' + BENCHMARK_IMPLEMENTATION.dataFormat)
@@ -196,7 +196,7 @@
           const y = iCh + ySrc + Math.random() * 0.05
           if (BENCHMARK_IMPLEMENTATION.dataFormat === 'xy-object-array') {
             return { x: i, y }
-          } else if (BENCHMARK_IMPLEMENTATION.dataFormat === 'y-object-array') {
+          } else if (BENCHMARK_IMPLEMENTATION.dataFormat === 'y-array') {
             return y
           } else {
             throw new Error('unidentified data format ' + BENCHMARK_IMPLEMENTATION.dataFormat)
