@@ -141,7 +141,7 @@
         )
       )
       const dataSet2 = getDataInFormat(dataSet2YValues, 0, BENCHMARK_IMPLEMENTATION.dataFormat)
-        
+      
       initiateFPSMonitoring()
       let tPrev = window.performance.now()
       let iDataSet = 0

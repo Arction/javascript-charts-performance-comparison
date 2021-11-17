@@ -1,9 +1,9 @@
 const BENCHMARK_CONFIG = {
-  // TODO: echart
-  // "lcjs" | "scichart" | "plotly" | "amchart" | "anychart" | "highchart" | "zingchart" | "dvxchart" | "dygraph" | "uplot"
-  library: "uplot",
+  // TODO: "canvasjs"
+  // "lcjs" | "scichart" | "plotly" | "amchart" | "anychart" | "highchart" | "zingchart" | "dvxchart" | "dygraph" | "uplot" | "echart"
+  library: "canvasjs",
   // "static" | "append" | "refresh"
-  mode: "refresh",
+  mode: "static",
   // In "static" or "refresh" mode, amount of data points per channel.
   channelDataPointsCount: 10000,
   channelsCount: 2,
