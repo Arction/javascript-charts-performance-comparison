@@ -34,7 +34,13 @@ const BENCHMARK_IMPLEMENTATION = (() => {
           },
         }))
 
-      Plotly.plot('chart', plotData);
+      Plotly.plot('chart', plotData, {
+        xaxis: BENCHMARK_CONFIG.mode !== 'append' ? {
+          range: [0, BENCHMARK_CONFIG.channelDataPointsCount]
+        } : {
+          autorange: true
+        },
+      });
 
       if (!BENCHMARK_CONFIG.ticksEnabled) {
         // TODO IMMEDIATE: How to hide ticks ?

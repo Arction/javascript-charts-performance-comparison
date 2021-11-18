@@ -11,35 +11,42 @@
         "channelDataPointsCount": 100,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 35,
-        "loadupDelayMsFirefox": 27
+        "loadupDelayMsChrome": 52,
+        "loadupDelayMsFirefox": 43
     },
     {
         "channelDataPointsCount": 1000,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 66,
-        "loadupDelayMsFirefox": 52
+        "loadupDelayMsChrome": 54,
+        "loadupDelayMsFirefox": 51
     },
     {
         "channelDataPointsCount": 10000,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 186,
-        "loadupDelayMsFirefox": 69
+        "loadupDelayMsChrome": 101,
+        "loadupDelayMsFirefox": 66
     },
     {
         "channelDataPointsCount": 100000,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 1249,
-        "loadupDelayMsFirefox": 594
+        "loadupDelayMsChrome": 139,
+        "loadupDelayMsFirefox": 157
     },
     {
         "channelDataPointsCount": 1000000,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 54648,
-        "loadupDelayMsFirefox": 29754
+        "loadupDelayMsChrome": 3242,
+        "loadupDelayMsFirefox": 2405
+    },
+    {
+        "channelDataPointsCount": 2000000,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": 10624,
+        "loadupDelayMsFirefox": 8577
     }
 ]

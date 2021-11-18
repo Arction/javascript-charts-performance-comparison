@@ -47,6 +47,8 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         title: {},
         xAxis: {
           type: 'value',
+          min: 0,
+          max: BENCHMARK_CONFIG.channelDataPointsCount
         },
         yAxis: {
           type: 'value',
@@ -98,12 +100,17 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       chart.setOption({
         series: new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_, iChannel) => ({
           data: data[iChannel]
-        })),
-        xAxis: {
-          min: totalDataPoints - keepDataPointsCount,
-          max: totalDataPoints
-        }
+        }))
       })
+
+      if (BENCHMARK_CONFIG.mode === 'append') {
+        chart.setOption({
+          xAxis: {
+            min: totalDataPoints - keepDataPointsCount,
+            max: totalDataPoints
+          }
+        })
+      }
 
       requestAnimationFrame(resolve)
     })

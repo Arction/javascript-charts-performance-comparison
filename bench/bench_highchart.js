@@ -47,6 +47,10 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         boost: {
           
         },
+        xAxis: {
+          min: 0,
+          max: BENCHMARK_CONFIG.channelDataPointsCount
+        },
         series: new Array(BENCHMARK_CONFIG.channelsCount)
           .fill(0)
           .map((_, iChannel) => ({

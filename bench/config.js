@@ -4,7 +4,7 @@ const BENCHMARK_CONFIG = {
   // "static" | "append" | "refresh"
   mode: "static",
   // In "static" or "refresh" mode, amount of data points per channel.
-  channelDataPointsCount: 100,
+  channelDataPointsCount: 10000,
   channelsCount: 10,
   ticksEnabled: false,
   dataSource: 'data.json',
@@ -16,7 +16,7 @@ const BENCHMARK_CONFIG = {
   // In "append" mode, amount of samples pushed every second.
   appendNewSamplesPerSecond: 1000,
   // In "append" mode, the data that matches this many seconds is first appended into the chart to simulate as if the application had run for a long time.
-  appendHistorySeconds: 14, 
+  appendHistorySeconds: 600, 
   // In "refresh" mode, amount of refreshes every second.
   refreshRate: 10,
 };
