@@ -6,43 +6,58 @@
         "channelsCount": 0,
         "appendNewSamplesPerSecond": 0,
         "fail": false,
-        "cpu": 0,
-        "fps": 0
+        "cpuChrome": 0,
+        "fpsChrome": 0,
+        "fpsFirefox": 0
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 600,
+        "appendHistorySeconds": 300,
         "channelsCount": 1,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,
-        "cpu": 18.3,
-        "fps": 60.0
+        "cpuChrome": 18.3,
+        "fpsChrome": 60.0,
+        "fpsFirefox": 59.0
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 600,
+        "appendHistorySeconds": 300,
+        "channelsCount": 10,
+        "appendNewSamplesPerSecond": 1000,
+        "fail": false,
+        "cpuChrome": 20.3,
+        "fpsChrome": 60.0,
+        "fpsFirefox": 59.8
+    },
+    {
+        "appendTimeDomainIntervalSeconds": 15,
+        "appendHistorySeconds": 300,
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 10000,
         "fail": false,
-        "cpu": 20.9,
-        "fps": 60.0
+        "cpuChrome": 20.9,
+        "fpsChrome": 60.0,
+        "fpsFirefox": 59.5
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 600,
+        "appendHistorySeconds": 15,
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 100000,
         "fail": false,
-        "cpu": 23.7,
-        "fps": 60.0
+        "cpuChrome": 23.7,
+        "fpsChrome": 60.0,
+        "fpsFirefox": 49.0
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 600,
+        "appendHistorySeconds": 15,
         "channelsCount": 20,
         "appendNewSamplesPerSecond": 100000,
         "fail": false,
-        "cpu": 31.8,
-        "fps": 59.8
+        "cpuChrome": 31.8,
+        "fpsChrome": 59.8,
+        "fpsFirefox": 36.6
     }
 ]

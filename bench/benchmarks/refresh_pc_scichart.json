@@ -5,55 +5,62 @@
         "channelDataPointsCount": 0,
         "channelsCount": 0,
         "fail": false,
-        "cpu": 0,
-        "fps": 0
+        "cpuChrome": 0,
+        "fpsChrome": 0,
+        "fpsFirefox": 0
     },
     {
         "refreshRate": 10,
         "channelDataPointsCount": 1000,
         "channelsCount": 10,
         "fail": false,
-        "cpu": 23.2,
-        "fps": 60.0
+        "cpuChrome": 23.2,
+        "fpsChrome": 60.0,
+        "fpsFirefox": 43.9
     },
     {
         "refreshRate": 10,
         "channelDataPointsCount": 10000,
         "channelsCount": 10,
         "fail": false,
-        "cpu": 49.6,
-        "fps": 54.6
+        "cpuChrome": 49.6,
+        "fpsChrome": 54.6,
+        "fpsFirefox": 39.6
     },
     {
         "refreshRate": 10,
         "channelDataPointsCount": 100000,
         "channelsCount": 10,
         "fail": false,
-        "cpu": 100,
-        "fps": 12.3
+        "cpuChrome": 100,
+        "fpsChrome": 12.3,
+        "fpsFirefox": 4.7
     },
     {
         "refreshRate": 10,
         "channelDataPointsCount": 200000,
         "channelsCount": 10,
         "fail": false,
-        "cpu": 100,
-        "fps": 4.7
+        "cpuChrome": 100,
+        "fpsChrome": 4.7,
+        "fpsFirefox": 2.5
     },
     {
         "refreshRate": 10,
         "channelDataPointsCount": 400000,
         "channelsCount": 10,
         "fail": false,
-        "cpu": 100,
-        "fps": 2.2
+        "cpuChrome": 100,
+        "fpsChrome": 2.2,
+        "fpsFirefox": 1.3
     },
     {
         "refreshRate": 10,
         "channelDataPointsCount": 800000,
         "channelsCount": 10,
         "fail": false,
-        "cpu": 100,
-        "fps": 1.1
+        "cpuChrome": 100,
+        "fpsChrome": 1.1,
+        "fpsFirefox": 1.2
     }
 ]

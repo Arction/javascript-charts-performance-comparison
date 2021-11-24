@@ -6,34 +6,38 @@
         "channelsCount": 0,
         "appendNewSamplesPerSecond": 0,
         "fail": false,
-        "cpu": 0,
-        "fps": 0
+        "cpuChrome": 0,
+        "fpsChrome": 0,
+        "fpsFirefox": 0
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 600,
+        "appendHistorySeconds": 300,
         "channelsCount": 1,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,
-        "cpu": 49.2,
-        "fps": 60.0
+        "cpuChrome": 49.2,
+        "fpsChrome": 60.0,
+        "fpsFirefox": 41.5
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 600,
+        "appendHistorySeconds": 300,
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,
-        "cpu": 100,
-        "fps": 8.2
+        "cpuChrome": 100,
+        "fpsChrome": 8.2,
+        "fpsFirefox": 9.7
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 600,
+        "appendHistorySeconds": 300,
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 10000,
         "fail": false,
-        "cpu": 100,
-        "fps": 0.6
+        "cpuChrome": 100,
+        "fpsChrome": 0.6,
+        "fpsFirefox": 0.3
     }
 ]
