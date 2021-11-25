@@ -16,7 +16,7 @@
         "channelsCount": 1,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,
-        "warning": "Degradation after runtime",
+        "warning": "Degradation after runtime!",
         "cpuChrome": 50.1,
         "fpsChrome": 60.0,
         "fpsFirefox": 45.6
@@ -27,7 +27,7 @@
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,
-        "warning": "Degradation after runtime",
+        "warning": "Degradation after runtime!",
         "cpuChrome": 100.0,
         "fpsChrome": 4.9,
         "fpsFirefox": 1.0
@@ -38,7 +38,7 @@
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 10000,
         "fail": false,
-        "warning": "Degradation after runtime",
+        "warning": "Degradation after runtime!",
         "cpuChrome": 100.0,
         "fpsChrome": 1.8,
         "fpsFirefox": 0.4

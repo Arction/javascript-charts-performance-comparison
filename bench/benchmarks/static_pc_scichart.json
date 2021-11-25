@@ -11,49 +11,50 @@
         "channelDataPointsCount": 100,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 204,
-        "loadupDelayMsFirefox": 392
+        "loadupDelayMsChrome": 262,
+        "loadupDelayMsFirefox": 421,
     },
     {
         "channelDataPointsCount": 1000,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 218,
-        "loadupDelayMsFirefox": 394
+        "loadupDelayMsChrome": 235,
+        "loadupDelayMsFirefox": 433
     },
     {
         "channelDataPointsCount": 10000,
         "channelsCount": 10,
         "fail": false,
         "loadupDelayMsChrome": 224,
-        "loadupDelayMsFirefox": 420
+        "loadupDelayMsFirefox": 448
     },
     {
         "channelDataPointsCount": 100000,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 232,
-        "loadupDelayMsFirefox": 481
+        "loadupDelayMsChrome": 240,
+        "loadupDelayMsFirefox": 495
     },
     {
+        "maxChunkDataPoints": 1000000,
         "channelDataPointsCount": 1000000,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 1633,
-        "loadupDelayMsFirefox": 4219
+        "loadupDelayMsChrome": 2367,
+        "loadupDelayMsFirefox": 4243
     },
     {
         "channelDataPointsCount": 2000000,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 5678,
-        "loadupDelayMsFirefox": 13056
+        "loadupDelayMsChrome": 5840,
+        "loadupDelayMsFirefox": 12924
     },
     {
         "channelDataPointsCount": 5000000,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 34829,
+        "loadupDelayMsChrome": 32776,
         "loadupDelayMsFirefox": 79800
     }
 ]
