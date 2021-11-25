@@ -32,6 +32,7 @@
         "channelDataPointsCount": 100000,
         "channelsCount": 10,
         "fail": false,
+        "warning": "Down-sampling detected!",
         "loadupDelayMsChrome": 424,
         "loadupDelayMsFirefox": 868
     },
@@ -39,6 +40,7 @@
         "channelDataPointsCount": 1000000,
         "channelsCount": 10,
         "fail": false,
+        "warning": "Down-sampling detected!",
         "loadupDelayMsChrome": 2267,
         "loadupDelayMsFirefox": 5468
     },
@@ -46,6 +48,7 @@
         "channelDataPointsCount": 2000000,
         "channelsCount": 10,
         "fail": false,
+        "warning": "Down-sampling detected!",
         "loadupDelayMsChrome": 4794,
         "loadupDelayMsFirefox": 12656
     },
@@ -53,14 +56,8 @@
         "channelDataPointsCount": 5000000,
         "channelsCount": 10,
         "fail": false,
+        "warning": "Down-sampling detected!",
         "loadupDelayMsChrome": 16935,
         "loadupDelayMsFirefox": 36614
-    },
-    {
-        "channelDataPointsCount": 10000000,
-        "channelsCount": 10,
-        "fail": false,
-        "loadupDelayMsChrome": 0,
-        "loadupDelayMsFirefox": 0
     }
 ]

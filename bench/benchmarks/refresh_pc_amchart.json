@@ -21,6 +21,6 @@
         "channelDataPointsCount": 1000,
         "channelsCount": 10,
         "fail": true,
-        "warning": "Stuck in asynchronous loading",
+        "warning": "Stuck in asynchronous loading"
     }
 ]

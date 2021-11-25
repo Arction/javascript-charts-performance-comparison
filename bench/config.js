@@ -4,8 +4,8 @@ const BENCHMARK_CONFIG = {
   // "static" | "append" | "refresh"
   mode: "static",
   // In "static" or "refresh" mode, amount of data points per channel.
-  channelDataPointsCount: 10000,
-  channelsCount: 1,
+  channelDataPointsCount: 100000,
+  channelsCount: 10,
   ticksEnabled: false,
   dataSource: 'data.json',
   strokeThickness: 1,

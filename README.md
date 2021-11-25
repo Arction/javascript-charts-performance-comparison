@@ -1,145 +1,207 @@
-Public comparison of LightningChart® JS performance against other JavaScript charting libraries in visualizing a realtime multichannel ECG chart:
+Public comparison of LightningChart® JS performance against other JavaScript charting libraries in visualizing line charts:
 
-![Multichannel ECG Chart](multichannel-ecg-chart.png "5 channel ECG Chart visualized with LightningChart® JS")
+Line charts are perhaps the most commonly used chart type in all fields of data visualization.
+For testing their performance in different types of applications, we have identified 3 different application types of line charts:
+
+1. **Static line chart**. An XY or Y data set is loaded and displayed as line chart.
+
+![](pics/static.png)
+
+2. **Refreshing line chart**. In this case, the data is dynamic changing every so often (_refresh rate_). Used in real-time monitoring / analysis.
+
+TODO: Video
+
+3. **Appending surface chart**. Also dynamic data, but in this case the previous data is not cleared, instead just shifted out as new data is pushed in. Used in several fields with different real-time data sources.
+
+TODO: Video
+
+This repository contains performance tests for these 3 application types.
 
 The following chart libraries were tested:
-- [LightningChart® JS v3.0.0](https://www.arction.com/lightningchart-js/)
+- [LightningChart® JS v.3.3](https://www.arction.com/lightningchart-js/)
 - [Highcharts 9.1.0](https://www.highcharts.com/)
-- [SciChart 1.4.1578](https://www.scichart.com/javascript-chart-features/)
+- [SciChart JS v.2.0.2115](https://www.scichart.com/javascript-chart-features/)
 - [Anychart 8.9.0](https://www.anychart.com/)
 - [amCharts 4](https://www.amcharts.com/)
 - [ECharts 5](http://echarts.apache.org/en/index.html)
 - [DvxCharts 5.0.0.0](https://www.dvxcharts.com/)
 - [Dygraphs 2.1.0](https://dygraphs.com/)
 - [Canvas.js 3.2.16](https://canvasjs.com/)
-- [μPlot 1.6.8](https://github.com/leeoniya/uPlot)
+- [μPlot 1.6.17](https://github.com/leeoniya/uPlot)
 - [Plotly.js 1.58.4](https://plotly.com/javascript/)
 - [ZingChart 2.9.3](https://www.zingchart.com/)
 
-The following chart libraries were suggested but not included:
-- [DevExtreme](https://js.devexpress.com/) Based on SVG, this is not suitable for real-time data visualization.
+Competitor results are kept unidentified (for example, "Competitor A").
 
 ## Benchmarks
 
-Below you can find an overview of library performance in a streaming application by visualizing *refresh rate* (frames per second).
-- Higher bar corresponds to smoother performance.
-- Orange bar color means stuttering is visible to human eye.
-- Red bar color means stuttering is constant and feels laggy, or even unusable.
+All applications that were created to test performance are included in this repository, open-source (`bench/` folder).
+See [Replicating performance benchmarks](#replicating-performance-benchmarks) section to learn more about replicating the results.
 
-Competitor results are kept unidentified (for example, "Competitor A").
+The later referenced benchmarks can be found in `bench/benchmarks`. These were measured on 25.11.2021, with an average office PC (Intel Core i7-7700K, 16 GB RAM, AMD Radeon R9 380).
 
-### PC
+## Static performance comparison breakdown
 
-- Date: 05.05.2021
-- OS: Windows 10
-- Browser: Google Chrome v90.0.4430.93
-- CPU: AMD Ryzen 5 2600
-- GPU: NVIDIA GeForce GTX 1050 Ti
-- RAM: 8 GB
+We have a selected two tests from the set of static performance tests to highlight the performance differences between charts most effectively.
 
-![FPS visualization PC](fpsVisualization-pc.png "FPS visualization (PC)")
+### Small data set size
 
-Full benchmarks data can be found [here](https://github.com/Arction/javascript-charts-performance-comparison/blob/main/bench/benchmarks_pc.csv).
+The word "small" can be misleading, but the nature of this test is to test charts performance when the data set size is not big enough to be downloaded into run-time memory.
+In practice, this is usually around the range of 10 million data points, however, we'll highlight the test with 10 channels and each channel receiving 100 thousand data points.
 
-### Laptop
+| JavaScript Chart Library | Loading speed * |
+|:---|:---|
+| Competitor E | 148 ms |
+| **LightningChart JS** | **180 ms** |
+| Hardware accelerated competitor A | 368 ms |
+| Competitor H | 520 ms |
+| Hardware accelerated competitor D | 521 ms |
+| Competitor F | 598 ms |
+| Competitor C | 646 ms ** |
+| Competitor G | 922 ms |
+| Competitor B | 1045 ms |
+| Competitor J | 1192 ms |
+| Competitor I | 8701 ms |
+| Competitor K | 42658 ms |
 
-- Date: 05.05.2021
-- OS: Windows 10
-- Browser: Google Chrome v90.0.4430.93
-- CPU: Intel Core i7-8550U CPU 1,80 GHz
-- GPU: Intel UHD Graphics 620
-- RAM: 8 GB
+\* Average of measurements with Google Chrome and Mozilla Firefox browsers.
 
-![FPS visualization laptop](fpsVisualization-laptop.png "FPS visualization (Laptop)")
+\** Chart library uses [down-sampling](#downsampling), the performance reading is invalid.
 
-Full benchmarks data can be found [here](https://github.com/Arction/javascript-charts-performance-comparison/blob/main/bench/benchmarks_laptop.csv).
+![](./bench/analysis/static-small.PNG)
 
-### High end PC
+This is a good place to explain what does the **"loading speed"** measurement include. You might run into various claims of JavaScript loading speed in the internet, but we believe that there is only one correct way to measure this.
 
-- Date: 05.05.2021
-- OS: Windows 10
-- Browser: Google Chrome v90.0.4430.93
-- CPU: Ryzen 9 5900X
-- GPU: RTX 3080
-- RAM: 32 GB
+> Loading speed is the time (seconds) which user has to wait for their chart to be visible on the web page.
 
-![FPS visualization high end PC](fpsVisualization-high-end-pc.png "FPS visualization (High end PC)")
+Some inconsistencies to this statement which you might have to look out for:
 
-Full benchmarks data can be found [here](https://github.com/Arction/javascript-charts-performance-comparison/blob/main/bench/benchmarks_high-end-pc.csv).
+- Setting up rendering frameworks and licenses, or any other steps which users have to do are included in loading time.
+- Loading speed includes any chart processing time between initiating the chart creation and displaying it.
+- In addition to this, loading speed **also includes any extra time that is required before the chart is visible**.
 
-## Results analysis
+From the bar chart above, we can see that LightningChart JS is the second fastest JavaScript chart in visualizing 1 million data points.
+Well done, competitor E!
 
-While all of the included chart libraries could visualize the multichannel ECG chart, it quickly became apparent that majority of the tested charts are not designed for frequent updates.
+Regardless, we still consider LightningChart JS to be easily the fastest chart in line chart visualization, as setting up WebGL takes a bit more time initially than lighter web drawing frameworks. We'll prove this in the next test case.
 
-Already with only one channel and 1000 incoming data points per second, most charts utilize 100% of the CPU which means that the rest of the webpage stops working well. CPU usage can only be observed with browser developer tools, but the same effect can be observed from the benchmark results by looking at `FPS` dropping to 30 and below (laptop measurements).
+### Large data set size
 
-Increasing data amount to 10 channels and 10000 incoming data points per second, 9 out of 12 charts cease working as their FPS drops to ~10 and below. At this point, _LightningChart JS_ refreshes twice as fast and with ~3x less processing than the other still functioning charts (laptop measurements).
+When visualizing large data sets in web frontend, you have to load your data in size-limited parts in order to avoid crashing due to using too much memory.
+In the following test, 10 channels receive a total of 1 million data points each, 100 thousand points at a time. The goal of the test is to measure how fast the chart library can produce the final data visualization without allocating all of the data set into memory at a single time and risking an application crash.
 
-Increasing data amounts even further, every chart except for _LightningChart JS_ drops off, either crashing or refreshing at less than 5 FPS.
-The final measurement for _LightningChart JS_ is with 10 channels and million data points per second coming to a whopping total of **10 million incoming data points per second** and still refreshing with over 60 FPS (high-end pc measurements). At this point, the amount of data is approaching the limitations of modern browsers but it seems clear that _LightningChart JS_ is not going to be the bottleneck.
+| JavaScript Chart Library | Loading speed * |
+|:---|:---|
+| **LightningChart JS** | **1246 ms** |
+| Competitor E | 2824 ms |
+| Hardware accelerated competitor A | 3305 ms |
+| Competitor C | 3868 ms ** |
+| Competitor B | 11947 ms |
+| Hardware accelerated competitor D | 28554 ms |
+| Competitor F | 33754 ms |
+| Competitor G | 42201 ms |
+| Competitor H | 45342 ms |
+| Competitor J | 56169 ms |
+| Competitor I | Fail |
+| Competitor K | Fail |
 
-**Conclusion:**
+\* Average of measurements with Google Chrome and Mozilla Firefox browsers.
 
-- _LightningChart JS_ performed **175x** more efficiently than the fastest hardware accelerated competitor (amount of data, refresh rate).
-- _LightningChart JS_ performed **542x** more efficiently than the average competitor.
-- Majority of web charts claiming "high performance" are still not suitable for real-time line chart visualization as they require too much CPU processing, leaving the rest of the webpage performing bad.
+\** Chart library uses [down-sampling](#downsampling), the performance reading is invalid.
 
-## Errors in data visualization
+![](./bench/analysis/static-large.PNG)
 
-Chart library performance is important, but producing correct visualizations is even more important. This section contains some cases where **incorrect** or *unexpected* results were identified.
+As we can see from the bar chart above, with heavier applications the power of LightningChart JS starts to show even in static data visualization applications, being ready **25.7x faster** than the average non hardware accelerated chart and **12.8x faster** than the average hardware accelerated chart.
 
-### Downsampling
 
-Some chart libraries are known to utilize internal downsampling of input data.
-While this yields increased performance, it produces incorrect visualization which is unacceptable in any realistic application.
+TODO >>>> Refreshing
 
-The following competitors have been tested and proven to utilize downsampling:
+TODO >>>> Appending
 
-- Competitor C
 
-![Competitor C spike data](spikeData-C.png "Competitor C spike data (incorrect visualization)")
+TODO >>>> Update below section
 
-Same data visualized *correctly* with LightningChart® JS:
+## LightningChart JS Line Chart Capabilities
 
-![LightningChart® JS spike data](spikeData-lcjs.png "LightningChart® JS spike data")
+As you might know, LightningChart JS utilizes hardware acceleration for its graphics. This results in three very particular performance properties:
+- **Low CPU usage**
+    - As you can see from both highlighted real-time performance scenarios, LightningChart JS is extremely efficient on CPU usage with stark contrast to other chart libraries.
+- **High refresh rate**
+    - In all highlighted real-time performance scenarios, LightningChart JS refreshes with the maximum required display rate.
+- **Hardware scaling**
+    - Perhaps something which is not talked about enough; hardware acceleration enables utilizing the power of device graphics processing units (GPU). As a result of this, LightningChart JS performance skyrockets when powerful hardware is used.
 
-### Other errors
+It is worth noting, that this is not as simple as "if something is hardware accelerated then it must perform well". There are large differences even between performance of hardware accelerated web charts.
 
-With extremely dense data (100 μs resolution), competitor G produces incorrect visualization (curve looks like it is thicker than it should, or like there is a lot of *noise*). In this case, the Y value can't be accurately identified. Additionally, the visualized Y min/max range is out of the input data bounds (max Y is obviously drawn higher than 5.0).
+**Let's see what happens when LightningChart JS is used with a powerful machine ...**
 
-![Competitor G noise visualization](issue0-G.png "Competitor G \"noise\" error")
+We performed a separate test iteration with a more powerful PC (Ryzen 9 5900X, 64GB RAM, RTX 3080) to see what is the maximum capability of LightningChart JS Surface charts. Here's the results!
 
-Same data visualized *correctly* with LightningChart® JS:
+### Static surface chart
 
-![LightningChart® JS](issue0-LCJS.png "LightningChart® JS")
+- Maximum data set size: **2 BILLION data points** (45000x45000)
+- Massive 10000x10000 surface grid can be loaded in less than a second! (768 ms)
+    - This translates to processing ~130 million data points in 1 second.
 
+![](pics/static-2.PNG)
+
+### Refreshing surface chart
+
+- **LightningChart JS officially enables real-time refreshing surface data visualization**. From the performance results of older data visualization tools, it can be seen that they are simply not efficient enough with CPU usage to allow this kind of applications. Here is one performance test result we'd like to highlight:
+
+| JavaScript chart library | Refresh rate (Hz) | Surface grid dimensions | Total data points per refresh | Achieved refresh rate (FPS) | CPU usage (%) |
+|:---|:----|:----|:----|:----|:---|
+| LightningChart JS | 60 | 1000x1000 | 1 million | **60.0** | **16.0%** | 
+
+In this test, a surface data set is refreshed 60 times per second. This is the most common maximum refresh rate of computer monitors, thus a very commonly used refresh rate in monitoring solutions.
+
+Note, the CPU usage from LightningChart JS: **16.0 %**. This leaves plenty of power for the rest of the web page as well as something often forgotten before it is a problem: transferring the data to the data visualization application, as well as possible data analysis computations.
+
+![](pics/refresh.gif)
+
+### Appending surface chart
+
+- **LightningChart JS officially enables real-time appending surface data visualization**. From the performance results of older data visualization tools, it can be seen that they are simply not efficient enough with CPU usage to allow this kind of applications. 
+
+**Why is this?**
+
+Most importantly, this is due to design decisions. All other chart solutions that we tested only allowed following actions:
+- Create surface chart with X data set.
+- Update existing surface chart with X data set.
+
+However, this is not applicable to appending surface charts because of several reasons:
+
+1. User is responsible for appending data and shifting old data out.
+    - This means that actually users are implementing a significant part of the data processing.
+
+2. Data update is not optimized.
+    - Even if only one sample is added to the surface, it results in the entire chart being updated as if the whole data set was changed.
+    - This will NEVER perform on an acceptable level in real-time applications.
+
+**How does LightningChart resolve this issue?**
+
+From the start, LightningChart JS was designed to work in all real-time applications. For this reason, we have a dedicated surface chart feature, which handles all the above mentioned processes internally, while user only has to push in new samples to append.
+
+...and here is how it performs with a fast machine:
+
+| JavaScript chart library | Surface grid dimensions | New data points per second | Achieved refresh rate (FPS) | CPU usage (%) |
+|:---|:----|:----|:----|:----|
+| LightningChart JS | 2000x1000 | 200 thousand | **55.0** | **2.5%** | 
+
+This is an extremely heavy application, with each sample having 2000 data values and displaying time domain history from 10 seconds with 100 new samples added per second.
+
+In practice, this should cover any realistic need for 3D spectrogram data visualization applications, which are usually limited by sample size and refresh rate.
+
+![](pics/append.gif)
+
+## End word
+
+Read more about Lightning Chart JS performance why and how at our [web site](https://www.arction.com/high-performance-javascript-charts/).
+
+To interact with LightningChart JS Surface charts, please continue in our [Surface chart examples gallery](https://www.arction.com/lightningchart-js-interactive-examples/search.html?t=surface).
 
 ## Replicating performance benchmarks
 
 The benchmark applications and all related resources can be found in `bench/` folder.
 
-**Hosting development server**
-
-```
-npm i --global http-server
-
-http-server
-```
-
-Afterwards, benchmark index page can be found in `localhost:8080/bench` by typing the URL directly into a browser (like Google Chrome).
-
-The test parameters are configured by modifying `bench/config.iife.js`. After modifications, a *cache refresh* is usually required (reload page with Shift+Ctrl+R).
-
-All the benchmark applications run for specified amount of time (30 seconds by default), and then print out the benchmark results into the *console*.
-
-### Required dependencies
-
-Some chart libraries do not have public URLs where the latest version can be fetched. For these libraries, you have to manually download their library build, and place it in the `bench` folder in order for the application to work.
-
-- LightningChart® JS | Included in project `lcjs.iife.js`
-- μPlot | Requires `uPlot.iife.min.js`, `uPlot.min.css`
-- DvxCharts | Requires `dvxCharts.chart.min.js`, `dvxCharts.chart.min.css`, `dvxCharts.styles.css`
-
-### Chart libraries that require a license
-
-*SciChart* can't be run with the above method, as there is no IIFE build available, and it also requires licensing management software installed on the local computer. *SciChart* benchmark application can be found in `bench/scichart/`.
+Please see [bench/README.md](bench/README.md) for development instructions.
