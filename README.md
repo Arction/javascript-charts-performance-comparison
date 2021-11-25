@@ -5,6 +5,8 @@ For testing their performance in different types of applications, we have identi
 
 1. **Static line chart**. An XY or Y data set is loaded and displayed as line chart.
 
+TODO: Picture
+
 ![](pics/static.png)
 
 2. **Refreshing line chart**. In this case, the data is dynamic changing every so often (_refresh rate_). Used in real-time monitoring / analysis.
@@ -83,7 +85,7 @@ Some inconsistencies to this statement which you might have to look out for:
 From the bar chart above, we can see that LightningChart JS is the second fastest JavaScript chart in visualizing 1 million data points.
 Well done, competitor E!
 
-Regardless, we still consider LightningChart JS to be easily the fastest chart in line chart visualization, as setting up WebGL takes a bit more time initially than lighter web drawing frameworks. We'll prove this in the next test case.
+Regardless, we still consider LightningChart JS to easily be the fastest in line chart visualization even if setting up WebGL simply takes a bit more time initially than lighter web drawing frameworks. We'll prove this in the next test case.
 
 ### Large data set size
 
@@ -109,7 +111,7 @@ In the following test, 10 channels receive a total of 1 million data points each
 
 \** Chart library uses [down-sampling](#downsampling), the performance reading is invalid.
 
-![](./bench/analysis/static-large.PNG)
+![](bench/analysis/static-large.PNG)
 
 As we can see from the bar chart above, with heavier applications the power of LightningChart JS starts to show even in static data visualization applications, being ready **25.7x faster** than the average non hardware accelerated chart and **12.8x faster** than the average hardware accelerated chart.
 
