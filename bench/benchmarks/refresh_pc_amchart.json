@@ -1,0 +1,26 @@
+[
+    {
+        "_TEMPLATE": true,
+        "refreshRate": 0,
+        "channelDataPointsCount": 0,
+        "channelsCount": 0,
+        "fail": false,
+        "cpuChrome": 0,
+        "fpsChrome": 0,
+        "fpsFirefox": 0
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 1000,
+        "channelsCount": 1,
+        "warning": "Stuck in asynchronous loading",
+        "fail": true
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 1000,
+        "channelsCount": 10,
+        "fail": true,
+        "warning": "Stuck in asynchronous loading",
+    }
+]

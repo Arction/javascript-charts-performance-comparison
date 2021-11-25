@@ -3,7 +3,13 @@ const BENCHMARK_IMPLEMENTATION = (() => {
   const beforeStart = () => {
     return new Promise((resolve, reject) => {
       const libScript = document.createElement("script");
-      libScript.onload = () => resolve();
+      libScript.onload = () => {
+        SciChart.SciChartSurface.configure({
+          dataUrl: "https://cdn.jsdelivr.net/npm/scichart@2.0.2115/_wasm/scichart2d.data",
+          wasmUrl: "https://cdn.jsdelivr.net/npm/scichart@2.0.2115/_wasm/scichart2d.wasm"
+        })
+        resolve()
+      };
       libScript.src = "https://cdn.jsdelivr.net/npm/scichart@2.0.2115/_wasm/scichart.browser.js";
       document.body.append(libScript);
     });
@@ -23,11 +29,6 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         FastLineRenderableSeries,
         NumberRange,
       } = SciChart
-
-      SciChartSurface.configure({
-        dataUrl: "https://cdn.jsdelivr.net/npm/scichart@2.0.2115/_wasm/scichart2d.data",
-        wasmUrl: "https://cdn.jsdelivr.net/npm/scichart@2.0.2115/_wasm/scichart2d.wasm"
-      })
 
       const sciChart = await SciChartSurface.create('chart');
       sciChartSurface = sciChart.sciChartSurface

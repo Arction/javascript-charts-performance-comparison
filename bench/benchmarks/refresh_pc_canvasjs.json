@@ -1,0 +1,39 @@
+[
+    {
+        "_TEMPLATE": true,
+        "refreshRate": 0,
+        "channelDataPointsCount": 0,
+        "channelsCount": 0,
+        "fail": false,
+        "cpuChrome": 0,
+        "fpsChrome": 0,
+        "fpsFirefox": 0
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 1000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpuChrome": 46.1,
+        "fpsChrome": 43.6,
+        "fpsFirefox": 32.8
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 10000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpuChrome": 67.3,
+        "fpsChrome": 6.0,
+        "fpsFirefox": 21.8
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 100000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpuChrome": 100.0,
+        "fpsChrome": 0.2,
+        "fpsFirefox": 1.1
+    }
+]

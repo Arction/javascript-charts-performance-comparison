@@ -1,0 +1,30 @@
+[
+    {
+        "_TEMPLATE": true,
+        "refreshRate": 0,
+        "channelDataPointsCount": 0,
+        "channelsCount": 0,
+        "fail": false,
+        "cpuChrome": 0,
+        "fpsChrome": 0,
+        "fpsFirefox": 0
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 1000,
+        "channelsCount": 1,
+        "fail": false,
+        "cpuChrome": 60.5,
+        "fpsChrome": 42.0,
+        "fpsFirefox": 22.7
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 1000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpuChrome": 100.0,
+        "fpsChrome": 4.0,
+        "fpsFirefox": 3.8
+    }
+]
