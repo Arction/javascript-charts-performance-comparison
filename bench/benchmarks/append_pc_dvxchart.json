@@ -12,35 +12,29 @@
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 1200,
+        "appendHistorySeconds": 300,
         "channelsCount": 1,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,
-        "warning": "Degradation after runtime",
-        "cpuChrome": 50.1,
-        "fpsChrome": 60.0,
-        "fpsFirefox": 45.6
+        "cpuChrome": 100.0,
+        "fpsChrome": 54.4,
+        "fpsFirefox": 18.0
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 1200,
+        "appendHistorySeconds": 300,
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,
-        "warning": "Degradation after runtime",
         "cpuChrome": 100.0,
-        "fpsChrome": 4.9,
-        "fpsFirefox": 1.0
+        "fpsChrome": 13.9,
+        "fpsFirefox": 6.4
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
         "appendHistorySeconds": 300,
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 10000,
-        "fail": false,
-        "warning": "Degradation after runtime",
-        "cpuChrome": 100.0,
-        "fpsChrome": 1.8,
-        "fpsFirefox": 0.4
+        "fail": true
     }
 ]

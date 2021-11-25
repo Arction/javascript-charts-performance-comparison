@@ -12,17 +12,17 @@
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 300,
+        "appendHistorySeconds": 1200,
         "channelsCount": 1,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,
-        "cpuChrome": 18.3,
+        "cpuChrome": 20.3,
         "fpsChrome": 60.0,
-        "fpsFirefox": 59.0
+        "fpsFirefox": 60.0
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 300,
+        "appendHistorySeconds": 1200,
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,

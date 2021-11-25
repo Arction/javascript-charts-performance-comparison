@@ -20,6 +20,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
   };
 
   let chart;
+  let options;
 
   const loadChart = (initialData) => {
     return new Promise((resolve, reject) => {
@@ -40,7 +41,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         },
       });
 
-      chart = Highcharts.chart('chart', {
+      options = {
         title: {
           text: '',
         },
@@ -58,7 +59,9 @@ const BENCHMARK_IMPLEMENTATION = (() => {
             lineWidth: BENCHMARK_CONFIG.strokeThickness,
             boostThreshold: 1,
           })),
-      });
+      }
+
+      chart = Highcharts.chart('chart', options);
 
       if (!BENCHMARK_CONFIG.ticksEnabled) {
         // TODO IMMEDIATE: How to hide ticks ?
@@ -97,6 +100,12 @@ const BENCHMARK_IMPLEMENTATION = (() => {
           }
         })
       }
+
+      chart.xAxis[0].update({
+        min: totalDataPoints - BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond,
+        max: totalDataPoints,
+      });
+      
 
       chart.redraw();
       requestAnimationFrame(resolve)

@@ -1,0 +1,30 @@
+[
+    {
+        "_TEMPLATE": true,
+        "appendTimeDomainIntervalSeconds": 0,
+        "appendHistorySeconds": 0,
+        "channelsCount": 0,
+        "appendNewSamplesPerSecond": 0,
+        "fail": false,
+        "cpuChrome": 0,
+        "fpsChrome": 0,
+        "fpsFirefox": 0
+    },
+    {
+        "appendTimeDomainIntervalSeconds": 15,
+        "appendHistorySeconds": 300,
+        "channelsCount": 1,
+        "appendNewSamplesPerSecond": 1000,
+        "fail": false,
+        "cpuChrome": 100.0,
+        "fpsChrome": 6.3,
+        "fpsFirefox": 2.2
+    },
+    {
+        "appendTimeDomainIntervalSeconds": 15,
+        "appendHistorySeconds": 300,
+        "channelsCount": 10,
+        "appendNewSamplesPerSecond": 1000,
+        "fail": true
+    }
+]

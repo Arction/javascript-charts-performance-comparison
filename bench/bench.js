@@ -55,6 +55,7 @@
     do {
       const addDataPointsCount = Math.min(BENCHMARK_CONFIG.maxChunkDataPoints / BENCHMARK_CONFIG.channelsCount, initialDataPointsCount - dataPoints)
       const data = packNDataPoints(addDataPointsCount)
+      console.log(`\tchunk ${iteration + 1} ${addDataPointsCount} data points (per channel) load up sum: ${(dLoadup).toFixed(1)}ms`)
       const tStart = window.performance.now()
       if (iteration === 0) {
         await BENCHMARK_IMPLEMENTATION.loadChart(data);
@@ -64,7 +65,6 @@
       const dIteration = window.performance.now() - tStart
       dLoadup += dIteration
       dataPoints += addDataPointsCount
-      console.log(`\tchunk ${iteration + 1} ${addDataPointsCount} data points (per channel) ${(dIteration).toFixed(1)}ms`)
       iteration += 1
     } while (dataPoints < initialDataPointsCount)
 
@@ -99,11 +99,11 @@
     if (BENCHMARK_CONFIG.mode === "append") {
       console.log(`appending history data ${BENCHMARK_CONFIG.appendHistorySeconds}s ...`)
       while (dataPoints < BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond) {
-        const addDataPointsCount = Math.min(BENCHMARK_CONFIG.maxChunkDataPoints, BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond - dataPoints)
+        const addDataPointsCount = Math.min(BENCHMARK_CONFIG.maxChunkDataPoints / BENCHMARK_CONFIG.channelsCount, BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond - dataPoints)
+        console.log(`\t${(dataPoints+addDataPointsCount)} / ${BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond} data points`)
         BENCHMARK_IMPLEMENTATION.appendData(packNDataPoints(addDataPointsCount, testData1YValues));
         await new Promise(resolve => setTimeout(resolve, 1000))
         dataPoints += addDataPointsCount
-        console.log(`\t${dataPoints} / ${BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond} data points`)
       }
 
       initiateFPSMonitoring()
