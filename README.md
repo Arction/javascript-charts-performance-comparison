@@ -120,11 +120,100 @@ As we can see from the bar chart above, with heavier applications the power of L
 
 ## Refreshing line chart performance comparison breakdown
 
+In refreshing chart applications, performance is measured as **refresh rate** (how fast data set can be refreshed, faster is better, unit is expressed as frequency Hz which means how many refreshes per every second) and **CPU usage** (% of processing power used, 0-100).
 
+In web data visualization, the CPU usage measurement is perhaps the most important performance metric which can be measured. This is because almost exclusively all processing on a web page is run in a single process and multiple CPU cores can't be easily utilized. In practice, this means if your web page has a single component which uses CPU extensively it will **ruin the performance of the entire web page**.
 
-TODO >>>> Refreshing
+> If your web page has a chart component which uses 100% of CPU, you can say goodbye to your good user experience.
 
-TODO >>>> Appending
+We have selected a single test from the set of refreshing performance tests. This test was the same for each library and it highlights the performance differences most effectively.
+
+Here are the results of refreshing (refresh rate = 10 Hz) line chart test with 1 million data points
+
+| JavaScript Chart Library | Actual refresh rate /s | CPU Usage (%) |
+|:---|:---|:---|
+| LightningChart JS | 10.0 | **57.6 %** |
+| Hardware accelerated competitor A | 10.0 | 93.6 % |
+| Competitor E | 10.0 | 94.4 % |
+| Competitor H | 2.3 | 100.0 % |
+| Competitor F | 1.3 | 100.0 % |
+| Competitor B | 0.9 | 100.0 % |
+| Competitor J | 0.7 | 100.0 % |
+| Competitor G | 0.4 | 100.0 % |
+| Competitor C | Fail | Fail |
+| Competitor D | Fail | Fail |
+| Competitor I | Fail | Fail |
+| Competitor K | Fail | Fail |
+
+![](bench/analysis/refresh.PNG)
+
+To help understand viewers to understand the effects of bad refresh rate and CPU usage measurements we have created a [YouTube video showcasing the charts](TODO) mentioned here undertaking the refreshing chart performance test (**not necessarily with same parameters as the test case highlighted above!**). In this video you can visible see how a low FPS looks on a web page, and respectively how a good FPS looks.
+
+On average, LightningChart JS could process **14.2x** more data than non hardware accelerated charts and **9.1x** more data than other hardware accelerated charts.
+
+| JavaScript Chart Library | Max data process speed | Data points | Achieved refresh rate * |
+|:----|:----|:----|:----|
+| LightningChart JS | **34 M/s** | 8 000 000 | 4.3 Hz |
+| Competitor E | 16 M/s | 4 000 000 | 4.0 Hz |
+| Hardware accelerated competitor A | 7.4 M/s | 2 000 000 | 3.7 Hz |
+| Competitor H | 2.3 M/s | 1 000 000 | 2.3 Hz |
+| Competitor F | 1.3 M/s | 1 000 000 | 1.3 Hz |
+| Competitor B | 850 k/s | 1 000 000 | 0.9 Hz |
+| Competitor J | 700 k/s | 1 000 000 | 0.7 Hz |
+| Competitor G | 400 k/s | 1 000 000 | 0.4 Hz |
+| Competitor C | 39 k/s | 10 000 | 4.5 Hz |
+| Hardware accelerated competitor D | 39 k/s | 10 000 | 3.9 Hz |
+| Competitor I | 14 k/s | 10 000 | 1.4 Hz |
+| Competitor K | None ** | | |
+
+\* Average result of Google Chrome and Mozilla Firefox.
+
+\** Even with minimal data amounts, chart was stuck in loading animation.
+
+## Appending line chart performance comparison breakdown
+
+Performance in appending chart applications is measured same way as in [refreshing applications](#refreshing-line-chart-performance-comparison-breakdown). However, generally refresh rates are much more frequent, usually capped around 60 FPS.
+
+We have selected a single test from the set of appending performance tests. This test was the same for each library and it highlights the performance differences most effectively. Here are the results of appending 
+>>>> TODO
+
+| JavaScript Chart Library | Actual refresh rate /s | CPU Usage (%) |
+|:---|:---|:---|
+| LightningChart JS | 10.0 | **57.6 %** |
+| Hardware accelerated competitor A | 10.0 | 93.6 % |
+| Competitor E | 10.0 | 94.4 % |
+| Competitor H | 2.3 | 100.0 % |
+| Competitor F | 1.3 | 100.0 % |
+| Competitor B | 0.9 | 100.0 % |
+| Competitor J | 0.7 | 100.0 % |
+| Competitor G | 0.4 | 100.0 % |
+| Competitor C | Fail | Fail |
+| Competitor D | Fail | Fail |
+| Competitor I | Fail | Fail |
+| Competitor K | Fail | Fail |
+
+![](bench/analysis/refresh.PNG)
+
+To help understand viewers to understand the effects of bad refresh rate and CPU usage measurements we have created a [YouTube video showcasing the charts](TODO) mentioned here undertaking the refreshing chart performance test (**not necessarily with same parameters as the test case highlighted above!**). In this video you can visible see how a low FPS looks on a web page, and respectively how a good FPS looks.
+
+On average, LightningChart JS could process **14.2x** more data than non hardware accelerated charts and **9.1x** more data than other hardware accelerated charts.
+
+| JavaScript Chart Library | Max data process speed | Data points | Achieved refresh rate * |
+|:----|:----|:----|:----|
+| LightningChart JS | **34 M/s** | 8 000 000 | 4.3 Hz |
+| Competitor E | 16 M/s | 4 000 000 | 4.0 Hz |
+| Hardware accelerated competitor A | 7.4 M/s | 2 000 000 | 3.7 Hz |
+| Competitor H | 2.3 M/s | 1 000 000 | 2.3 Hz |
+| Competitor F | 1.3 M/s | 1 000 000 | 1.3 Hz |
+| Competitor B | 850 k/s | 1 000 000 | 0.9 Hz |
+| Competitor J | 700 k/s | 1 000 000 | 0.7 Hz |
+| Competitor G | 400 k/s | 1 000 000 | 0.4 Hz |
+| Competitor C | 39 k/s | 10 000 | 4.5 Hz |
+| Hardware accelerated competitor D | 39 k/s | 10 000 | 3.9 Hz |
+| Competitor I | 14 k/s | 10 000 | 1.4 Hz |
+| Competitor K | None ** | | |
+
+\* Average result of Google Chrome and Mozilla Firefox.
 
 
 TODO >>>> Update below section

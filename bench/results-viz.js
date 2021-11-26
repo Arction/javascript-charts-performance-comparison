@@ -181,81 +181,65 @@ if (!target) {
             categoryAxisTitle: 'JavaScript Chart Library',
             valueAxisTitle: '',
             values: [
-              { name: 'LightningChart JS', values: [
-                  // NOTE: FPS measurements over refresh rate (10) are clamped.
-                  { value: Math.min(10, 42.4), label: 'FPS: 10.0' },
-                  { value: 100 - 57.6, label: 'CPU: 57.6%' }
-              ] },
+              { 
+                  name: 'LightningChart JS',
+                  values: [
+                    { value: 100 - 57.6, label: 'CPU: 57.6%' },
+                    ]
+                },
               {
-                  name: 'Hardware accelerated competitor A', values: [
-                      { value: Math.min(10, 14), label: 'FPS: 14.0' },
-                      { value: 100 - 93.6, label: 'CPU: 93.6%' }
+                  name: 'Competitor A', values: [
+                    { value: 100 - 93.6, label: 'CPU: 93.6%' },
                   ]
               },
               {
                   name: 'Competitor B', values: [
-                      { value: Math.min(10, 0.9), label: 'FPS: 0.9' },
-                      { value: 100 - 100.0, label: 'CPU: 100.0%' }
+                    { value: 100 - 100.0, label: 'CPU: 100.0%', label2: 'FPS: 0.9', color2: '#ff0000' },
                   ]
               },
               {
                   name: 'Competitor C', values: [
                     { value: -1, label: 'FAIL', color: '#ff0000' },
-                    { value: -1, label: 'FAIL', color: '#ff0000' }
                   ]
               },
               {
-                  name: 'Hardware accelerated competitor D', values: [
+                  name: 'Competitor D', values: [
                     { value: -1, label: 'FAIL', color: '#ff0000' },
-                    { value: -1, label: 'FAIL', color: '#ff0000' }
-                  ]
-              },
-              {
-                  name: 'Competitor B', values: [
-                      { value: Math.min(10, 0.9), label: 'FPS: 0.9' },
-                      { value: 100 - 100.0, label: 'CPU: 100.0%' }
                   ]
               },
               {
                   name: 'Competitor E', values: [
-                      { value: Math.min(10, 25), label: 'FPS: 25.0' },
-                      { value: 100 - 94.4, label: 'CPU: 94.4%' }
+                    { value: 100 - 94.4, label: 'CPU: 94.4%' },
                   ]
               },
               {
                   name: 'Competitor F', values: [
-                      { value: Math.min(10, 1.3), label: 'FPS: 1.3' },
-                      { value: 100 - 100, label: 'CPU: 100.0%' }
+                    { value: 100 - 100, label: 'CPU: 100.0%', label2: 'FPS: 1.3', color2: '#ff0000' },
                   ]
               },
               {
                   name: 'Competitor G', values: [
-                      { value: Math.min(10, 0.4), label: 'FPS: 0.4' },
-                      { value: 100 - 100, label: 'CPU: 100.0%' }
+                    { value: 100 - 100, label: 'CPU: 100.0%', label2: 'FPS: 0.4', color2: '#ff0000' },
                   ]
               },
               {
                   name: 'Competitor H', values: [
-                      { value: Math.min(10, 2.3), label: 'FPS: 2.3' },
-                      { value: 100 - 100, label: 'CPU: 100.0%' }
+                    { value: 100 - 100, label: 'CPU: 100.0%', label2: 'FPS: 2.3', color2: '#ff0000' },
                   ]
               },
               {
                   name: 'Competitor I', values: [
                     { value: -1, label: 'FAIL', color: '#ff0000' },
-                    { value: -1, label: 'FAIL', color: '#ff0000' }
                   ]
               },
               {
                   name: 'Competitor J', values: [
-                      { value: Math.min(10, 0.7), label: 'FPS: 0.7' },
-                      { value: 100 - 100, label: 'CPU: 100.0%' }
+                    { value: 100 - 100, label: 'CPU: 100.0%', label2: 'FPS: 0.7', color2: '#ff0000' },
                   ]
               },
               {
                   name: 'Competitor K', values: [
                     { value: -1, label: 'FAIL', color: '#ff0000' },
-                    { value: -1, label: 'FAIL', color: '#ff0000' }
                   ]
               },
             ]
@@ -340,7 +324,7 @@ if (!target) {
             .setText(name)
             .setTextFont((font) => font.setSize(18))
         values.forEach((valueItem, i) => {
-            const { value, label, warning } = valueItem
+            const { value, label, warning, label2, color2 } = valueItem
             const xBarStart = x
             x += 1
             const xBarEnd = x
@@ -364,15 +348,29 @@ if (!target) {
                     ]
                 }))
             }
-            const uiLabel = chart.addUIElement(UIElementBuilders.TextBox.setBackground(UIBackgrounds.None), { x: axisX, y: axesY[i] })
-                .setText(label)
+
+            const uiLayout = chart.addUIElement(UILayoutBuilders.Column.setBackground(UIBackgrounds.None), { x: axisX, y: axesY[i] })
                 .setOrigin(UIOrigins.CenterBottom)
                 .setMargin({bottom: 6})
                 .setPosition({ x: xBarCenter, y: valueMin })
+
+            const uiLabel = uiLayout.addElement(UIElementBuilders.TextBox)
+                .setText(label)
+
             if (valueItem.color) {
                 uiLabel
                     .setTextFillStyle(new SolidFill({color: ColorHEX(valueItem.color)}))
                     .setTextFont((font) => font.setWeight('bold'))
+            }
+
+            if (label2) {
+                const uiLabel2 = uiLayout.addElement(UIElementBuilders.TextBox)
+                    .setText(label2)
+                if (color2) {
+                    uiLabel2
+                        .setTextFillStyle(new SolidFill({color: ColorHEX(color2)}))
+                        .setTextFont((font) => font.setWeight('bold'))
+                }
             }
             
             if (warning) {
