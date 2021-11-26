@@ -54,18 +54,23 @@ const BENCHMARK_IMPLEMENTATION = (() => {
     });
   };
 
-  const appendData = (data) => {
+  let tPreviousDataCleaning = 0
+  const appendData = (data, simulateHistory) => {
     return new Promise((resolve, reject) => {
+      const tNow = window.performance.now()
       newDataPointsCount = data.length
       totalDataPoints += newDataPointsCount
       existingDataPoints += newDataPointsCount
+
+      const doDataCleaning = (BENCHMARK_CONFIG.mode === 'append' && tNow - tPreviousDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) || simulateHistory
+      tPreviousDataCleaning = doDataCleaning ? tNow : tPreviousDataCleaning
 
       table.addData(data, false)
       
       // Drop out of range data points to keep application running forever (this is a must for real-time data monitoring use cases!)
       if (BENCHMARK_CONFIG.mode === 'append') {
         const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
-        const deleteDataPointsCount = (existingDataPoints) - keepDataPointsCount
+        const deleteDataPointsCount = doDataCleaning ? (existingDataPoints) - keepDataPointsCount : 0
         if (deleteDataPointsCount > 0) {
           table.remove(totalDataPoints - (deleteDataPointsCount + keepDataPointsCount), totalDataPoints - keepDataPointsCount)
           existingDataPoints -= deleteDataPointsCount

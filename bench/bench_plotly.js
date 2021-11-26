@@ -52,12 +52,16 @@ const BENCHMARK_IMPLEMENTATION = (() => {
 
   let totalDataPoints = 0
   let existingDataPoints = 0
-  const appendData = (data) => {
+  let tPreviousDataCleaning = 0
+  const appendData = (data, simulateHistory) => {
     return new Promise((resolve, reject) => {
+      const tNow = window.performance.now()
       newDataPointsCount = data[0].length
       totalDataPoints += newDataPointsCount
       existingDataPoints += newDataPointsCount
 
+      const doDataCleaning = (BENCHMARK_CONFIG.mode === 'append' && tNow - tPreviousDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) || simulateHistory
+      
       Plotly.extendTraces(
         'chart',
         {
@@ -68,21 +72,17 @@ const BENCHMARK_IMPLEMENTATION = (() => {
           .map((_, iChannel) => iChannel)
       );
 
-      // Drop out of range data points to keep application running forever (this is a must for real-time data monitoring use cases!)
-      if (BENCHMARK_CONFIG.mode === 'append') {
+      if (doDataCleaning) {
+        // Drop out of range data points to keep application running forever (this is a must for real-time data monitoring use cases!)
         const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
         const deleteDataPointsCount = (existingDataPoints) - keepDataPointsCount
         if (deleteDataPointsCount > 0) {
           for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
-            if (deleteDataPointsCount === 1) {
-              // Shift is faster than splice
-              plotData[iCh].y.shift()
-            } else {
-              plotData[iCh].y.splice(0, deleteDataPointsCount)
-            }
+            plotData[iCh].y.splice(0, deleteDataPointsCount)
           }
           existingDataPoints -= deleteDataPointsCount
         }
+        tPreviousDataCleaning = tNow
       }
 
       requestAnimationFrame(resolve)

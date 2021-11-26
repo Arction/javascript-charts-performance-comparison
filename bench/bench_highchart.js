@@ -77,9 +77,11 @@ const BENCHMARK_IMPLEMENTATION = (() => {
     return new Promise((resolve, reject) => {
       newDataPointsCount = data[0].length
       totalDataPoints += newDataPointsCount
+      // For optimal data cleaning with this API, data cleaning must be done every time new points are added. This is because the data shifting API only allows dropping one point at a time.
+      const doDataCleaning = BENCHMARK_CONFIG.mode === 'append' ? true: false
 
       // Drop out of range data points to keep application running forever (this is a must for real-time data monitoring use cases!)
-      if (BENCHMARK_CONFIG.mode === 'append') {
+      if (BENCHMARK_CONFIG.mode === 'append' && doDataCleaning) {
         const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
 
         // Based on https://www.highcharts.com/forum/viewtopic.php?t=41141 (best way to delete old points)
@@ -94,11 +96,12 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         }
       } else {
         // Just add new points.
-        chart.series.forEach((series, iCh) => {
-          for (let i = 0; i < newDataPointsCount; i += 1) {
+        for (let i = 0; i < newDataPointsCount; i += 1) {
+          chart.series.forEach((series, iCh) => {
             series.addPoint(data[iCh][i], false)
-          }
-        })
+          })
+          existingDataPoints += 1
+        }
       }
 
       chart.xAxis[0].update({

@@ -61,14 +61,18 @@ const BENCHMARK_IMPLEMENTATION = (() => {
     });
   };
 
-  const appendData = (newData) => {
+  let tPreviousDataCleaning = 0
+  const appendData = (newData, simulateHistory) => {
     return new Promise((resolve, reject) => {
+      const tNow = window.performance.now()
       const newDataPointsCount = newData.length
       totalDataPoints += newDataPointsCount
       existingDataPoints += newDataPointsCount
+      const doDataCleaning = (BENCHMARK_CONFIG.mode === 'append' && tNow - tPreviousDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) || simulateHistory
+      tPreviousDataCleaning = doDataCleaning ? tNow : tPreviousDataCleaning
 
       const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
-      const deleteDataPointsCount = Math.max((existingDataPoints) - keepDataPointsCount, 0)
+      const deleteDataPointsCount = doDataCleaning ? Math.max((existingDataPoints) - keepDataPointsCount, 0) : 0
 
       for (let i = 0; i < newDataPointsCount; i += 1) {
         data.push(newData[i])

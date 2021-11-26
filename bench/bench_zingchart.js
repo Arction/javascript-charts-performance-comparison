@@ -28,24 +28,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       data = initialData
       
       const myConfig = {
-        //chart styling
         type: 'line',
-        //real-time feed
-        // refresh: {
-        //   type: 'feed',
-        //   transport: 'js',
-        //   url: 'realTimeFeed()',
-        //   // NOTE: Min supported refresh interval = 50ms, which means max FPS = 20
-        //   interval: 50,
-        //   maxTicks: BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendHistorySeconds,
-        //   resetTimeout: BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendHistorySeconds,
-        //   adjustScale: true,
-        //   preserveData: false,
-        // },
-        // 'scale-x': {
-        //   'min-value': 0,
-        //   'max-value': BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendHistorySeconds,
-        // },
         plot: {
           lineWidth: BENCHMARK_CONFIG.strokeThickness,
           hoverState: {
@@ -81,33 +64,54 @@ const BENCHMARK_IMPLEMENTATION = (() => {
     });
   };
 
-  const appendData = (newData) => {
+  let tPreviousDataCleaning = 0
+  const appendData = (newData, simulateHistory) => {
     return new Promise((resolve, reject) => {
+      const tNow = window.performance.now()
       newDataPointsCount = newData[0].length
       totalDataPoints += newDataPointsCount
       existingDataPoints += newDataPointsCount
-      
-      // NOTE: Zingchart has no API for dropping old data points.
-      // For real-time monitoring, data has to be manipulated manually and append API can't be utilized.
-      const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
-      const deleteDataPointsCount = Math.max((existingDataPoints) - keepDataPointsCount, 0)
-      for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
-        for (let i = 0; i < newDataPointsCount; i += 1) {
-          data[iCh].push(newData[iCh][i])
+      const doDataCleaning = (BENCHMARK_CONFIG.mode === 'append' && tNow - tPreviousDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) || simulateHistory
+      tPreviousDataCleaning = doDataCleaning ? tNow : tPreviousDataCleaning
+
+      if (! doDataCleaning) {
+        // Can use append API
+        for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
+          zingchart.exec('chart', 'appendseriesvalues', {
+            plotindex: iCh,
+            values: newData[iCh]
+          })
         }
-        if (BENCHMARK_CONFIG.mode === 'append') {
-          for (let i = 0; i < deleteDataPointsCount; i += 1) {
-            data[iCh].shift()
+
+        // also have to track total data manually for data cleaning during other frames.
+        for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
+          for (let i = 0; i < newDataPointsCount; i += 1) {
+            data[iCh].push(newData[iCh][i])
           }
         }
-      }
-      existingDataPoints -= deleteDataPointsCount
 
-      for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
-        zingchart.exec('chart', 'setseriesvalues', {
-          plotindex: iCh,
-          values: data[iCh]
-        })
+      } else {
+        // Append API can't be used for this frame, because data has to be dropped and ZingChart has no such API.
+        const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
+        const deleteDataPointsCount = Math.max((existingDataPoints) - keepDataPointsCount, 0)
+        for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
+          for (let i = 0; i < newDataPointsCount; i += 1) {
+            data[iCh].push(newData[iCh][i])
+          }
+          if (BENCHMARK_CONFIG.mode === 'append') {
+            for (let i = 0; i < deleteDataPointsCount; i += 1) {
+              data[iCh].shift()
+            }
+          }
+        }
+        existingDataPoints -= deleteDataPointsCount
+  
+        for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
+          zingchart.exec('chart', 'setseriesvalues', {
+            plotindex: iCh,
+            values: data[iCh]
+          })
+        }
       }
 
       requestAnimationFrame(resolve)

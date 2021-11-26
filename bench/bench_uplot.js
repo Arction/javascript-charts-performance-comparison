@@ -79,14 +79,20 @@ const BENCHMARK_IMPLEMENTATION = (() => {
     });
   };
 
-  const appendData = (newData) => {
+  let tPrevDataCleaning = 0
+  const appendData = (newData, simulateHistory) => {
     return new Promise((resolve, reject) => {
+      const tNow = window.performance.now()
       const newDataPointsCount = newData[0].length
       totalDataPoints += newDataPointsCount
       existingDataPoints += newDataPointsCount
 
-      const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
-      const deleteDataPointsCount = Math.max((existingDataPoints) - keepDataPointsCount, 0)
+      let deleteDataPointsCount = 0
+      if (tNow - tPrevDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000 || simulateHistory) {
+        const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
+        deleteDataPointsCount = Math.max((existingDataPoints) - keepDataPointsCount, 0)
+        tPrevDataCleaning = tNow
+      }
 
       for (let i = 0; i < BENCHMARK_CONFIG.channelsCount + 1; i += 1) {
         for (let i2 = 0; i2 < newDataPointsCount; i2 += 1) {
@@ -99,7 +105,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         }
       }
     
-      existingDataPoints -= deleteDataPointsCount
+      existingDataPoints -= Math.max(deleteDataPointsCount, 0)
       uplot.setData(data);
 
       requestAnimationFrame(resolve)

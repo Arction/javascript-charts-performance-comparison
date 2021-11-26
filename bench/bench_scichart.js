@@ -101,7 +101,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
   let dataPoints = 0
   let existingDataPoints = 0
   let tPrevClean = window.performance.now()
-  const appendData = (data) => {
+  const appendData = (data, simulateHistory) => {
     const {
       NumberRange
     } = SciChart
@@ -109,8 +109,10 @@ const BENCHMARK_IMPLEMENTATION = (() => {
     return new Promise((resolve, reject) => {
       const newDataPointsCount = data[0][0].length
       const tNow = window.performance.now()
-      const doDataCleaning = (tNow - tPrevClean) >= 1000
+      const doDataCleaning = (BENCHMARK_CONFIG.mode === 'append' && tNow - tPreviousDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) || simulateHistory
       tPrevClean = doDataCleaning ? tNow : tPrevClean
+      const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
+      const deleteDataPointsCount = (existingDataPoints + newDataPointsCount) - keepDataPointsCount
 
       channels.forEach((ch, iChannel) => {
         ch.dataSeries.appendRange(
@@ -119,16 +121,16 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         );
 
         if (BENCHMARK_CONFIG.mode === 'append' && doDataCleaning) {
-          const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
-          const deleteDataPointsCount = (existingDataPoints + newDataPointsCount) - keepDataPointsCount
           if (deleteDataPointsCount > 0) {
             ch.dataSeries.removeRange(0, deleteDataPointsCount)
-            existingDataPoints -= deleteDataPointsCount
           }
         }
       });
 
       dataPoints += newDataPointsCount
+      if (doDataCleaning && deleteDataPointsCount > 0) {
+        existingDataPoints -= deleteDataPointsCount
+      }
       existingDataPoints += newDataPointsCount
       sciChartSurface.zoomExtentsY()
 

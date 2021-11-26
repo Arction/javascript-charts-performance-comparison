@@ -83,16 +83,15 @@
           frames++;
           const tNow = Date.now();
           fps = 1000 / ((tNow - fpsMonitoringStart) / frames);
+          if (tNow - fpsMonitoringStart >= 12000) {
+            console.log(`FPS: ${fps.toFixed(1)}`)
+            fpsMonitoringStart = Date.now()
+            frames = 0
+            fps = 0
+          }
           requestAnimationFrame(recordFrame);
         };
         requestAnimationFrame(recordFrame);
-        setInterval(() => console.log(`FPS: ${fps.toFixed(1)}`), 5000);
-        setInterval(() => {
-          console.log(`Reset FPS counter`)
-          fpsMonitoringStart = Date.now()
-          frames = 0
-          fps = 0
-        }, 10000)
       }, fpsMonitoringDelay);
     }
 
@@ -101,7 +100,7 @@
       while (dataPoints < BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond) {
         const addDataPointsCount = Math.min(BENCHMARK_CONFIG.maxChunkDataPoints / BENCHMARK_CONFIG.channelsCount, BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond - dataPoints)
         console.log(`\t${(dataPoints+addDataPointsCount)} / ${BENCHMARK_CONFIG.appendHistorySeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond} data points`)
-        BENCHMARK_IMPLEMENTATION.appendData(packNDataPoints(addDataPointsCount, testData1YValues));
+        BENCHMARK_IMPLEMENTATION.appendData(packNDataPoints(addDataPointsCount, testData1YValues), true);
         await new Promise(resolve => setTimeout(resolve, 1000))
         dataPoints += addDataPointsCount
       }

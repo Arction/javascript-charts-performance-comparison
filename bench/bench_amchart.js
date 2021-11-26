@@ -65,17 +65,22 @@ const BENCHMARK_IMPLEMENTATION = (() => {
 
   let totalDataPoints = 0
   let existingDataPoints = 0
-  const appendData = (data) => {
+  let tPreviousDataCleaning = 0
+  const appendData = (data, simulateHistory) => {
     return new Promise((resolve, reject) => {
+      const tNow = window.performance.now()
       newDataPointsCount = data[0].length
       totalDataPoints += newDataPointsCount
       existingDataPoints += newDataPointsCount
+
+      const doDataCleaning = (BENCHMARK_CONFIG.mode === 'append' && tNow - tPreviousDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) || simulateHistory
+      tPreviousDataCleaning = doDataCleaning ? tNow : tPreviousDataCleaning
 
       // Drop out of range data points to keep application running forever (this is a must for real-time data monitoring use cases!)
       if (BENCHMARK_CONFIG.mode === 'append') {
         // Add new points and drop old points.
         const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
-        const deleteDataPointsCount = Math.max((existingDataPoints) - keepDataPointsCount, 0)
+        const deleteDataPointsCount = doDataCleaning ? Math.max((existingDataPoints) - keepDataPointsCount, 0) : 0
         series.forEach((series, iCh) => {
           series.addData(data[iCh], deleteDataPointsCount)
         })
