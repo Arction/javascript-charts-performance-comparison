@@ -9,11 +9,11 @@ For testing their performance in different types of applications, we have identi
 
 2. **Refreshing line chart**. In this case, the data is dynamic changing every so often (_refresh rate_). Used in real-time monitoring / analysis.
 
-TODO: Video
+https://user-images.githubusercontent.com/55391673/143553344-9c0a954b-81bd-4153-b774-f0374bb71747.mp4
 
 3. **Appending surface chart**. Also dynamic data, but in this case the previous data is not cleared, instead just shifted out as new data is pushed in. Used in several fields with different real-time data sources.
 
-TODO: Video
+https://user-images.githubusercontent.com/55391673/143553637-d2321cb0-e735-4786-a872-8ddcfd4aab07.mp4
 
 This repository contains performance tests for these 3 application types.
 
