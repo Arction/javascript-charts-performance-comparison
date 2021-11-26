@@ -30,6 +30,11 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         NumberRange,
       } = SciChart
 
+      // @@@@@ Trial runtime key required to run test! @@@@@
+      SciChartSurface.setRuntimeLicenseKey(
+        "bszJo3nCP3GpLQJTzG4EBX4icSGVJci4mI/jg1vylxEHQAvvay6tF66llQqf2Sm8jbeekkMSL8lGG1azFSiK+bu4/Sm/ss6ZvTscd+dVK+T+Hc5/0VI+pXbxX8hiYVjYzBXehepLw6+nyAreNw8rL8/9BkP2L+Cpxk+WmHC6gHbr6IwYpCMzM84l0NrcJL2aW8KRMfJbdJ7qANlsAn9VciMpgyrELYnKEWWw0TihqpaZoDyHL1xx9M4aW7wC2tjKDdB8cRoP3IEi3bqXeFbheQEpC33A4X3zY4BDmH+6YnYLWb2yRbDmT8R791YmFU/lcumIDRXIiKpB9SfYF50I/DznsJ0J4uv5ZpbIrjDu7f1NZNY9yyRT66eASGkW6dzvP9dywp6Gg/vsCj+nZcHppVoN5XlCPiFTMywF6HYXEvXa1IAwBrPkRD0JVemfssjVEazxb40Jy1cmuo/70sIPYG5FaJJHJAiawY6JbUtb4WHmVcIMHEsA6+htGPTTBHmjstSeX9c102XVzSIBdBQSMr7pZqpp885uSBSv/LGYi4ZWG9nrqnrOegz2Mgan86kQ"
+      );
+
       const sciChart = await SciChartSurface.create('chart');
       sciChartSurface = sciChart.sciChartSurface
       wasmContext = sciChart.wasmContext
@@ -100,7 +105,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
 
   let dataPoints = 0
   let existingDataPoints = 0
-  let tPrevClean = window.performance.now()
+  let tPreviousDataCleaning = window.performance.now()
   const appendData = (data, simulateHistory) => {
     const {
       NumberRange
@@ -110,7 +115,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       const newDataPointsCount = data[0][0].length
       const tNow = window.performance.now()
       const doDataCleaning = (BENCHMARK_CONFIG.mode === 'append' && tNow - tPreviousDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) || simulateHistory
-      tPrevClean = doDataCleaning ? tNow : tPrevClean
+      tPreviousDataCleaning = doDataCleaning ? tNow : tPreviousDataCleaning
       const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
       const deleteDataPointsCount = (existingDataPoints + newDataPointsCount) - keepDataPointsCount
 

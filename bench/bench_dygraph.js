@@ -78,9 +78,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         data.push(newData[i])
       }
       if (BENCHMARK_CONFIG.mode === 'append') {
-        for (let i = 0; i < deleteDataPointsCount; i += 1) {
-          data.shift()
-        }
+        data.splice(0, deleteDataPointsCount)
         existingDataPoints -= deleteDataPointsCount
       }
     

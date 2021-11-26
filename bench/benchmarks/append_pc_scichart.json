@@ -12,25 +12,23 @@
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 1200,
+        "appendHistorySeconds": 300,
         "channelsCount": 1,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,
-        "warning": "Degradation after runtime!",
-        "cpuChrome": 50.1,
+        "cpuChrome": 31.4,
         "fpsChrome": 60.0,
-        "fpsFirefox": 45.6
+        "fpsFirefox": 35.5
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
-        "appendHistorySeconds": 1200,
+        "appendHistorySeconds": 300,
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 1000,
         "fail": false,
-        "warning": "Degradation after runtime!",
-        "cpuChrome": 100.0,
-        "fpsChrome": 4.9,
-        "fpsFirefox": 1.0
+        "cpuChrome": 58.8,
+        "fpsChrome": 60.0,
+        "fpsFirefox": 24.2
     },
     {
         "appendTimeDomainIntervalSeconds": 15,
@@ -38,9 +36,18 @@
         "channelsCount": 10,
         "appendNewSamplesPerSecond": 10000,
         "fail": false,
-        "warning": "Degradation after runtime!",
         "cpuChrome": 100.0,
-        "fpsChrome": 1.8,
-        "fpsFirefox": 0.4
+        "fpsChrome": 19.9,
+        "fpsFirefox": 6.2
+    },
+    {
+        "appendTimeDomainIntervalSeconds": 15,
+        "appendHistorySeconds": 15,
+        "channelsCount": 10,
+        "appendNewSamplesPerSecond": 100000,
+        "fail": false,
+        "cpuChrome": 100.0,
+        "fpsChrome": 1.4,
+        "fpsFirefox": 0.8
     }
 ]

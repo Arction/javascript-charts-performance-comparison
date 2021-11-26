@@ -99,9 +99,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
           data[i].push(newData[i][i2])
         }
         if (BENCHMARK_CONFIG.mode === 'append') {
-          for (let i2 = 0; i2 < deleteDataPointsCount; i2 += 1) {
-            data[i].shift()
-          }
+          data[i].splice(0, deleteDataPointsCount)
         }
       }
     

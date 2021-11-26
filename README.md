@@ -5,8 +5,6 @@ For testing their performance in different types of applications, we have identi
 
 1. **Static line chart**. An XY or Y data set is loaded and displayed as line chart.
 
-TODO: Picture
-
 ![](pics/static.png)
 
 2. **Refreshing line chart**. In this case, the data is dynamic changing every so often (_refresh rate_). Used in real-time monitoring / analysis.
@@ -42,9 +40,11 @@ See [Replicating performance benchmarks](#replicating-performance-benchmarks) se
 
 The later referenced benchmarks can be found in `bench/benchmarks`. These were measured on 25.11.2021, with an average office PC (Intel Core i7-7700K, 16 GB RAM, AMD Radeon R9 380).
 
-## Static performance comparison breakdown
+## Static line chart performance comparison breakdown
 
-We have a selected two tests from the set of static performance tests to highlight the performance differences between charts most effectively.
+In static data visualization, the most important **measurable** performance attribute is how fast the chart is displayed to the user. Another performance metric, which is not covered by this study is how well the user can interact with the produced chart.
+
+We have a selected two tests from the set of static performance tests to highlight the loading speed differences between charts most effectively.
 
 ### Small data set size
 
@@ -79,8 +79,11 @@ This is a good place to explain what does the **"loading speed"** measurement in
 Some inconsistencies to this statement which you might have to look out for:
 
 - Setting up rendering frameworks and licenses, or any other steps which users have to do are included in loading time.
+    - For example, some manufacturers have omitted the initialization time of graphics engines from loading time, which doesn't make any sense from the perspective of the user and provides false results.
 - Loading speed includes any chart processing time between initiating the chart creation and displaying it.
+    - We have also identified loading speed claims which disregarded the processing time of chart method calls, once again producing completely irrelevant performance measurements.
 - In addition to this, loading speed **also includes any extra time that is required before the chart is visible**.
+    - Most JavaScript chart libraries have some internal events which can be used to track when the chart is done with processing data - this however, by no chance means that the data is visible to the user.
 
 From the bar chart above, we can see that LightningChart JS is the second fastest JavaScript chart in visualizing 1 million data points.
 Well done, competitor E!
@@ -114,6 +117,9 @@ In the following test, 10 channels receive a total of 1 million data points each
 ![](bench/analysis/static-large.PNG)
 
 As we can see from the bar chart above, with heavier applications the power of LightningChart JS starts to show even in static data visualization applications, being ready **25.7x faster** than the average non hardware accelerated chart and **12.8x faster** than the average hardware accelerated chart.
+
+## Refreshing line chart performance comparison breakdown
+
 
 
 TODO >>>> Refreshing
