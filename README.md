@@ -31,6 +31,9 @@ The following chart libraries were tested:
 - [Plotly.js 1.58.4](https://plotly.com/javascript/)
 - [ZingChart 2.9.3](https://www.zingchart.com/)
 
+The following chart libraries were suggested but not included:
+- [DevExtreme](https://js.devexpress.com/) Based on SVG, this is not suitable for real-time data visualization.
+
 Competitor results are kept unidentified (for example, "Competitor A").
 
 ## Benchmarks
@@ -111,8 +114,6 @@ Here are the results of refreshing (refresh rate = 10 Hz) line chart test with 1
 
 ![](bench/analysis/refresh.PNG)
 
-To help understand viewers to understand the effects of bad refresh rate and CPU usage measurements we have created a [YouTube video showcasing the charts](TODO) mentioned here undertaking the refreshing chart performance test (**not necessarily with same parameters as the test case highlighted above!**). In this video you can visible see how a low FPS looks on a web page, and respectively how a good FPS looks.
-
 On average, LightningChart JS could process **14.2x** more data than non hardware accelerated charts and **9.1x** more data than other hardware accelerated charts.
 
 | JavaScript Chart Library | Max data process speed | Data points | Achieved refresh rate * |
@@ -159,11 +160,9 @@ We have selected a single test from the set of appending performance tests. This
 
 As you can see from the amount of chart libraries which failed this test scenario, this is not a light weight test.
 
-To help understand viewers to understand the effects of bad refresh rate and CPU usage measurements we have created a [YouTube video showcasing the charts](TODO) mentioned here undertaking the appending chart performance test (**not necessarily with same parameters as the test case highlighted above!**). In this video you can visible see how a low FPS looks on a web page, and respectively how a good FPS looks.
-
 When compared to other hardware accelerated charts, LightningChart JS could process on average 19.8x more data while using 4.2x less CPU power and refreshing 4 times faster. Combining these factors, **LightningChart JS was 332.6 times more powerful than other hardware accelerated charts**.
 
-| JavaScript Chart Library | Incoming data per second | Refresh rate (FPS) | CPU usage (%) |
+| JavaScript Chart Library | Incoming data per second | Refresh rate (FPS) * | CPU usage (%) |
 |:----|:----|:----|:----|
 | LightningChart JS | 1 million | **59.3** | **23.7 %** |
 | Hardware accelerated competitor A | 100 thousand | 13.1 | 100.0 % |

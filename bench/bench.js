@@ -1,9 +1,8 @@
-(async () => {
+requestAnimationFrame(async () => {
   console.log("start benchmark");
   console.log(BENCHMARK_CONFIG);
 
-  const promiseTestData1 = fetch(BENCHMARK_CONFIG.dataSource)
-    .then(r => r.json())
+  const promiseTestDataSets = generateTestDataSets()
 
   const promiseBenchmarkImplementation = new Promise((resolve, reject) => {
     const benchScriptName = `./bench_${BENCHMARK_CONFIG.library}.js`;
@@ -13,10 +12,11 @@
     document.body.append(benchScript);
   });
 
-  const [testData1YValues] = await Promise.all([
-    promiseTestData1,
+  const [testDataSets] = await Promise.all([
+    promiseTestDataSets,
     promiseBenchmarkImplementation,
   ]);
+  const testData1YValues = testDataSets[0]
 
   console.log("benchmark ready");
   console.log(BENCHMARK_IMPLEMENTATION);
@@ -128,37 +128,52 @@
     }
 
     if (BENCHMARK_CONFIG.mode === "refresh") {
-      const dataSet1YValues = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_, iCh) => 
-        new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) =>
-          testData1YValues[i % testData1YValues.length] + iCh
-        )
+      const formattedDataFrames = testDataSets.map(dataSetYValues => 
+        getDataInFormat(
+          new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_, iCh) => 
+            new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) => 
+            dataSetYValues[i % dataSetYValues.length] + iCh
+            )
+          ),
+          0,
+          BENCHMARK_IMPLEMENTATION.dataFormat
+        )  
       )
-      const dataSet1 = getDataInFormat(dataSet1YValues, 0, BENCHMARK_IMPLEMENTATION.dataFormat)
-      const dataSet2YValues = new Array(BENCHMARK_CONFIG.channelsCount).fill(0).map((_, iCh) => 
-        new Array(BENCHMARK_CONFIG.channelDataPointsCount).fill(0).map((_, i) =>
-          testData1YValues[i % testData1YValues.length] + iCh + Math.random() * 0.05
-        )
-      )
-      const dataSet2 = getDataInFormat(dataSet2YValues, 0, BENCHMARK_IMPLEMENTATION.dataFormat)
-      
+
       initiateFPSMonitoring()
-      let tPrev = window.performance.now()
-      let iDataSet = 0
+
+      let tStart = window.performance.now()
+      let tPrevDataSet = -1
       const onEveryFrame = () => {
         const tNow = window.performance.now()
-        const tDelta = tNow - tPrev
-        if (tDelta >= 1000 / BENCHMARK_CONFIG.refreshRate) {
-          iDataSet = (iDataSet + 1) % 2
-          const dataSet = iDataSet === 0 ? dataSet1 : dataSet2
+        const tAnimation = tNow - tStart
+        const iDataSet = Math.round( tAnimation / (1000 / BENCHMARK_CONFIG.refreshRate) ) % testDataSets.length
+        if (tPrevDataSet !== iDataSet) {
+          tPrevDataSet = iDataSet
+          const dataSet = formattedDataFrames[iDataSet]
           BENCHMARK_IMPLEMENTATION.refreshData(dataSet)
-          tPrev = tNow
         }
         requestAnimationFrame(onEveryFrame)
       }
       onEveryFrame()
+
+      // let tPrev = window.performance.now()
+      // let iDataSet = 0
+      // const onEveryFrame = () => {
+      //   const tNow = window.performance.now()
+      //   const tDelta = tNow - tPrev
+      //   if (tDelta >= 1000 / BENCHMARK_CONFIG.refreshRate) {
+      //     iDataSet = (iDataSet + 1) % 2
+      //     const dataSet = iDataSet === 0 ? dataSet1 : dataSet2
+      //     BENCHMARK_IMPLEMENTATION.refreshData(dataSet)
+      //     tPrev = tNow
+      //   }
+      //   requestAnimationFrame(onEveryFrame)
+      // }
+      // onEveryFrame()
     }
   });
-})();
+});
 
 const getDataInFormat = (
   srcYValuesChannels,
@@ -208,4 +223,34 @@ const getDataInFormat = (
   } else {
     throw new Error('unidentified format ' + dataFormat)
   }
+}
+
+const generateTestDataSets = async () => {
+
+  if (BENCHMARK_CONFIG.mode === 'static') {
+    return [
+      await fetch(BENCHMARK_CONFIG.dataSource)
+        .then(r => r.json())
+    ]
+  } else if (BENCHMARK_CONFIG.mode === 'append') {
+    return [
+      await fetch(BENCHMARK_CONFIG.dataSource)
+        .then(r => r.json())
+    ]
+  }
+  // Refreshing mode
+  const data = []
+  const SAMPLE_COUNT = 150
+  const SAMPLE_SIZE = BENCHMARK_CONFIG.channelDataPointsCount
+  for (let i = 0; i < SAMPLE_COUNT; i += 1) {
+    const sample = []
+    const amplitude = Math.cos(i * 2 * Math.PI / SAMPLE_COUNT)
+    for (let x = 0; x < SAMPLE_SIZE; x += 1) {
+      let y = Math.cos(i * 2 * Math.PI / SAMPLE_COUNT + 5 * x * Math.PI / SAMPLE_SIZE) * amplitude + Math.sin(x * 7.0 * Math.PI / SAMPLE_SIZE)
+      y += Math.random() * 0.02
+      sample.push(y)
+    }
+    data.push(sample)
+  }
+  return data
 }
