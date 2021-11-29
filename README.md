@@ -70,6 +70,8 @@ We have selected a single test from the set of static performance tests. This te
 
 ![](./bench/analysis/static.PNG)
 
+From the bar chart above, we can see that LightningChart JS is the fastest JavaScript chart in visualizing 10 million data points, being ready **7.5x faster** than the average hardware accelerated chart and **65.7x faster** than the average non hardware accelerated chart.
+
 This is a good place to explain what does the **"loading speed"** measurement include. You might run into various claims of JavaScript loading speed in the internet, but we believe that there is only one correct way to measure this.
 
 > Loading speed is the time (seconds) which user has to wait for their chart to be visible on the web page.
@@ -82,8 +84,6 @@ Some inconsistencies to this statement which you might have to look out for:
     - We have also identified loading speed claims which disregarded the processing time of chart method calls, once again producing completely irrelevant performance measurements.
 - In addition to this, loading speed **also includes any extra time that is required before the chart is visible**.
     - Most JavaScript chart libraries have some internal events which can be used to track when the chart is done with processing data - this however, by no chance means that the data is visible to the user.
-
-From the bar chart above, we can see that LightningChart JS is the fastest JavaScript chart in visualizing 10 million data points, being ready **7.5x faster** than the average hardware accelerated chart and **65.7x faster** than the average non hardware accelerated chart.
 
 ## Refreshing line chart performance comparison breakdown
 
@@ -284,7 +284,7 @@ Same data visualized *correctly* with LightningChart® JS:
 
 Read more about Lightning Chart JS performance why and how at our [web site](https://www.arction.com/high-performance-javascript-charts/).
 
-To interact with LightningChart JS Surface charts, please continue in our [Surface chart examples gallery](https://www.arction.com/lightningchart-js-interactive-examples/search.html?t=surface).
+To interact with LightningChart JS Line charts, please continue in our [Line chart examples gallery](https://www.arction.com/lightningchart-js-interactive-examples/search.html?t=line).
 
 ## Replicating performance benchmarks
 
