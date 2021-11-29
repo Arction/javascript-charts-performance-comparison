@@ -40,21 +40,7 @@
         "channelDataPointsCount": 1000000,
         "channelsCount": 10,
         "fail": false,
-        "loadupDelayMsChrome": 2367,
-        "loadupDelayMsFirefox": 4243
-    },
-    {
-        "channelDataPointsCount": 2000000,
-        "channelsCount": 10,
-        "fail": false,
-        "loadupDelayMsChrome": 5840,
-        "loadupDelayMsFirefox": 12924
-    },
-    {
-        "channelDataPointsCount": 5000000,
-        "channelsCount": 10,
-        "fail": false,
-        "loadupDelayMsChrome": 32776,
-        "loadupDelayMsFirefox": 79800
+        "loadupDelayMsChrome": 1040,
+        "loadupDelayMsFirefox": 1560
     }
 ]

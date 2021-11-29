@@ -1,0 +1,59 @@
+[
+    {
+        "_TEMPLATE": true,
+        "channelDataPointsCount": 0,
+        "channelsCount": 0,
+        "fail": false,
+        "loadupDelayMsChrome": 0,
+        "loadupDelayMsFirefox": 0
+    },
+    {
+        "channelDataPointsCount": 10000,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": 70,
+        "loadupDelayMsFirefox": 69
+    },
+    {
+        "channelDataPointsCount": 100000,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": 95,
+        "loadupDelayMsFirefox": 85
+    },
+    {
+        "channelDataPointsCount": 1000000,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": 399,
+        "loadupDelayMsFirefox": 559
+    },
+    {
+        "channelDataPointsCount": 2000000,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": 734,
+        "loadupDelayMsFirefox": 984
+    },
+    {
+        "channelDataPointsCount": 5000000,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": 1754,
+        "loadupDelayMsFirefox": 2451
+    },
+    {
+        "channelDataPointsCount": 10000000,
+        "channelsCount": 10,
+        "fail": false,
+        "loadupDelayMsChrome": "out of memory",
+        "loadupDelayMsFirefox": 5901
+    },
+    {
+        "channelDataPointsCount": 5000000,
+        "channelsCount": 20,
+        "fail": false,
+        "loadupDelayMsChrome": "out of memory",
+        "loadupDelayMsFirefox": 6505
+    }
+]

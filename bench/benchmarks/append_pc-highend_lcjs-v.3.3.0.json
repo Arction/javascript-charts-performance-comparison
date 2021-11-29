@@ -1,0 +1,40 @@
+[
+    {
+        "_TEMPLATE": true,
+        "appendTimeDomainIntervalSeconds": 0,
+        "appendHistorySeconds": 0,
+        "channelsCount": 0,
+        "appendNewSamplesPerSecond": 0,
+        "fail": false,
+        "cpuChrome": 0,
+        "fpsChrome": 0,
+        "fpsFirefox": 0
+    },
+    {
+        "appendTimeDomainIntervalSeconds": 15,
+        "appendHistorySeconds": 15,
+        "channelsCount": 20,
+        "appendNewSamplesPerSecond": 100000,
+        "fail": false,
+        "cpuChrome": 28,
+        "fpsChrome": 142
+    },
+    {
+        "appendTimeDomainIntervalSeconds": 5,
+        "appendHistorySeconds": 5,
+        "channelsCount": 40,
+        "appendNewSamplesPerSecond": 100000,
+        "fail": false,
+        "cpuChrome": 50,
+        "fpsChrome": 130
+    },
+    {
+        "appendTimeDomainIntervalSeconds": 5,
+        "appendHistorySeconds": 5,
+        "channelsCount": 20,
+        "appendNewSamplesPerSecond": 200000,
+        "fail": false,
+        "cpuChrome": 50,
+        "fpsChrome": 128
+    }
+]

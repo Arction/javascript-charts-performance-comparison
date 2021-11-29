@@ -3,7 +3,7 @@ const url = new URL(document.URL)
 const target = url.searchParams.get('target')
 
 if (!target) {
-    const targets = ['static-small', 'static-large', 'append', 'refresh']
+    const targets = ['static', 'append', 'refresh']
     const div = document.createElement('div')
     div.style.display = 'flex'
     div.style.flexDirection = 'column'
@@ -36,124 +36,53 @@ if (!target) {
     // ----- REFRESHING -----
     let data
 
-    if (target === 'static-small') {
-        data = {
-            chartTitle: 'Line Chart Speed Comparison 1 Million Data Points',
-            categoryAxisTitle: 'JavaScript Chart Library',
-            valueAxisTitle: '',
-            values: [
-                { 
-                    name: 'LightningChart JS', 
-                    values: [
-                        { value: 1, label: '180 ms' },
-                    ]
-                },
-                {
-                    name: 'Hardware accelerated competitor A', values: [
-                        { value: 180 / 368, label: '368 ms' }
-                    ]
-                },
-                {
-                    name: 'Competitor B', values: [
-                        { value: 180 / 1045, label: '1045 ms' }
-                    ]
-                },
-                {
-                    name: 'Competitor C', values: [
-                        { value: 180 / 646, label: '646 ms', warning: true }
-                    ]
-                },
-                {
-                    name: 'Hardware accelerated competitor D', values: [
-                        { value: 180 / 521, label: '521 ms' }
-                    ]
-                },
-                {
-                    name: 'Competitor E', values: [
-                        { value: 180 / 148, label: '148 ms' }
-                    ]
-                },
-                {
-                    name: 'Competitor F', values: [
-                        { value: 180 / 598, label: '598 ms' }
-                    ]
-                },
-                {
-                    name: 'Competitor G', values: [
-                        { value: 180 / 922, label: '922 ms' }
-                    ]
-                },
-                {
-                    name: 'Competitor H', values: [
-                        { value: 180 / 520, label: '520 ms' }
-                    ]
-                },
-                {
-                    name: 'Competitor I', values: [
-                        { value: 180 / 8701, label: '8701 ms' }
-                    ]
-                },
-                {
-                    name: 'Competitor J', values: [
-                        { value: 180 / 1192, label: '1192 ms' }
-                    ]
-                },
-                {
-                    name: 'Competitor K', values: [
-                        { value: 180 / 42658, label: '42658 ms' }
-                    ]
-                },
-            ]
-          }
-    }
-
-    if (target === 'static-large') {
+    if (target === 'static') {
         data = {
             chartTitle: 'Line Chart Speed Comparison 10 Million Data Points',
             categoryAxisTitle: 'JavaScript Chart Library',
             valueAxisTitle: '',
             values: [
               { name: 'LightningChart JS', values: [
-                  { value: 1, label: '1246 ms' },
+                  { value: 1, label: '330 ms' },
               ] },
               {
-                  name: 'Hardware accelerated competitor A', values: [
-                      { value: 1246 / 3305, label: '3305 ms' }
+                  name: 'Competitor A', values: [
+                      { value: 330 / 1300, label: '1300 ms' }
                   ]
               },
               {
                   name: 'Competitor B', values: [
-                      { value: 1246 / 11947, label: '11947 ms' }
+                      { value: 330 / 11947, label: '11947 ms' }
                   ]
               },
               {
                   name: 'Competitor C', values: [
-                      { value: 1246 / 3868, label: '3868 ms', warning: true }
+                      { value: 330 / 3472, label: '3472 ms', warning: true }
                   ]
               },
               {
-                  name: 'Hardware accelerated competitor D', values: [
-                      { value: 1246 / 28554, label: '28554 ms' }
+                  name: 'Competitor D', values: [
+                      { value: 330 / 3626, label: '3626 ms' }
                   ]
               },
               {
                   name: 'Competitor E', values: [
-                      { value: 1246 / 2824, label: '2824 ms' }
+                      { value: 330 / 735, label: '735 ms' }
                   ]
               },
               {
                   name: 'Competitor F', values: [
-                      { value: 1246 / 33754, label: '33754 ms' }
+                      { value: 330 / 9880, label: '9880 ms' }
                   ]
               },
               {
                   name: 'Competitor G', values: [
-                      { value: 1246 / 42201, label: '42201 ms' }
+                      { value: 330 / 7497, label: '7497 ms' }
                   ]
               },
               {
                   name: 'Competitor H', values: [
-                      { value: 1246 / 45342, label: '45342 ms' }
+                      { value: 330 / 3740, label: '3740 ms' }
                   ]
               },
               {
@@ -163,12 +92,12 @@ if (!target) {
               },
               {
                   name: 'Competitor J', values: [
-                      { value: 1246 / 56169, label: '56169 ms' }
+                      { value: 330 / 10220, label: '10220 ms' }
                   ]
               },
               {
                   name: 'Competitor K', values: [
-                    { value: -1, label: 'FAIL', color: '#ff0000' }
+                    { value: 330 / 42658, label: '42658 ms' }
                   ]
               },
             ]
@@ -249,32 +178,75 @@ if (!target) {
     // ----- APPENDING -----
     if (target === 'append') {
         data = {
-            chartTitle: 'Appending Surface Chart Performance Comparison (sample size = 500, stream rate 200 Hz)',
+            chartTitle: 'Appending Line Chart Performance Comparison (10 channels, 10 kHz, 15 s history)',
             categoryAxisTitle: 'JavaScript Chart Library',
             valueAxisTitle: '',
             values: [
-              { name: 'LightningChart JS', values: [
-                  { value: 60.0, label: 'FPS: 60.0' },
-                  { value: 100 - 7.5, label: 'CPU: 7.5%' }
-              ] },
+              { 
+                  name: 'LightningChart JS',
+                  values: [
+                    { value: 60, label: 'FPS: 60' },
+                    { value: 100 - 21, label: 'CPU: 21%' },
+                ]
+              },
               {
-                  name: 'Hardware accelerated competitor A', values: [
-                      { value: 5.8, label: 'FPS: 5.8' },
-                      { value: 100 - 100.0, label: 'CPU: 100.0%' }
+                  name: 'Competitor A', values: [
+                    { value: 13, label: 'FPS: 13' },
+                    { value: 100 - 100, label: 'CPU: 100%' },
                   ]
               },
               {
                   name: 'Competitor B', values: [
-                      { value: 0.7, label: 'FPS: 0.7' },
-                      { value: 100 - 100.0, label: 'CPU: 100.0%' }
+                    { value: -1, label: 'FAIL', color: '#ff0000' },
                   ]
               },
               {
                   name: 'Competitor C', values: [
                     { value: -1, label: 'FAIL', color: '#ff0000' },
-                    { value: -1, label: 'FAIL', color: '#ff0000' }
                   ]
-              }
+              },
+              {
+                  name: 'Competitor D', values: [
+                    { value: -1, label: 'FAIL', color: '#ff0000' },
+                  ]
+              },
+              {
+                  name: 'Competitor E', values: [
+                    { value: 13, label: 'FPS: 13' },
+                    { value: 100 - 100, label: 'CPU: 100%' },
+                  ]
+              },
+              {
+                  name: 'Competitor F', values: [
+                    { value: -1, label: 'FAIL', color: '#ff0000' },
+                  ]
+              },
+              {
+                  name: 'Competitor G', values: [
+                    { value: -1, label: 'FAIL', color: '#ff0000' },
+                  ]
+              },
+              {
+                  name: 'Competitor H', values: [
+                    { value: 1, label: 'FPS: 1' },
+                    { value: 100 - 100, label: 'CPU: 100%' },
+                  ]
+              },
+              {
+                  name: 'Competitor I', values: [
+                    { value: -1, label: 'FAIL', color: '#ff0000' },
+                  ]
+              },
+              {
+                  name: 'Competitor J', values: [
+                    { value: -1, label: 'FAIL', color: '#ff0000' },
+                  ]
+              },
+              {
+                  name: 'Competitor K', values: [
+                    { value: -1, label: 'FAIL', color: '#ff0000' },
+                  ]
+              },
             ]
           }
     }
@@ -299,7 +271,7 @@ if (!target) {
 
     const valuesCount = data.values.reduce((prev, cur) => Math.max(prev, cur.values.length), 0)
     const yValuesMax = new Array(valuesCount).fill(0).map((_, i) => 
-        data.values.reduce((prev, cur) => Math.max(prev, cur.values[i].value), 0)
+        data.values.reduce((prev, cur) => cur.values[i]? Math.max(prev, cur.values[i].value) : prev, 0)
     )
 
     const axesY = new Array(valuesCount).fill(0).map((_, i) => {

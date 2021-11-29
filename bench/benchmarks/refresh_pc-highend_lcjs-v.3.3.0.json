@@ -1,0 +1,68 @@
+[
+    {
+        "_TEMPLATE": true,
+        "refreshRate": 0,
+        "channelDataPointsCount": 0,
+        "channelsCount": 0,
+        "fail": false,
+        "cpuChrome": 0,
+        "fpsChrome": 0,
+        "fpsFirefox": 0
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 100000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpuChrome": 19,
+        "fpsChrome": 161
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 200000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpuChrome": 31,
+        "fpsChrome": 140
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 400000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpuChrome": 58,
+        "fpsChrome": 92
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 800000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpuChrome": 100,
+        "fpsChrome": 8.5
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 1600000,
+        "channelsCount": 10,
+        "fail": false,
+        "cpuChrome": 100,
+        "fpsChrome": 4.1
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 400000,
+        "channelsCount": 20,
+        "fail": false,
+        "cpuChrome": 100,
+        "fpsChrome": 8.6
+    },
+    {
+        "refreshRate": 10,
+        "channelDataPointsCount": 400000,
+        "channelsCount": 40,
+        "fail": false,
+        "cpuChrome": 100,
+        "fpsChrome": 4.0
+    }
+]
