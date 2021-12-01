@@ -84,6 +84,7 @@ Some inconsistencies to this statement which you might have to look out for:
     - We have also identified loading speed claims which disregarded the processing time of chart method calls, once again producing completely irrelevant performance measurements.
 - In addition to this, loading speed **also includes any extra time that is required before the chart is visible**.
     - Most JavaScript chart libraries have some internal events which can be used to track when the chart is done with processing data - this however, by no chance means that the data is visible to the user.
+- Some competitors also use "subsequent frame render time" as the claimed loading speed, which once again makes no sense from the users point of view.
 
 ## Refreshing line chart performance comparison breakdown
 
