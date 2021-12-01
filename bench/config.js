@@ -2,15 +2,15 @@ const BENCHMARK_CONFIG = {
   // "lcjs" | "scichart" | "plotly" | "amchart" | "anychart" | "highchart" | "zingchart" | "dvxchart" | "dygraph" | "uplot" | "echart" | "canvasjs"
   library: "lcjs",
   // "static" | "append" | "refresh"
-  mode: "append",
+  mode: "static",
   // In "static" or "refresh" mode, amount of data points per channel.
-  channelDataPointsCount: 50000,
-  channelsCount: 5,
+  channelDataPointsCount: 100000,
+  channelsCount: 10,
   ticksEnabled: true,
   dataSource: 'data.json',
   strokeThickness: 1,
   // Max amount of data points to append in a single frame (total of all channels).
-  maxChunkDataPoints: 1000000,
+  maxChunkDataPoints: 10000000,
   // In "append" mode, interval of x axis as seconds.
   appendTimeDomainIntervalSeconds: 15,
   // In "append" mode, amount of samples pushed every second.

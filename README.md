@@ -36,12 +36,21 @@ The following chart libraries were suggested but not included:
 
 Competitor results are kept unidentified (for example, "Competitor A").
 
+## Disclaimer
+
+We understand that from an users point of view any claims of performance can be easily falsified by "marketing sugar" - if you ask the creator, their own chart is always the best.
+
+This is the very reason, why this project exists - to evolve from the empty claims to **proven, reproducable tests**.
+
+We have gone the extra mile to implement all these 12 chart applications, so please utilize them - read more below how you can run and **prove** the tests on your machine.
+
 ## Benchmarks
 
 All applications that were created to test performance are included in this repository, open-source (`bench/` folder).
-See [Replicating performance benchmarks](#replicating-performance-benchmarks) section to learn more about replicating the results.
 
-The later referenced benchmarks can be found in `bench/benchmarks`. These were measured on 25.11.2021, with an average office PC (Intel Core i7-7700K, 16 GB RAM, AMD Radeon R9 380).
+See [Replicating performance benchmarks](#replicating-performance-benchmarks) section to learn more about replicating the results on your machine.
+
+The later referenced benchmarks that are used for comparison breakdowns and analysis can be found in `bench/benchmarks`. These were measured on 25.11.2021, with an average office PC (Intel Core i7-7700K, 16 GB RAM, AMD Radeon R9 380).
 
 ## Static line chart performance comparison breakdown
 
