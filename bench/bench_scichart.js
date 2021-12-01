@@ -98,8 +98,6 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         sciChartSurface.rendered.unsubscribe(onRendered)
       }
       sciChartSurface.rendered.subscribe(onRendered)
-
-      requestAnimationFrame(resolve);
     });
   };
 

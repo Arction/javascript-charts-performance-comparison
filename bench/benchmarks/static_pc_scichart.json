@@ -36,7 +36,6 @@
         "loadupDelayMsFirefox": 495
     },
     {
-        "maxChunkDataPoints": 1000000,
         "channelDataPointsCount": 1000000,
         "channelsCount": 10,
         "fail": false,
