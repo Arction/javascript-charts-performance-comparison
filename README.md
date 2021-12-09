@@ -124,6 +124,8 @@ Here are the results of refreshing (refresh rate = 10 Hz) line chart test with 1
 
 ![](bench/analysis/refresh.PNG)
 
+To help understand viewers to understand the effects of bad refresh rate and CPU usage measurements we have created a [YouTube video showcasing the charts](https://youtu.be/_KRkWBj2sso) mentioned here undertaking the refreshing line chart performance test (not necessarily with same parameters as the test case highlighted above!). In this video you can visible see how a low FPS looks on a web page, and respectively how a good FPS looks.
+
 On average, LightningChart JS could process **14.2x** more data than non hardware accelerated charts and **9.1x** more data than other hardware accelerated charts.
 
 | JavaScript Chart Library | Max data process speed | Data points | Achieved refresh rate * |
