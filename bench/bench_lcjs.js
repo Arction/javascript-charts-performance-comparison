@@ -12,15 +12,17 @@ const BENCHMARK_IMPLEMENTATION = (() => {
 
   const loadChart = (initialData) => {
     return new Promise((resolve, reject) => {
-      const { lightningChart, emptyFill, AxisTickStrategies, AxisScrollStrategies } = lcjs;
+      const { lightningChart, emptyFill, AxisTickStrategies, AxisScrollStrategies, Themes, disableThemeEffects } = lcjs;
 
       chart = lightningChart().ChartXY({
         container: document.getElementById("chart"),
         disableAnimations: true,
+        // Glow and shadow effects are visual candy that are not used for best performance benchmarks. Effect may be some tens of milliseconds slower initial loading and increased GPU use in real-time tests
+        theme: disableThemeEffects(Themes.darkGold),
       })
         .setTitleFillStyle(emptyFill);
         
-      chart.getDefaultAxisY().setScrollStrategy(AxisScrollStrategies.expansion).setInterval(0, 1)
+      chart.getDefaultAxisY().setScrollStrategy(AxisScrollStrategies.expansion).setInterval({ start: 0, end: 1, stopAxisAfter: false })
 
       axes = [
         chart.getDefaultAxisX(),
@@ -47,9 +49,9 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       }
 
       if (BENCHMARK_CONFIG.mode === "append") {
-        chart.getDefaultAxisX().setScrollStrategy(AxisScrollStrategies.progressive).setInterval(-BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond, 0)
+        chart.getDefaultAxisX().setScrollStrategy(AxisScrollStrategies.progressive).setInterval({start: -BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond, end: 0, stopAxisAfter: false })
       } else {
-        chart.getDefaultAxisX().setInterval(0, BENCHMARK_CONFIG.channelDataPointsCount, false, true)
+        chart.getDefaultAxisX().setInterval({start: 0, end: BENCHMARK_CONFIG.channelDataPointsCount})
       }
 
       requestAnimationFrame(resolve);
