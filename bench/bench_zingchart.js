@@ -65,13 +65,13 @@ const BENCHMARK_IMPLEMENTATION = (() => {
   };
 
   let tPreviousDataCleaning = 0
-  const appendData = (newData, simulateHistory) => {
+  const appendData = (newData) => {
     return new Promise((resolve, reject) => {
       const tNow = window.performance.now()
       newDataPointsCount = newData[0].length
       totalDataPoints += newDataPointsCount
       existingDataPoints += newDataPointsCount
-      const doDataCleaning = (BENCHMARK_CONFIG.mode === 'append' && tNow - tPreviousDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) || simulateHistory
+      const doDataCleaning = (BENCHMARK_CONFIG.mode === 'append' && tNow - tPreviousDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) 
       tPreviousDataCleaning = doDataCleaning ? tNow : tPreviousDataCleaning
 
       if (! doDataCleaning) {

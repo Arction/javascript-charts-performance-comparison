@@ -1,5 +1,4 @@
 const BENCHMARK_IMPLEMENTATION = (() => {
-
   const beforeStart = () => {
     return new Promise((resolve, reject) => {
       const libScript = document.createElement("script");
@@ -9,19 +8,19 @@ const BENCHMARK_IMPLEMENTATION = (() => {
     });
   };
 
-  let totalDataPoints = 0
-  let existingDataPoints = 0
-  let chart
+  let totalDataPoints = 0;
+  let existingDataPoints = 0;
+  let chart;
 
   const loadChart = (initialData) => {
     return new Promise((resolve, reject) => {
-      totalDataPoints = initialData[0].length
-      existingDataPoints = totalDataPoints
-      data = initialData
+      totalDataPoints = initialData[0].length;
+      existingDataPoints = totalDataPoints;
+      data = initialData;
       const plotData = new Array(BENCHMARK_CONFIG.channelsCount)
         .fill(0)
         .map((_, iChannel) => ({
-          type: 'line',
+          type: "line",
           lineThickness: BENCHMARK_CONFIG.strokeThickness,
           dataPoints: initialData[iChannel],
         }));
@@ -30,54 +29,61 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         animationEnabled: false,
         data: plotData,
       };
-      chart = new CanvasJS.Chart('chart', options);
+      chart = new CanvasJS.Chart("chart", options);
       chart.render();
       requestAnimationFrame(resolve);
     });
   };
 
-  let tPreviousDataCleaning = 0
-  const appendData = (newData, simulateHistory) => {
+  let tPreviousDataCleaning = 0;
+  const appendData = (newData) => {
     return new Promise((resolve, reject) => {
-      const tNow = window.performance.now()
-      newDataPointsCount = newData[0].length
-      totalDataPoints += newDataPointsCount
-      existingDataPoints += newDataPointsCount
+      const tNow = window.performance.now();
+      newDataPointsCount = newData[0].length;
+      totalDataPoints += newDataPointsCount;
+      existingDataPoints += newDataPointsCount;
 
-      const doDataCleaning = (BENCHMARK_CONFIG.mode === 'append' && tNow - tPreviousDataCleaning >= BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) || simulateHistory
-      tPreviousDataCleaning = doDataCleaning ? tNow : tPreviousDataCleaning
+      const doDataCleaning =
+        BENCHMARK_CONFIG.mode === "append" &&
+        tNow - tPreviousDataCleaning >=
+          BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000;
+      tPreviousDataCleaning = doDataCleaning ? tNow : tPreviousDataCleaning;
 
-      const keepDataPointsCount = BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds * BENCHMARK_CONFIG.appendNewSamplesPerSecond
-      const deleteDataPointsCount = doDataCleaning ? Math.max((existingDataPoints) - keepDataPointsCount, 0) : 0
+      const keepDataPointsCount =
+        BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds *
+        BENCHMARK_CONFIG.appendNewSamplesPerSecond;
+      const deleteDataPointsCount = doDataCleaning
+        ? Math.max(existingDataPoints - keepDataPointsCount, 0)
+        : 0;
 
       for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
         for (let i = 0; i < newDataPointsCount; i += 1) {
-          data[iCh].push(newData[iCh][i])
+          data[iCh].push(newData[iCh][i]);
         }
-        if (BENCHMARK_CONFIG.mode === 'append') {
-          data[iCh].splice(0, deleteDataPointsCount)
+        if (BENCHMARK_CONFIG.mode === "append") {
+          data[iCh].splice(0, deleteDataPointsCount);
         }
       }
-      existingDataPoints -= deleteDataPointsCount
+      existingDataPoints -= deleteDataPointsCount;
       chart.render();
 
-      requestAnimationFrame(resolve)
-    })
+      requestAnimationFrame(resolve);
+    });
   };
 
   const refreshData = (data) => {
     return new Promise((resolve, reject) => {
       for (let iCh = 0; iCh < BENCHMARK_CONFIG.channelsCount; iCh += 1) {
-        chart.options.data[iCh].dataPoints = data[iCh]
+        chart.options.data[iCh].dataPoints = data[iCh];
       }
 
       chart.render();
-      requestAnimationFrame(resolve)
-    })
-  }
+      requestAnimationFrame(resolve);
+    });
+  };
 
   return {
-    dataFormat: 'xy-object-array',
+    dataFormat: "xy-object-array",
     beforeStart,
     loadChart,
     appendData,

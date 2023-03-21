@@ -109,17 +109,16 @@ const BENCHMARK_IMPLEMENTATION = (() => {
   let dataPoints = 0;
   let existingDataPoints = 0;
   let tPreviousDataCleaning = window.performance.now();
-  const appendData = (data, simulateHistory) => {
+  const appendData = (data) => {
     const { NumberRange } = SciChart;
 
     return new Promise((resolve, reject) => {
       const newDataPointsCount = data[0][0].length;
       const tNow = window.performance.now();
       const doDataCleaning =
-        (BENCHMARK_CONFIG.mode === "append" &&
-          tNow - tPreviousDataCleaning >=
-            BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000) ||
-        simulateHistory;
+        BENCHMARK_CONFIG.mode === "append" &&
+        tNow - tPreviousDataCleaning >=
+          BENCHMARK_CONFIG.appendMinimumDataCleaningIntervalSeconds * 1000;
       tPreviousDataCleaning = doDataCleaning ? tNow : tPreviousDataCleaning;
       const keepDataPointsCount =
         BENCHMARK_CONFIG.appendTimeDomainIntervalSeconds *
