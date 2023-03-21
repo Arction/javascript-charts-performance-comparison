@@ -1,5 +1,5 @@
 const BENCHMARK_CONFIG = {
-  // "lcjs" | "scichart" | "plotly" | "amchart" | "anychart" | "highchart" | "zingchart" | "dvxchart" | "dygraph" | "uplot" | "echart" | "canvasjs"
+  // "lcjs" | "scichart" | "plotly" | "amchart" | "anychart" | "highchart" | "zingchart" | "dvxchart" | "dygraph" | "uplot" | "echart" | "canvasjs" | "chartjs"
   library: "lcjs",
   // "static" | "append" | "refresh"
   mode: "static",
@@ -7,7 +7,7 @@ const BENCHMARK_CONFIG = {
   channelDataPointsCount: 100000,
   channelsCount: 10,
   ticksEnabled: true,
-  dataSource: 'data.json',
+  dataSource: "data.json",
   strokeThickness: 1,
   // Max amount of data points to append in a single frame (total of all channels).
   maxChunkDataPoints: 10000000,
