@@ -239,18 +239,15 @@ const generateTestDataSets = async () => {
     ]
   }
   // Refreshing mode
-  const data = []
-  const SAMPLE_COUNT = 150
+  const DATA_SETS_COUNT = 3
   const SAMPLE_SIZE = BENCHMARK_CONFIG.channelDataPointsCount
-  for (let i = 0; i < SAMPLE_COUNT; i += 1) {
-    const sample = []
-    const amplitude = Math.cos(i * 2 * Math.PI / SAMPLE_COUNT)
-    for (let x = 0; x < SAMPLE_SIZE; x += 1) {
-      let y = Math.cos(i * 2 * Math.PI / SAMPLE_COUNT + 5 * x * Math.PI / SAMPLE_SIZE) * amplitude + Math.sin(x * 7.0 * Math.PI / SAMPLE_SIZE)
-      y += Math.random() * 0.02
-      sample.push(y)
+  const data = new Array(DATA_SETS_COUNT).fill(0).map(_ => [])
+  for (let x = 0; x < SAMPLE_SIZE; x += 1) {
+    const y0 = Math.sin(2 * Math.PI * x / SAMPLE_SIZE)
+    for (let i = 0; i < DATA_SETS_COUNT; i += 1) {
+      data[i].push(y0 + Math.random() * 0.1)
     }
-    data.push(sample)
   }
+
   return data
 }
