@@ -2,17 +2,16 @@ const BENCHMARK_IMPLEMENTATION = (() => {
   const beforeStart = () => {
     return new Promise((resolve, reject) => {
       const libScript = document.createElement("script");
+
       libScript.onload = () => {
-        SciChart.SciChartSurface.configure({
-          dataUrl:
-            "https://cdn.jsdelivr.net/npm/scichart@2.2.2415/_wasm/scichart2d.data",
-          wasmUrl:
-            "https://cdn.jsdelivr.net/npm/scichart@2.2.2415/_wasm/scichart2d.wasm",
-        });
+        SciChart.SciChartSurface.useWasmFromCDN();
+        // debug scichart version
+        console.log("SciChart version", SciChart.libraryVersion);
         resolve();
       };
-      libScript.src =
-        "https://cdn.jsdelivr.net/npm/scichart@2.2.2415/_wasm/scichart.browser.js";
+
+      libScript.src = "https://cdn.jsdelivr.net/npm/scichart@3/index.min.js"
+
       document.body.append(libScript);
     });
   };
@@ -21,9 +20,11 @@ const BENCHMARK_IMPLEMENTATION = (() => {
     return new Promise(async (resolve, reject) => {
       const {
         SciChartSurface,
+        SciChartDefaults,
         NumericAxis,
         EAutoRange,
         CursorModifier,
+        SciChartJsNavyTheme,
         ZoomPanModifier,
         ZoomExtentsModifier,
         MouseWheelZoomModifier,
@@ -35,12 +36,13 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       // @@@@@ Trial runtime key required to run test! @@@@@
       SciChartSurface.setRuntimeLicenseKey("");
 
-      const sciChart = await SciChartSurface.create("chart");
+      SciChartDefaults.useNativeText = true;
+
+      const sciChart = await SciChartSurface.createSingle("chart", { theme: new SciChartJsNavyTheme() });
       sciChartSurface = sciChart.sciChartSurface;
       wasmContext = sciChart.wasmContext;
 
       xAxis = new NumericAxis(wasmContext);
-      xAxis.axisTitle = "time domain";
       if (BENCHMARK_CONFIG.mode !== "append") {
         xAxis.visibleRange = new NumberRange(
           0,
@@ -48,7 +50,6 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         );
       }
       const yAxis = new NumericAxis(wasmContext);
-      yAxis.autoRange = EAutoRange.Always;
       sciChartSurface.xAxes.add(xAxis);
       sciChartSurface.yAxes.add(yAxis);
 
@@ -58,15 +59,6 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       }
 
       sciChartSurface.chartModifiers.add(
-        new CursorModifier({
-          crosshairStroke: "red",
-          crosshairStrokeThickness: 1,
-          tooltipContainerBackground: "green",
-          tooltipTextStroke: "white",
-          showTooltip: true,
-          axisLabelFill: "green",
-          axisLabelStroke: "white",
-        }),
         new ZoomPanModifier(),
         new ZoomExtentsModifier(),
         new MouseWheelZoomModifier()
@@ -75,13 +67,14 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       channels = new Array(BENCHMARK_CONFIG.channelsCount)
         .fill(undefined)
         .map((_, iChannel) => {
-          const nDataSeries = new XyDataSeries(wasmContext);
-          nDataSeries.containsNaN = false;
-          nDataSeries.isSorted = true;
+          const nDataSeries = new XyDataSeries(wasmContext, {
+            dataIsSortedInX: true,
+            containsNaN: false,
+          });
           const nRendSeries = new FastLineRenderableSeries(wasmContext, {
             dataSeries: nDataSeries,
             strokeThickness: BENCHMARK_CONFIG.strokeThickness,
-            // stroke: "red",
+            stroke: "auto"
           });
           sciChartSurface.renderableSeries.add(nRendSeries);
           return {
@@ -141,7 +134,6 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         existingDataPoints -= deleteDataPointsCount;
       }
       existingDataPoints += newDataPointsCount;
-      sciChartSurface.zoomExtentsY();
 
       if (BENCHMARK_CONFIG.mode === "append") {
         xAxis.visibleRange = new NumberRange(
