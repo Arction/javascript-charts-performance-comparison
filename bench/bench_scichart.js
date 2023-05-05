@@ -4,13 +4,19 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       const libScript = document.createElement("script");
 
       libScript.onload = () => {
-        SciChart.SciChartSurface.useWasmFromCDN();
+        SciChart.SciChartSurface.configure({
+          dataUrl:
+            "https://cdn.jsdelivr.net/npm/scichart@3.1.333/_wasm/scichart2d.data",
+          wasmUrl:
+            "https://cdn.jsdelivr.net/npm/scichart@3.1.333/_wasm/scichart2d.wasm",
+        });
         // debug scichart version
         console.log("SciChart version", SciChart.libraryVersion);
         resolve();
       };
 
-      libScript.src = "https://cdn.jsdelivr.net/npm/scichart@3/index.min.js"
+      libScript.src =
+        "https://cdn.jsdelivr.net/npm/scichart@3.1.333/index.min.js";
 
       document.body.append(libScript);
     });
@@ -38,11 +44,14 @@ const BENCHMARK_IMPLEMENTATION = (() => {
 
       SciChartDefaults.useNativeText = true;
 
-      const sciChart = await SciChartSurface.createSingle("chart", { theme: new SciChartJsNavyTheme() });
+      const sciChart = await SciChartSurface.createSingle("chart", {
+        theme: new SciChartJsNavyTheme(),
+      });
       sciChartSurface = sciChart.sciChartSurface;
       wasmContext = sciChart.wasmContext;
 
       xAxis = new NumericAxis(wasmContext);
+      xAxis.axisTitle = "time domain";
       if (BENCHMARK_CONFIG.mode !== "append") {
         xAxis.visibleRange = new NumberRange(
           0,
@@ -50,6 +59,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
         );
       }
       const yAxis = new NumericAxis(wasmContext);
+      yAxis.autoRange = EAutoRange.Always;
       sciChartSurface.xAxes.add(xAxis);
       sciChartSurface.yAxes.add(yAxis);
 
@@ -59,6 +69,15 @@ const BENCHMARK_IMPLEMENTATION = (() => {
       }
 
       sciChartSurface.chartModifiers.add(
+        new CursorModifier({
+          crosshairStroke: "red",
+          crosshairStrokeThickness: 1,
+          tooltipContainerBackground: "green",
+          tooltipTextStroke: "white",
+          showTooltip: true,
+          axisLabelFill: "green",
+          axisLabelStroke: "white",
+        }),
         new ZoomPanModifier(),
         new ZoomExtentsModifier(),
         new MouseWheelZoomModifier()
@@ -74,7 +93,7 @@ const BENCHMARK_IMPLEMENTATION = (() => {
           const nRendSeries = new FastLineRenderableSeries(wasmContext, {
             dataSeries: nDataSeries,
             strokeThickness: BENCHMARK_CONFIG.strokeThickness,
-            stroke: "auto"
+            stroke: "auto",
           });
           sciChartSurface.renderableSeries.add(nRendSeries);
           return {
