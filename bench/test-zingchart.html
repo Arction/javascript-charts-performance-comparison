@@ -1,0 +1,159 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/zingchart@2.9.13/zingchart.min.js"></script>
+        <style>
+            body {
+                margin: 0px;
+            }
+
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+        <script src="common.js"></script>
+        <script>
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, testAppend, appendTestDurationMs, feature }) => {
+                // Initialize data
+                const xs = new Array(dataSetSize)
+                for (let i = 0; i < dataSetSize; i += 1) {
+                    xs[i] = i
+                }
+                const dataSetsY = new Array(channels).fill(0).map((_, ch) => {
+                    const ys = new Array(dataSetSize)
+                    for (let i = 0; i < dataSetSize; i += 1) {
+                        ys[i] = Math.random() + ch
+                    }
+                    return ys
+                })
+
+                const channelData = dataSetsY.map((yArray) => {
+                    return xs.map((x, index) => [x, yArray[index]])
+                })
+
+                window.testPerform = () => {
+                    // loading speed test
+
+                    let chartType = 'line'
+                    let plotAspect = ''
+                    switch (feature) {
+                        case 'area':
+                            chartType = 'area'
+                            break
+                        case 'scatter':
+                            chartType = 'scatter'
+                            break
+                        case 'step':
+                            plotAspect = 'stepped'
+                            break
+                        case 'spline':
+                            plotAspect = 'spline'
+                            break
+                    }
+
+                    const seriesArray = []
+                    channelData.forEach((channel) => {
+                        seriesArray.push({
+                            values: channel,
+                            'line-width': 2,
+                            'line-style': 'solid',
+                            marker: {
+                                visible: feature === 'scatter' ? true : false,
+                                size: 3,
+                            },
+                        })
+                    })
+                    const myConfig = {
+                        type: chartType,
+                        scaleX: {},
+                        scaleY: {},
+                        plot: {
+                            aspect: plotAspect,
+                        },
+                        series: seriesArray,
+                    }
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+
+                                // Append data
+                                const dataAppend = new Array(channels).fill(0).map(() => new Array(appendDataPointCount))
+                                for (let i = 0; i < appendDataPointCount; i += 1) {
+                                    x += 1
+                                    iSample = (iSample + 1) % dataSetSize
+                                    for (let ch = 0; ch < channels; ch += 1) {
+                                        channelData[ch].push([x, dataSetsY[ch][iSample]])
+                                    }
+                                }
+                                channelData.forEach((channel, index) => {
+                                    channel.splice(0, appendDataPointCount)
+                                })
+                                for (let i = 0; i < channels; i += 1) {
+                                    zingchart.exec('chart', 'setseriesvalues', {
+                                        plotindex: i,
+                                        values: channelData[i],
+                                    })
+                                }
+
+                                if (t - tStart > appendTestDurationMs && window.appendTestFinished) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    let loaded = false
+                    zingchart.render({
+                        id: 'chart',
+                        data: myConfig,
+                        height: '100%',
+                        width: '100%',
+                        events: {
+                            // NOTE: requestAnimationFrame triggers BEFORE zingchart is visible on display.
+                            // even `load` event fires well before chart is actually visible
+                            // there are many events available but all seem to have same problem https://www.zingchart.com/docs/api/events#load
+                            // for example, 10 x 50_000 data line chart "complete" event reports chart to be ready about 20 seconds before it becomes visible
+                            complete: async function (p) {
+                                console.log('complete')
+                                if (loaded) {
+                                    return
+                                }
+                                loaded = true
+                                window.loadingTestFinished(window.testStart, window.performance.now())
+                                await new Promise((resolve) => setTimeout(resolve, 500))
+                                if (appendTestDurationMs === 0) {
+                                    window.appendTestFinished(window.performance.now(), -1)
+                                } else {
+                                    await runAppendPerformanceTest()
+                                }
+                            },
+                        },
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

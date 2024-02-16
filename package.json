@@ -1,0 +1,21 @@
+{
+    "name": "test2",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "host": "http-server bench --port=8080 --cors",
+        "start": "concurrently \"npm run host\" \"cd bench && nodemon index.js\""
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "concurrently": "^8.2.2",
+        "http-server": "^14.1.1",
+        "live-server": "^1.2.2",
+        "nodemon": "^3.0.1",
+        "pngjs": "^7.0.0",
+        "puppeteer": "^19.9.0"
+    }
+}

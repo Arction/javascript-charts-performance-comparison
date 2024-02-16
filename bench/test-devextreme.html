@@ -1,0 +1,152 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/23.1.6/css/dx.light.css" />
+        <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.6/js/dx.all.js"></script>
+        <style>
+            body {
+                margin: 0px;
+            }
+
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+        <script src="common.js"></script>
+        <script>
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, testAppend, appendTestDurationMs, feature }) => {
+                // Initialize data
+                const xs = new Array(dataSetSize)
+                for (let i = 0; i < dataSetSize; i += 1) {
+                    xs[i] = i
+                }
+                const dataSetsY = new Array(channels).fill(0).map((_, ch) => {
+                    const ys = new Array(dataSetSize)
+                    for (let i = 0; i < dataSetSize; i += 1) {
+                        ys[i] = Math.random() + ch
+                    }
+                    return ys
+                })
+                const dataSource = new Array(dataSetSize).fill(0).map((_, i) => {
+                    const dataPoint = { x: xs[i] }
+                    for (let j = 0; j < channels; j++) {
+                        dataPoint[`C${j}`] = dataSetsY[j][i]
+                    }
+                    return dataPoint
+                })
+
+                window.testPerform = () => {
+                    // loading speed test
+
+                    // Initialize chart
+                    $(() => {
+                        const chart = $('#chart')
+                            .dxChart({
+                                dataSource,
+                                commonSeriesSettings: {
+                                    argumentField: 'x',
+                                    type: feature === 'step' ? 'stepline' : feature,
+                                    width: 2,
+                                    scatter: {
+                                        point: {
+                                            size: 3,
+                                        },
+                                    },
+                                },
+                                argumentAxis: {
+                                    valueMarginsEnabled: false,
+                                    discreteAxisDivisionMode: 'crossLabels',
+                                    grid: {
+                                        visible: true,
+                                    },
+                                    wholeRange: {
+                                        startValue: 0,
+                                        endValue: dataSetSize,
+                                    },
+                                },
+                                zoomAndPan: {
+                                    argumentAxis: 'both',
+                                    allowMouseWheel: true,
+                                    allowTouchGestures: true,
+                                },
+                                series: new Array(channels).fill(0).map((_, i) => {
+                                    return {
+                                        argumentField: 'x',
+                                        valueField: `C${i}`,
+                                    }
+                                }),
+                            })
+                            .dxChart('instance')
+                    })
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+
+                                // Append data
+                                const ds = $('#chart').dxChart('getDataSource')
+                                for (let i = 0; i < appendDataPointCount; i += 1) {
+                                    x += 1
+                                    iSample = (iSample + 1) % dataSetSize
+                                    const dataPoint = { x: x }
+                                    for (let ch = 0; ch < channels; ch += 1) {
+                                        dataPoint[`C${ch}`] = dataSetsY[ch][iSample]
+                                    }
+                                    ds.store().insert(dataPoint)
+                                }
+                                ds.filter(['x', '>', x - dataSetSize])
+                                ds.reload()
+
+                                $('#chart')
+                                    .dxChart('instance')
+                                    .option('argumentAxis', {
+                                        wholeRange: {
+                                            startValue: x - dataSetSize,
+                                            endValue: x,
+                                        },
+                                    })
+
+                                if (t - tStart > appendTestDurationMs && window.appendTestFinished) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    requestAnimationFrame(async () => {
+                        window.loadingTestFinished(window.testStart, window.performance.now())
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+                        if (appendTestDurationMs === 0) {
+                            window.appendTestFinished(window.performance.now(), -1)
+                        } else {
+                            await runAppendPerformanceTest()
+                        }
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

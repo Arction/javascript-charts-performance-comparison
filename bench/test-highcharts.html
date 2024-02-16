@@ -1,0 +1,154 @@
+<html>
+    <head>
+        <script src="https://code.highcharts.com/11.2.0/highcharts.js"></script>
+        <style>
+            body {
+                margin: 0px;
+            }
+
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+        <script src="common.js"></script>
+
+        <script>
+            const container = 'chart'
+
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, appendTestDurationMs, feature }) => {
+                // Prepare the data
+                const dataSetsY = new Array(channels)
+                    .fill(0)
+                    .map((_, ch) => new Array(dataSetSize).fill(0).map((_, i) => Math.random() + ch))
+
+                let chartType = 'line' // Default
+                switch (feature) {
+                    case 'line':
+                        chartType = 'line'
+                        break
+                    case 'area':
+                        chartType = 'area'
+                        break
+                    case 'scatter':
+                        chartType = 'scatter'
+                        break
+                    case 'spline':
+                        chartType = 'spline'
+                        break
+                    case 'step':
+                        chartType = 'line'
+                        break
+                    // Add other cases as necessary
+                    default:
+                        chartType = 'line'
+                        break
+                }
+
+                window.testPerform = async () => {
+                    // Start performance test
+
+                    const seriesOptions = dataSetsY.map((dataSet, index) => ({
+                        data: dataSet,
+                        name: `Channel ${index}`,
+                        type: chartType,
+                        marker: {
+                            enabled: feature === 'scatter',
+                        },
+                        step: feature === 'step' ? 'left' : undefined,
+                        enableMouseTracking: false,
+                        animation: false,
+                    }))
+
+                    // Initialize the chart
+                    const chart = Highcharts.chart(container, {
+                        series: seriesOptions,
+                        title: {
+                            text: '',
+                        },
+                        chart: {
+                            type: chartType,
+                            animation: false,
+                        },
+                        yAxis: {
+                            visible: false,
+                        },
+                        xAxis: {
+                            // visible: false,
+                        },
+                        plotOptions: {
+                            scatter: {
+                                marker: {
+                                    radius: 2.5,
+                                    symbol: 'circle',
+                                },
+                            },
+                        },
+                    })
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+                                const dataAppend = new Array(channels).fill(0).map(() => [])
+
+                                for (let i = 0; i < appendDataPointCount; i += 1) {
+                                    x += 1
+                                    for (let ch = 0; ch < channels; ch += 1) {
+                                        dataAppend[ch].push(Math.random() + ch)
+                                    }
+                                }
+
+                                chart.series.forEach(function (line, index) {
+                                    for (let l = 0; l < appendDataPointCount; l++) {
+                                        var y = Math.random() + index
+                                        line.addPoint(y, false, true)
+                                    }
+                                })
+                                chart.redraw()
+
+                                if (t - tStart > appendTestDurationMs && window.appendTestFinished) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    // NOTE: requestAnimationFrame triggers BEFORE chart is visible on display.
+                    requestAnimationFrame(async () => {
+                        window.loadingTestFinished(window.testStart, window.performance.now())
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+                        if (appendTestDurationMs === 0) {
+                            window.appendTestFinished(window.performance.now(), -1)
+                        } else {
+                            await runAppendPerformanceTest()
+                        }
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

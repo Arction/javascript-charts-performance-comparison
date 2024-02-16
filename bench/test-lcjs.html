@@ -1,0 +1,161 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/@arction/lcjs@5.1.0/dist/lcjs.iife.js"></script>
+        <style>
+            body {
+                margin: 0px;
+            }
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="chart"></div>
+        <script src="common.js"></script>
+        <script>
+            const container = document.getElementById('chart')
+            const {
+                lightningChart,
+                Themes,
+                disableThemeEffects,
+                AxisTickStrategies,
+                SolidFill,
+                ColorRGBA,
+                AxisScrollStrategies,
+                emptyLine,
+                emptyFill,
+                DataPatternsNew,
+                emptyTick,
+            } = lcjs
+
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, testAppend, appendTestDurationMs, feature }) => {
+                const xs = new Float32Array(dataSetSize)
+                for (let i = 0; i < dataSetSize; i += 1) {
+                    xs[i] = i
+                }
+                const dataSetsY = new Array(channels).fill(0).map((_, ch) => {
+                    const ys = new Float32Array(dataSetSize)
+                    for (let i = 0; i < dataSetSize; i += 1) {
+                        ys[i] = Math.random() + ch
+                    }
+                    return ys
+                })
+
+                const theme = {
+                    ...Themes.darkGold,
+                    effect: undefined,
+                    xAxisNumericTicks: Themes.darkGold.xAxisNumericTicks.setMinorTickStyle(emptyTick),
+                    yAxisNumericTicks: Themes.darkGold.yAxisNumericTicks.setMinorTickStyle(emptyTick),
+                }
+
+                window.testPerform = () => {
+                    // loading speed test
+                    // Put license key here to test locally
+                    const lc = lightningChart({})
+
+                    const chart = lc
+                        .ChartXY({
+                            disableAnimations: true,
+                            theme,
+                            container,
+                            interactable: false,
+                        })
+                        .setTitle('')
+                    const axisXBottom = chart.getDefaultAxisX()
+
+                    const seriesList = []
+                    for (let i = 0; i < channels; i += 1) {
+                        const series = chart.addPointLineAreaSeries({
+                            dataPattern: feature === 'scatter' ? null : 'ProgressiveX',
+                            dataStorage: Float32Array,
+                        })
+                        if (feature === 'step') {
+                            series.setCurvePreprocessing({
+                                type: 'step',
+                                step: 'middle',
+                            })
+                        }
+                        if (feature === 'spline') {
+                            series.setCurvePreprocessing({
+                                type: 'spline',
+                                resolution: 20,
+                            })
+                        }
+                        if (feature === 'line' || feature === 'area' || feature === 'step' || feature === 'spline') {
+                            series.setStrokeStyle((stroke) => stroke.setThickness(2))
+                        } else {
+                            series.setStrokeStyle(emptyLine)
+                        }
+                        if (feature !== 'scatter') series.setPointFillStyle(emptyFill)
+                        else series.setPointSize(3)
+                        if (feature !== 'area') series.setAreaFillStyle(emptyFill)
+                        seriesList.push(series)
+                        series.getDataSet().setMaxSampleCount(dataSetSize).appendSamples({ xValues: xs, yValues: dataSetsY[i] })
+                    }
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            axisXBottom.setStopped(false).setScrollStrategy(AxisScrollStrategies.progressive)
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+
+                                // Append data implementation for LCJS
+                                const dataAppendX = new Float32Array(appendDataPointCount)
+                                const dataAppend = new Array(channels).fill(0).map(() => new Float32Array(appendDataPointCount))
+                                for (let i = 0; i < appendDataPointCount; i += 1) {
+                                    x += 1
+                                    iSample = (iSample + 1) % dataSetSize
+                                    dataAppendX[i] = x
+                                    for (let ch = 0; ch < channels; ch += 1) {
+                                        dataAppend[ch][i] = dataSetsY[ch][iSample]
+                                    }
+                                }
+                                for (let ch = 0; ch < channels; ch += 1) {
+                                    seriesList[ch].getDataSet().appendSamples({
+                                        xValues: dataAppendX,
+                                        yValues: dataAppend[ch],
+                                    })
+                                }
+                                //
+
+                                if (t - tStart > appendTestDurationMs && window.appendTestFinished) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    requestAnimationFrame(async () => {
+                        window.loadingTestFinished(window.testStart, window.performance.now())
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+                        if (appendTestDurationMs === 0) {
+                            window.appendTestFinished(window.performance.now(), -1)
+                        } else {
+                            await runAppendPerformanceTest()
+                        }
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

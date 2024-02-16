@@ -1,0 +1,123 @@
+<html>
+    <head>
+        <script src="https://cdn.anychart.com/releases/8.12.0/js/anychart-base.min.js"></script>
+        <style>
+            body {
+                margin: 0px;
+            }
+
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+        <script src="./common.js"></script>
+        <script>
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, testAppend, appendTestDurationMs, feature }) => {
+                // Initialize data
+                var series
+                var chart
+
+                window.testPerform = () => {
+                    // dataArray format is [[series1, series2, ...], [series1, series2, ...], ...]
+                    const dataArray = new Array(dataSetSize)
+                        .fill(0)
+                        .map((_, index) => new Array(channels).fill(0).map((_, i) => Math.random() + i))
+
+                    const dataSets = anychart.data.set(dataArray)
+
+                    const seriesData = new Array(channels).fill(0).map((data, i) => dataSets.mapAs({ value: i }))
+
+                    switch (feature) {
+                        case 'line':
+                            chart = anychart.line()
+                            series = seriesData.map((data, i) => chart.line(data))
+                            break
+                        case 'area':
+                            chart = anychart.area()
+                            series = seriesData.map((data, i) => chart.area(data))
+                            break
+                        case 'scatter':
+                            chart = anychart.scatter()
+                            series = seriesData.map((data, i) => chart.marker(data).type('circle').size(3))
+                            break
+                        case 'spline':
+                            chart = anychart.line()
+                            series = seriesData.map((data, i) => chart.spline(data))
+                            break
+                        case 'step':
+                            chart = anychart.stepLine()
+                            series = seriesData.map((data, i) => chart.stepLine(data))
+                            break
+                        default:
+                            chart = anychart.line()
+                            series = seriesData.map((data, i) => chart.line(data))
+                            break
+                    }
+
+                    chart.xGrid(false)
+                    chart.yGrid(false)
+                    chart.xMinorGrid(false)
+                    chart.yMinorGrid(false)
+                    chart.title('')
+
+                    chart.container('chart')
+                    chart.draw()
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            // let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+                                const dataAppend = new Array(appendDataPointCount).fill(0).map(() => [])
+
+                                for (let i = 0; i < appendDataPointCount; i += 1) {
+                                    for (let ch = 0; ch < channels; ch += 1) {
+                                        dataAppend[i].push(Math.random() + ch)
+                                    }
+                                }
+                                x += appendDataPointCount
+                                // Set axis x initial
+                                if (feature !== 'scatter') chart.xZoom().setToValues(x - dataSetSize, x)
+                                else chart.xScale().minimum(x - dataSetSize)
+                                // Add data
+                                dataSets.append(...dataAppend)
+
+                                if (t - tStart > appendTestDurationMs) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    requestAnimationFrame(async () => {
+                        window.loadingTestFinished(window.testStart, window.performance.now())
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+                        await runAppendPerformanceTest()
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

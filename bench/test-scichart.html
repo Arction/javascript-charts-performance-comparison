@@ -1,0 +1,187 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/scichart@3.2.516/index.min.js" crossorigin="anonymous"></script>
+        <style>
+            body {
+                margin: 0px;
+            }
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="common.js"></script>
+        <div id="chart"></div>
+        <script>
+            const {
+                SciChartSurface,
+                SciChartDefaults,
+                NumericAxis,
+                EAutoRange,
+                CursorModifier,
+                ZoomPanModifier,
+                ZoomExtentsModifier,
+                MouseWheelZoomModifier,
+                XyDataSeries,
+                FastLineRenderableSeries,
+                FastMountainRenderableSeries,
+                SplineLineRenderableSeries,
+                XyScatterRenderableSeries,
+                EllipsePointMarker,
+                NumberRange,
+                SciChartJsNavyTheme,
+                EAxisAlignment,
+                LeftAlignedOuterVerticallyStackedAxisLayoutStrategy,
+                EXyDirection,
+                RubberBandXyZoomModifier,
+            } = SciChart
+
+            SciChartDefaults.useNativeText = true
+            // IMPORTANT
+            // See https://github.com/Arction/javascript-charts-performance-comparison/blob/main/extra-info.md
+            SciChartDefaults.enableResampling = false
+            SciChartSurface.configure({
+                dataUrl: 'https://cdn.jsdelivr.net/npm/scichart@3.2.516/_wasm/scichart2d.data',
+                wasmUrl: 'https://cdn.jsdelivr.net/npm/scichart@3.2.516/_wasm/scichart2d.wasm',
+            })
+
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, appendTestDurationMs, feature }) => {
+                const xs = new Float64Array(dataSetSize)
+                for (let i = 0; i < dataSetSize; i += 1) {
+                    xs[i] = i
+                }
+                const dataSetsY = new Array(channels).fill(0).map((_, ch) => {
+                    const ys = new Float64Array(dataSetSize)
+                    for (let i = 0; i < dataSetSize; i += 1) {
+                        ys[i] = Math.random() + ch
+                    }
+                    return ys
+                })
+
+                // NOTE: Some scichart js features do not support FiFo (first in first out), in which case data cleaning has to be handled manually by user
+                const fifoSupported = feature !== 'spline'
+
+                window.testPerform = async () => {
+                    // loading speed test
+                    const sciChart = await SciChartSurface.createSingle('chart', {
+                        theme: new SciChartJsNavyTheme(),
+                    })
+                    const sciChartSurface = sciChart.sciChartSurface
+                    const wasmContext = sciChart.wasmContext
+
+                    const xAxis = new NumericAxis(wasmContext)
+                    sciChartSurface.xAxes.add(xAxis)
+                    xAxis.autoRange = EAutoRange.Always
+                    const yAxis = new NumericAxis(wasmContext)
+                    sciChartSurface.yAxes.add(yAxis)
+                    yAxis.autoRange = EAutoRange.Always
+
+                    // const mouseWheelZoomModifier = new MouseWheelZoomModifier()
+                    // const rubberBandZoomModifier = new RubberBandXyZoomModifier()
+                    // const zoomExtentsModifier = new ZoomExtentsModifier()
+                    // sciChartSurface.chartModifiers.add(zoomExtentsModifier)
+                    // sciChartSurface.chartModifiers.add(rubberBandZoomModifier)
+                    // sciChartSurface.chartModifiers.add(mouseWheelZoomModifier)
+
+                    const dataSeriesList = []
+                    for (let ch = 0; ch < channels; ch += 1) {
+                        const yMin = ch
+                        const dataSeries = new XyDataSeries(wasmContext, {
+                            dataIsSortedInX: true,
+                            dataEvenlySpacedInX: true,
+                            containsNaN: false,
+                            fifoCapacity: fifoSupported ? dataSetSize : undefined,
+                        })
+                        const rendSeries =
+                            feature === 'scatter'
+                                ? new XyScatterRenderableSeries(wasmContext, {
+                                      dataSeries,
+                                      pointMarker: new EllipsePointMarker(wasmContext, {
+                                          width: 3,
+                                          height: 3,
+                                          fill: 'steelblue',
+                                      }),
+                                  })
+                                : feature === 'area'
+                                ? new FastMountainRenderableSeries(wasmContext, {
+                                      dataSeries,
+                                      strokeThickness: 2,
+                                      zeroLineY: yMin,
+                                  })
+                                : feature === 'spline'
+                                ? new SplineLineRenderableSeries(wasmContext, {
+                                      dataSeries,
+                                      strokeThickness: 2,
+                                      interpolationPoints: 20,
+                                  })
+                                : new FastLineRenderableSeries(wasmContext, {
+                                      dataSeries,
+                                      strokeThickness: 2,
+                                      isDigitalLine: feature === 'step' ? true : false,
+                                  })
+                        sciChartSurface.renderableSeries.add(rendSeries)
+                        dataSeries.appendRange(xs, dataSetsY[ch])
+                        dataSeriesList.push(dataSeries)
+                    }
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+                            let showData = true
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+
+                                // Append data implementation for SciChart
+                                const dataAppend = new Array(channels)
+                                    .fill(0)
+                                    .map(() => [new Float64Array(appendDataPointCount), new Float64Array(appendDataPointCount)])
+                                for (let i = 0; i < appendDataPointCount; i += 1) {
+                                    x += 1
+                                    iSample = (iSample + 1) % dataSetSize
+                                    for (let ch = 0; ch < channels; ch += 1) {
+                                        dataAppend[ch][0][i] = x
+                                        dataAppend[ch][1][i] = dataSetsY[ch][iSample]
+                                    }
+                                }
+                                for (let ch = 0; ch < channels; ch += 1) {
+                                    dataSeriesList[ch].appendRange(dataAppend[ch][0], dataAppend[ch][1])
+                                    if (!fifoSupported) {
+                                        dataSeriesList[ch].removeRange(0, appendDataPointCount)
+                                        xAxis.visibleRange = new NumberRange(x - dataSetSize, x)
+                                    }
+                                }
+
+                                if (t - tStart > appendTestDurationMs) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    requestAnimationFrame(async () => {
+                        window.loadingTestFinished(window.testStart, window.performance.now())
+                        await new Promise((resolve) => setTimeout(resolve, appendTestDurationMs === 0 ? 2000 : 500))
+                        await runAppendPerformanceTest()
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

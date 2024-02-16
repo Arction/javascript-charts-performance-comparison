@@ -1,0 +1,161 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/uplot@1.6.27/dist/uPlot.iife.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/uplot@1.6.27/dist/uPlot.min.css" rel="stylesheet" type="text/css" />
+        <style>
+            body {
+                margin: 0px;
+            }
+
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+        <script>
+            const container = document.getElementById('chart')
+            const bounds = container.getBoundingClientRect()
+            const { linear, stepped, spline, spline2 } = uPlot.paths
+
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, appendTestDurationMs, feature }) => {
+                // NOTE: uplot real-time tests bug out after ~5 seconds, resulting in all graphs showing flat lines
+                // Afterwards, FPS will be recorded to be much better than when the graphs are properly visible.
+                // To workaround this issue, uplot real-time tests are limited to 5 seconds.
+                appendTestDurationMs = Math.min(5000, appendTestDurationMs)
+
+                // [x...], [y0...], [y1...], [y2...]
+                const data = new Array(1 + channels).fill(0).map((_) => [])
+                for (let x = 0; x < dataSetSize; x += 1) {
+                    data[0].push(x)
+                }
+                for (let ch = 0; ch < channels; ch += 1) {
+                    for (let x = 0; x < dataSetSize; x += 1) {
+                        data[1 + ch].push(Math.random() + ch)
+                    }
+                }
+
+                window.testPerform = () => {
+                    const drawStyles = {
+                        line: 0,
+                        bars: 1,
+                        points: 2,
+                        barsLeft: 3,
+                        barsRight: 4,
+                    }
+                    const lineInterpolations = {
+                        linear: 0,
+                        stepAfter: 1,
+                        stepBefore: 2,
+                        spline: 3,
+                    }
+                    const _stepBefore = stepped({ align: -1 })
+                    const _stepAfter = stepped({ align: 1 })
+                    const _linear = linear()
+                    const _spline = spline()
+
+                    function paths(u, seriesIdx, idx0, idx1, extendGap, buildClip) {
+                        let s = u.series[seriesIdx]
+                        let style = s.drawStyle
+                        let interp = s.lineInterpolation
+
+                        let renderer =
+                            interp == lineInterpolations.stepAfter ? _stepAfter : interp == lineInterpolations.spline ? _spline : _linear
+
+                        return renderer(u, seriesIdx, idx0, idx1, extendGap, buildClip)
+                    }
+
+                    const opts = {
+                        width: bounds.width,
+                        height: bounds.height,
+                        series: [
+                            {},
+                            ...new Array(channels).fill(0).map((_, iChannel) => ({
+                                width: feature === 'scatter' ? 0 : 2,
+                                points: feature === 'scatter' && {
+                                    space: 0,
+                                    fill: 'red',
+                                },
+                                stroke: feature === 'scatter' ? 'rgba(0,0,0,0)' : 'blue',
+                                fill: feature === 'area' && 'rgba(255,0,0,0.1)',
+                                lineInterpolation: null,
+                                drawStyle: drawStyles.line,
+                                lineInterpolation:
+                                    feature === 'step'
+                                        ? lineInterpolations.stepAfter
+                                        : feature === 'spline'
+                                        ? lineInterpolations.spline
+                                        : lineInterpolations.linear,
+                                paths,
+                            })),
+                        ],
+                        scales: {
+                            x: {
+                                // Numeric axis values instead of UNIX timestamp (default).
+                                time: false,
+                                auto: true,
+                            },
+                        },
+                        legend: {
+                            show: false,
+                        },
+                    }
+                    uplot = new uPlot(opts, data, container)
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+                                if (appendDataPointCount > 0) {
+                                    // Append data implementation for uplot
+                                    for (let i = 0; i < appendDataPointCount; i += 1) {
+                                        x += 1
+                                        data[0].shift()
+                                        data[0].push(x)
+                                        for (let ch = 0; ch < channels; ch += 1) {
+                                            const y = data[1 + ch][0]
+                                            data[1 + ch].shift()
+                                            data[1 + ch].push(y)
+                                        }
+                                    }
+                                    uplot.setData(data)
+                                }
+                                //
+
+                                if (t - tStart > appendTestDurationMs) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    requestAnimationFrame(async () => {
+                        window.loadingTestFinished(window.testStart, window.performance.now())
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+                        await runAppendPerformanceTest()
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

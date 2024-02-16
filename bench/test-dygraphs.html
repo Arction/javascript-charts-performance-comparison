@@ -1,0 +1,211 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/dygraphs@2.2.1/dist/dygraph.min.js"></script>
+        <style>
+            body {
+                margin: 0px;
+            }
+
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+        <script src="common.js"></script>
+        <script>
+            // Functions for spline line type
+            // From: https://dygraphs.com/extras/smooth-plotter.js
+            function getControlPoints(p0, p1, p2, opt_alpha, opt_allowFalseExtrema) {
+                var alpha = opt_alpha !== undefined ? opt_alpha : 1 / 3 // 0=no smoothing, 1=crazy smoothing
+                var allowFalseExtrema = opt_allowFalseExtrema || false
+                if (!p2) {
+                    return [p1.x, p1.y, null, null]
+                }
+
+                // Step 1: Position the control points along each line segment.
+                var l1x = (1 - alpha) * p1.x + alpha * p0.x,
+                    l1y = (1 - alpha) * p1.y + alpha * p0.y,
+                    r1x = (1 - alpha) * p1.x + alpha * p2.x,
+                    r1y = (1 - alpha) * p1.y + alpha * p2.y
+
+                // Step 2: shift the points up so that p1 is on the l1–r1 line.
+                if (l1x != r1x) {
+                    // This can be derived w/ some basic algebra.
+                    var deltaY = p1.y - r1y - ((p1.x - r1x) * (l1y - r1y)) / (l1x - r1x)
+                    l1y += deltaY
+                    r1y += deltaY
+                }
+
+                // Step 3: correct to avoid false extrema.
+                if (!allowFalseExtrema) {
+                    if (l1y > p0.y && l1y > p1.y) {
+                        l1y = Math.max(p0.y, p1.y)
+                        r1y = 2 * p1.y - l1y
+                    } else if (l1y < p0.y && l1y < p1.y) {
+                        l1y = Math.min(p0.y, p1.y)
+                        r1y = 2 * p1.y - l1y
+                    }
+                    if (r1y > p1.y && r1y > p2.y) {
+                        r1y = Math.max(p1.y, p2.y)
+                        l1y = 2 * p1.y - r1y
+                    } else if (r1y < p1.y && r1y < p2.y) {
+                        r1y = Math.min(p1.y, p2.y)
+                        l1y = 2 * p1.y - r1y
+                    }
+                }
+                return [l1x, l1y, r1x, r1y]
+            }
+            function isOK(x) {
+                return !!x && !isNaN(x)
+            }
+            function smoothPlotter(e) {
+                var ctx = e.drawingContext,
+                    points = e.points
+                ctx.beginPath()
+                ctx.moveTo(points[0].canvasx, points[0].canvasy)
+
+                // right control point for previous point
+                var lastRightX = points[0].canvasx,
+                    lastRightY = points[0].canvasy
+                for (var i = 1; i < points.length; i++) {
+                    var p0 = points[i - 1],
+                        p1 = points[i],
+                        p2 = points[i + 1]
+                    p0 = p0 && isOK(p0.canvasy) ? p0 : null
+                    p1 = p1 && isOK(p1.canvasy) ? p1 : null
+                    p2 = p2 && isOK(p2.canvasy) ? p2 : null
+                    if (p0 && p1) {
+                        var controls = getControlPoints(
+                            {
+                                x: p0.canvasx,
+                                y: p0.canvasy,
+                            },
+                            {
+                                x: p1.canvasx,
+                                y: p1.canvasy,
+                            },
+                            p2 && {
+                                x: p2.canvasx,
+                                y: p2.canvasy,
+                            },
+                            smoothPlotter.smoothing,
+                        )
+                        // Uncomment to show the control points:
+                        // ctx.lineTo(lastRightX, lastRightY);
+                        // ctx.lineTo(controls[0], controls[1]);
+                        // ctx.lineTo(p1.canvasx, p1.canvasy);
+                        lastRightX = lastRightX !== null ? lastRightX : p0.canvasx
+                        lastRightY = lastRightY !== null ? lastRightY : p0.canvasy
+                        ctx.bezierCurveTo(lastRightX, lastRightY, controls[0], controls[1], p1.canvasx, p1.canvasy)
+                        lastRightX = controls[2]
+                        lastRightY = controls[3]
+                    } else if (p1) {
+                        // We're starting again after a missing point.
+                        ctx.moveTo(p1.canvasx, p1.canvasy)
+                        lastRightX = p1.canvasx
+                        lastRightY = p1.canvasy
+                    } else {
+                        lastRightX = lastRightY = null
+                    }
+                }
+                ctx.stroke()
+            }
+
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, testAppend, appendTestDurationMs, feature }) => {
+                // Initialize data
+                const xs = new Array(dataSetSize)
+                for (let i = 0; i < dataSetSize; i += 1) {
+                    xs[i] = i
+                }
+                const dataSetsY = new Array(channels).fill(0).map((_, ch) => {
+                    const ys = new Array(dataSetSize)
+                    for (let i = 0; i < dataSetSize; i += 1) {
+                        ys[i] = Math.random() + ch
+                    }
+                    return ys
+                })
+
+                const channelData = xs.map((x, index) => {
+                    const row = [x]
+                    for (let i = 0; i < channels; i++) {
+                        row.push(dataSetsY[i][index])
+                    }
+                    return row
+                })
+
+                window.testPerform = () => {
+                    // loading speed test
+
+                    // Initialize chart
+                    Dygraph.onDOMready(function onDOMready() {
+                        g = new Dygraph(document.getElementById('chart'), channelData, {
+                            drawPoints: feature === 'scatter' ? true : false,
+                            fillGraph: feature === 'area' ? true : false,
+                            stepPlot: feature === 'step' ? true : false,
+                            strokeWidth: feature === 'scatter' ? 0 : 2,
+                            plotter: feature === 'spline' ? smoothPlotter : null,
+                            showRoller: false,
+                            labels: ['Time domain', ...new Array(channels).fill(0).map((_, iChannel) => `Channel #${iChannel + 1}`)],
+                        })
+                    })
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+
+                                // Append data
+                                for (let i = 0; i < appendDataPointCount; i += 1) {
+                                    x += 1
+                                    iSample = (iSample + 1) % dataSetSize
+                                    const row = [x]
+                                    for (let ch = 0; ch < channels; ch += 1) {
+                                        row.push(dataSetsY[ch][iSample])
+                                    }
+                                    channelData.push(row)
+                                }
+                                channelData.splice(0, appendDataPointCount)
+                                g.updateOptions({ file: channelData })
+
+                                if (t - tStart > appendTestDurationMs && window.appendTestFinished) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    requestAnimationFrame(async () => {
+                        window.loadingTestFinished(window.testStart, window.performance.now())
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+                        if (appendTestDurationMs === 0) {
+                            window.appendTestFinished(window.performance.now(), -1)
+                        } else {
+                            await runAppendPerformanceTest()
+                        }
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

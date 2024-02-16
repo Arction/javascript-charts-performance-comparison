@@ -1,0 +1,150 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/3.21.1/fusioncharts.js"></script>
+        <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/3.21.1/themes/fusioncharts.theme.fusion.js"></script>
+        <style>
+            body {
+                margin: 0px;
+            }
+
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+        <script src="common.js"></script>
+        <script>
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, testAppend, appendTestDurationMs, feature }) => {
+                if (dataSetSize > 1000) {
+                    // For unknown reasons, the graphs for any feature do not appear when data set size goes over 1000
+                    window.error()
+                }
+                if (feature === 'scatter') {
+                    window.error()
+                }
+
+                // Initialize data
+                const xs = new Array(dataSetSize)
+                for (let i = 0; i < dataSetSize; i += 1) {
+                    xs[i] = i
+                }
+                const dataSetsY = new Array(channels).fill(0).map((_, ch) => {
+                    const ys = new Array(dataSetSize)
+                    for (let i = 0; i < dataSetSize; i += 1) {
+                        ys[i] = Math.random() + ch
+                    }
+                    return ys
+                })
+                const data = []
+                dataSetsY.forEach((channel, iCh) => {
+                    channel.forEach((y, i) => {
+                        data.push([xs[i].toString(), y, iCh.toString()])
+                    })
+                })
+
+                window.testPerform = () => {
+                    // loading speed test
+
+                    // Initialize chart
+                    const schema = [
+                        {
+                            name: 'x',
+                            type: 'date',
+                            format: '%-L', // milliseconds
+                        },
+                        {
+                            name: 'y',
+                            type: 'number',
+                        },
+                        {
+                            name: 'Channel',
+                            type: 'string',
+                        },
+                    ]
+                    const dataStore = new FusionCharts.DataStore().createDataTable(data, schema)
+                    let loadReady = false
+                    const realtimeChart = new FusionCharts({
+                        type: 'timeseries',
+                        renderAt: 'chart',
+                        width: '100%',
+                        height: '100%',
+                        dataSource: {
+                            data: dataStore,
+                            navigator: {
+                                enabled: false,
+                            },
+                            yAxis: {
+                                plottype: feature === 'spline' ? 'smooth-line' : feature === 'step' ? 'step-line' : feature,
+                            },
+                            xAxis: {},
+                            series: 'Channel',
+                        },
+                        events: {
+                            drawComplete: async (evtObj, argObj) => {
+                                if (loadReady) return
+                                loadReady = true
+                                window.loadingTestFinished(window.testStart, window.performance.now())
+                                await new Promise((resolve) => setTimeout(resolve, 500))
+                                if (appendTestDurationMs === 0) {
+                                    window.appendTestFinished(window.performance.now(), -1)
+                                } else {
+                                    await runAppendPerformanceTest()
+                                }
+                            },
+                        },
+                    })
+
+                    realtimeChart.addEventListener('disposed', function (eventObj) {
+                        const chartRef = eventObj
+                        clearInterval(chartRef.incrementor)
+                    })
+
+                    realtimeChart.render()
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+
+                                // Append data
+                                const dataAppend = new Array(channels).fill(0).map(() => new Array(appendDataPointCount))
+                                for (let i = 0; i < appendDataPointCount; i += 1) {
+                                    x += 1
+                                    iSample = (iSample + 1) % dataSetSize
+                                    for (let ch = 0; ch < channels; ch += 1) {
+                                        realtimeChart.feedData([[x.toString(), dataSetsY[ch][iSample], ch.toString()]])
+                                    }
+                                }
+
+                                if (t - tStart > appendTestDurationMs && window.appendTestFinished) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+                            requestAnimationFrame(frame)
+                        })
+                    }
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

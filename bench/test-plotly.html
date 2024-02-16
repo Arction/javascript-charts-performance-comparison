@@ -1,0 +1,168 @@
+<html>
+    <head>
+        <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+        <style>
+            body {
+                margin: 0px;
+            }
+
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+        <script src="common.js"></script>
+        <script>
+            const container = 'chart'
+
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, appendTestDurationMs, feature }) => {
+                // Data format: [[series1  x  data points], [series2  x data points], ...]
+                const dataSetsY = new Array(channels)
+                    .fill(0)
+                    .map((_, ch) => new Array(dataSetSize).fill(0).map((_, i) => Math.random() + ch))
+
+                let modes
+                switch (feature) {
+                    case 'line':
+                        modes = {
+                            mode: 'lines',
+                            type: 'scatter',
+                        }
+                        break
+                    case 'area':
+                        modes = {
+                            mode: 'lines',
+                            type: 'scatter',
+                            fill: 'tozeroy',
+                        }
+                        break
+                    case 'scatter':
+                        modes = {
+                            mode: 'markers',
+                            type: 'scatter',
+                        }
+                        break
+                    case 'spline':
+                        modes = {
+                            mode: 'lines',
+                            type: 'scatter',
+                            line: {
+                                shape: 'spline',
+                            },
+                        }
+                        break
+                    case 'step':
+                        modes = {
+                            mode: 'lines',
+                            type: 'scatter',
+                            line: {
+                                shape: 'hv',
+                            },
+                        }
+                        break
+                    default:
+                        modes = {
+                            mode: 'lines',
+                            type: 'scatter',
+                        }
+                        break
+                }
+
+                const traces = dataSetsY.map((dataSet, ch) => ({
+                    y: dataSet,
+                    name: `Channel ${ch}`,
+                    ...modes,
+                }))
+
+                var layout = {
+                    title: '',
+                    showlegend: false,
+                    xaxis: {
+                        title: '',
+                        showgrid: false,
+                        zeroline: false,
+                        showline: false,
+                        // range: [0, dataSetSize],
+                    },
+                    yaxis: {
+                        title: '',
+                        showgrid: false,
+                        showline: false,
+                        zeroline: false,
+                    },
+                }
+
+                window.testPerform = async () => {
+                    // Start performance test
+                    // Render the plot
+                    Plotly.newPlot(container, traces, layout)
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+                                const dataAppend = new Array(channels).fill(0).map(() => [])
+
+                                for (let ch = 0; ch < channels; ch += 1) {
+                                    const channelData = []
+                                    for (let i = 0; i < appendDataPointCount; i += 1) {
+                                        iSample = (iSample + 1) % dataSetSize
+                                        channelData.push(Math.random() + ch)
+                                    }
+                                    dataAppend[ch].push(...channelData)
+                                }
+                                x += appendDataPointCount
+
+                                Plotly.extendTraces(
+                                    container,
+                                    { y: dataAppend },
+                                    Array.from({ length: channels }, (_, i) => i),
+                                )
+
+                                // axis scroll
+                                Plotly.relayout(container, { 'xaxis.range': dataSetSize > x ? [0, dataSetSize] : [x - dataSetSize, x] })
+
+                                if (t - tStart > appendTestDurationMs && window.appendTestFinished) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    requestAnimationFrame(async () => {
+                        window.loadingTestFinished(window.testStart, window.performance.now())
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+                        if (appendTestDurationMs === 0) {
+                            window.appendTestFinished(window.performance.now(), -1)
+                        } else {
+                            await runAppendPerformanceTest()
+                        }
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

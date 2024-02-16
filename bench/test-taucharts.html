@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/d3@4.13.0/build/d3.min.js" charset="utf-8"></script>
+        <script src="https://cdn.jsdelivr.net/npm/taucharts@2/dist/taucharts.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/taucharts@2/dist/taucharts.min.css" />
+        <style>
+            body {
+                margin: 0px;
+            }
+
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+        <script src="common.js"></script>
+        <script>
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, testAppend, appendTestDurationMs, feature }) => {
+                // Initialize data
+                const xs = new Array(dataSetSize)
+                for (let i = 0; i < dataSetSize; i += 1) {
+                    xs[i] = i
+                }
+                const dataSetsY = new Array(channels).fill(0).map((_, ch) => {
+                    const ys = new Array(dataSetSize)
+                    for (let i = 0; i < dataSetSize; i += 1) {
+                        ys[i] = Math.random() + ch
+                    }
+                    return ys
+                })
+                const dataSource = []
+                xs.forEach((x, i) => {
+                    for (let ch = 0; ch < channels; ch++) {
+                        dataSource.push({
+                            channel: `Channel${ch}`,
+                            x: x,
+                            y: dataSetsY[ch][i],
+                        })
+                    }
+                })
+
+                window.testPerform = () => {
+                    // loading speed test
+
+                    // Initialize chart
+                    const chart = new Taucharts.Chart({
+                        data: dataSource,
+                        type: feature === 'scatter' ? 'scatterplot' : feature === 'area' ? 'area' : 'line',
+                        x: 'x',
+                        y: 'y',
+                        color: 'channel',
+                        guide: {
+                            x: { autoScale: false },
+                            y: { autoScale: false, min: 0, max: channels },
+                            interpolate: feature === 'spline' ? 'smooth' : feature === 'step' ? 'step' : 'line',
+                        },
+                        settings: {
+                            animationSpeed: 0,
+                        },
+                    })
+                    chart.renderTo('#chart')
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+
+                                // Append data
+                                const dataAppend = new Array(channels).fill(0).map(() => new Array(appendDataPointCount))
+                                for (let i = 0; i < appendDataPointCount; i += 1) {
+                                    x += 1
+                                    iSample = (iSample + 1) % dataSetSize
+                                    for (let ch = 0; ch < channels; ch += 1) {
+                                        dataSource.shift()
+                                        dataSource.push({
+                                            channel: `Channel${ch}`,
+                                            x: x,
+                                            y: dataSetsY[ch][iSample],
+                                        })
+                                    }
+                                }
+                                chart.setData(dataSource)
+
+                                if (t - tStart > appendTestDurationMs && window.appendTestFinished) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    requestAnimationFrame(async () => {
+                        window.loadingTestFinished(window.testStart, window.performance.now())
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+                        if (appendTestDurationMs === 0) {
+                            window.appendTestFinished(window.performance.now(), -1)
+                        } else {
+                            await runAppendPerformanceTest()
+                        }
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,135 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        <style>
+            body {
+                margin: 0px;
+            }
+
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div>
+            <canvas id="chart"></canvas>
+        </div>
+        <script src="common.js"></script>
+        <script>
+            window.testSetup().then(({ channels, dataSetSize, appendPointsPerSecond, testAppend, appendTestDurationMs, feature }) => {
+                // Initialize data
+                const xs = new Float32Array(dataSetSize)
+                for (let i = 0; i < dataSetSize; i += 1) {
+                    xs[i] = i
+                }
+                const dataSetsY = new Array(channels).fill(0).map((_, ch) => {
+                    const ys = new Float32Array(dataSetSize)
+                    for (let i = 0; i < dataSetSize; i += 1) {
+                        ys[i] = Math.random() + ch
+                    }
+                    return ys
+                })
+                const initialData = new Array(channels).fill(0).map((_, ch) => {
+                    const ys = new Array(dataSetSize)
+                    for (let i = 0; i < dataSetSize; i += 1) {
+                        ys[i] = { x: xs[i], y: dataSetsY[ch][i] }
+                    }
+                    return ys
+                })
+
+                window.testPerform = () => {
+                    // loading speed test
+
+                    // Initialize chart
+                    const ctx = document.getElementById('chart')
+                    const chart = new Chart(ctx, {
+                        type: feature === 'scatter' ? 'scatter' : 'line',
+                        data: {
+                            datasets: initialData.map((data, index) => ({
+                                label: `Channel ${index + 1}`,
+                                data: data,
+                                fill: feature === 'area' ? true : false,
+                                stepped: feature === 'step' ? true : false,
+                                tension: feature === 'spline' ? 0.2 : 0.0,
+                            })),
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    type: 'linear',
+                                    position: 'bottom',
+                                },
+                                y: {
+                                    type: 'linear',
+                                    position: 'left',
+                                },
+                            },
+                        },
+                    })
+
+                    const runAppendPerformanceTest = () => {
+                        return new Promise((resolve) => {
+                            const tStart = window.performance.now()
+                            let frameCount = 0
+                            let iSample = 0
+                            let x = dataSetSize
+                            let tPrev = window.performance.now()
+
+                            const frame = () => {
+                                frameCount += 1
+                                const t = window.performance.now()
+                                const d = t - tPrev
+                                tPrev = t
+                                const appendDataPointCount = Math.round((appendPointsPerSecond * d) / 1000)
+
+                                // Append data
+                                const dataAppend = new Array(channels).fill(0).map(() => new Array(appendDataPointCount))
+                                for (let i = 0; i < appendDataPointCount; i += 1) {
+                                    x += 1
+                                    iSample = (iSample + 1) % dataSetSize
+                                    for (let ch = 0; ch < channels; ch += 1) {
+                                        dataAppend[ch][i] = { x: x, y: dataSetsY[ch][iSample] }
+                                    }
+                                }
+                                chart.data.datasets.forEach((dataset, ch) => {
+                                    // Add new data
+                                    dataset.data = dataset.data.concat(dataAppend[ch])
+                                    // Remove old data
+                                    dataset.data.splice(0, appendDataPointCount)
+                                })
+                                // Adjust axis interval
+                                chart.options.scales.x.min = x - dataSetSize
+                                chart.options.scales.x.max = x
+                                chart.update('none')
+
+                                if (t - tStart > appendTestDurationMs && window.appendTestFinished) {
+                                    const fps = (1000 * frameCount) / (t - tStart)
+                                    window.appendTestFinished(window.performance.now(), fps)
+                                    resolve()
+                                } else {
+                                    requestAnimationFrame(frame)
+                                }
+                            }
+                            requestAnimationFrame(frame)
+                        })
+                    }
+
+                    requestAnimationFrame(async () => {
+                        window.loadingTestFinished(window.testStart, window.performance.now())
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+                        if (appendTestDurationMs === 0) {
+                            window.appendTestFinished(window.performance.now(), -1)
+                        } else {
+                            await runAppendPerformanceTest()
+                        }
+                    })
+                }
+
+                window.testReadyToBegin()
+            })
+        </script>
+    </body>
+</html>
